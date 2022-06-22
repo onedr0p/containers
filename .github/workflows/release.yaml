@@ -135,16 +135,17 @@ jobs:
           file: ${{ steps.dockerfile.outputs.dockerfile }}
           load: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/${{ steps.envs.outputs.__app }}:test
+            ghcr.io/${{ github.repository_owner }}/${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }}:test
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Run GOSS tests
+        id: dgoss
         if: ${{ steps.goss.outputs.enabled == 'true' }}
         env:
           GOSS_FILE: images/${{ steps.envs.outputs.__app }}/goss.yaml
         run: |
-          dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.envs.outputs.__app }}:test
+          dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }}:test
 
       - name: Release
         id: release
@@ -172,7 +173,7 @@ jobs:
           jq --arg v "${{ steps.envs.outputs.__build_date }}" '.__build_status.__ts = $v' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
 
       - name: Build failed
-        if: failure() && steps.release.outcome != 'success'
+        if: failure() && (steps.release.outcome != 'success' || steps.dgoss.outcome != 'success')
         run: |
           jq '.__build_status.__success = false' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
           jq --arg v "${{ steps.envs.outputs.__build_date }}" '.__build_status.__ts = $v' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
