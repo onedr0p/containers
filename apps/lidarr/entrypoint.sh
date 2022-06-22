@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 #shellcheck disable=SC1091
-source "/shim/umask.sh"
-source "/shim/vpn.sh"
+source "/hack/umask.sh"
+source "/hack/vpn.sh"
 
 # Discover existing configuration settings for backwards compatibility
 if [[ -f /config/config.xml ]]; then
