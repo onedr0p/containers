@@ -12,13 +12,13 @@ find . -name metadata.json | while read -r metadata; do
         jq --arg v "$__latest_version" '.__current_version = $v' "${metadata}" | sponge "${metadata}"
         jq '.__build_status.__success = true' "${metadata}" | sponge "${metadata}"
         echo "${__app} | ${__stream} | ${__current_version} | ${__latest_version} | ${metadata}"
-        __container_versions+=("ci(release/${__app}/${__stream}): update container image from ${__current_version} to ${__latest_version}")
+        __container_versions+=("🌹 ${__app}-${__stream} updated from ${__current_version} to ${__latest_version}")
     fi
 done
 
 COMMIT_MESSAGE="$(printf "%s" "${__container_versions[@]}")"
 if [[ ${#__container_versions[@]} -gt 1 ]]; then
-COMMIT_MESSAGE="ci(release/multiple): update container image versions"
+COMMIT_MESSAGE="🌹 fetched multiple new application versions"
 COMMIT_MESSAGE=$(cat << EOF
 ${COMMIT_MESSAGE}
 $(printf "%s\n" "${__container_versions[@]}")

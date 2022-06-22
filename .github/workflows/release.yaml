@@ -175,7 +175,7 @@ jobs:
         run: |
           jq '.__build_status.__success = true' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
           jq --arg v "${{ steps.envs.outputs.__build_date }}" '.__build_status.__ts = $v' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
-          echo "::set-output name=commit-message::build successful :tada:"
+          echo "::set-output name=commit-message::🎉 ${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }} build success"
 
       - name: Build failed
         id: build-failed
@@ -183,14 +183,14 @@ jobs:
         run: |
           jq '.__build_status.__success = false' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
           jq --arg v "${{ steps.envs.outputs.__build_date }}" '.__build_status.__ts = $v' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
-          echo "::set-output name=commit-message::build successful :warning:"
+          echo "::set-output name=commit-message::💥 ${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }} build failed"
 
       - name: Commit changes
         if: ${{ always() }}
         uses: EndBug/add-and-commit@v9
         with:
           message: |-
-            ci(meta/${{ steps.envs.outputs.__app }}/${{ steps.envs.outputs.__stream }}): updating metadata - ${{ steps.build-success.outputs.commit-message || steps.build-failed.outputs.commit-message }}
+            ${{ steps.build-failed.outputs.commit-message || steps.build-success.outputs.commit-message }}
           default_author: github_actions
           pull: "--rebase --autostash"
           add: "*.json --force"
