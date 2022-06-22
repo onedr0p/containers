@@ -51,7 +51,48 @@ jobs:
       - name: Setup Env
         id: setup
         run: |
-          echo ::set-output name=current_version::$(jq --raw-output '.current_version' ${{ matrix.container }})
-          echo ::set-output name=current_tag::$(jq --raw-output '.current_tag' ${{ matrix.container }})
+          echo ::set-output name=build_date::$(date --rfc-3339=seconds --utc)
+          echo ::set-output name=app::$(echo "${{ matrix.container }}" | awk -F / '{print $3}')
+          echo ::set-output name=version::$(jq --raw-output '.version' ${{ matrix.container }})
+          echo ::set-output name=image_tag::$(jq --raw-output '.image_tag' ${{ matrix.container }})
           echo ::set-output name=stream::$(jq --raw-output '.stream' ${{ matrix.container }})
           echo ::set-output name=platforms::$(jq --raw-output '.platforms | join(",")' ${{ matrix.container }})
+      
+      # - name: Extract metadata (tags, labels) for Docker
+      #   id: meta
+      #   uses: docker/metadata-action@v4
+      #   with:
+      #     images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: ${{ steps.setup.outputs.platforms }}
+      - name: Login to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v2
+        with:
+          install: true
+          version: latest
+          driver-opts: image=moby/buildkit:latest
+      - name: Build and Push
+        uses: docker/build-push-action@v3
+        with:
+          build-args: |
+            VERSION=${{ steps.setup.outputs.version }}
+            STREAM=${{ steps.setup.outputs.stream }}
+          labels: |
+            org.opencontainers.image.created=${{ steps.setup.outputs.build_date }}
+          context: .
+          platforms: ${{ steps.setup.outputs.platforms }}
+          file: ./${{ steps.setup.outputs.app }}/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/${{ steps.setup.outputs.app }}:rolling
+            ghcr.io/${{ github.repository_owner }}/${{ steps.setup.outputs.app }}:v${{ steps.setup.outputs.version }}

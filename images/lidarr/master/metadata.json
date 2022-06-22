@@ -1,6 +1,6 @@
 {
-  "current_version": "1.0.2.2592",
-  "current_tag": "1.0.2.2592",
+  "version": "1.0.2.2592",
+  "image_tag": "1.0.2.2592",
   "stream": "master",
   "platforms": [
     "linux/amd64",
