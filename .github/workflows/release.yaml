@@ -8,32 +8,29 @@ on:
     paths:
       - '**/metadata.json'
 
-env:
-  GOSS_SLEEP: 20
-
 jobs:
   changes:
     name: Get changes
     runs-on: ubuntu-latest
     outputs:
-      matrix: "{\"container\": ${{ toJson(steps.changed-files.outputs.all_changed_files) }} }"
+      matrix: "{\"container\": ${{ toJson(steps.filter.outputs) }} }"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0 # needed for tj-actions/changed-files
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v23
+      - uses: dorny/paths-filter@v2
+        id: filter
         with:
-          files: |
-            **/metadata.json
+          list-files: json
+          filters: |
+            changed:
+              - added|modified:
+                  - '**/metadata.json'
+      - run: echo '${{ toJson(steps.filter.outputs) }}'
       - name: List all changed files
         run: |
-          echo ${{ toJson(steps.changed-files.outputs.all_changed_files) }}
-          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-            echo "$file was changed"
-          done
+          echo "Hi"
 
   release:
     name: Release container
