@@ -80,5 +80,5 @@ COPY ./apps/plex/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
 LABEL \
-    org.opencontainers.image.title="Plex - ${STREAM}" \
+    org.opencontainers.image.title="Plex - (${STREAM})" \
     org.opencontainers.image.version="${VERSION}"

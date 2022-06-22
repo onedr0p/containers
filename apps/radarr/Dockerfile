@@ -56,6 +56,6 @@ COPY ./apps/radarr/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
 LABEL \
-    org.opencontainers.image.title="${RADARR__INSTANCE_NAME}" \
+    org.opencontainers.image.title="${RADARR__INSTANCE_NAME} (${RADARR__BRANCH})" \
     org.opencontainers.image.source="https://github.com/Radarr/Radarr" \
     org.opencontainers.image.version="${VERSION}"

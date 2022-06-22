@@ -1,0 +1,13 @@
+---
+process:
+  Sonarr:
+    running: true
+
+port:
+  tcp6:8989:
+    listening: true
+
+http:
+  http://localhost:8989:
+    status: 200
+    timeout: 5000
