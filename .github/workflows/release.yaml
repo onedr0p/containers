@@ -32,9 +32,7 @@ jobs:
       - name: Gather changes
         id: changed
         run: |
-          tmp=$(mktemp -d) && echo '${{ toJson(steps.filter.outputs) }}' > "${tmp}/changes.json"
-          json=$(jq --raw-output '.changed_files' "${tmp}/changes.json") && rm -rf "${tmp}"
-          echo ::set-output name=containers::${json}
+          echo ::set-output name=containers::$(jq --raw-output '.changed_files' "${{ toJson(steps.filter.outputs) }}")
 
   release:
     name: Release container
