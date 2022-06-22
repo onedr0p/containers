@@ -45,5 +45,5 @@ jobs:
 
             ${{ steps.fetch.outputs.commit-message-extra }}
           default_author: github_actions
-          commit: "--amend"
+          commit: "--amend --no-edit"
           push: "--force"
