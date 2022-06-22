@@ -1,0 +1,13 @@
+---
+process:
+  Lidarr:
+    running: true
+
+port:
+  tcp6:7878:
+    listening: true
+
+http:
+  http://localhost:7878:
+    status: 200
+    timeout: 5000
