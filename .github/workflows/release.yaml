@@ -109,6 +109,8 @@ jobs:
           tags: |
             ${{ steps.tags.outputs.rolling }}
             ${{ steps.tags.outputs.semver }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
       - name: Build successful
         if: always()
         run: |
@@ -123,7 +125,7 @@ jobs:
         uses: EndBug/add-and-commit@v9
         if: always()
         with:
-          message: "ci: update container build state"
+          message: "ci(${{ steps.envs.outputs.__app }}/${{ steps.envs.outputs.__stream }}): update container build state"
           committer_name: GitHub Actions
           committer_email: 41898282+github-actions[bot]@users.noreply.github.com
           pull: "--rebase --autostash"
