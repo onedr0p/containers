@@ -185,11 +185,6 @@ jobs:
           jq --arg v "${{ steps.envs.outputs.__build_date }}" '.__build_status.__ts = $v' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
           echo "::set-output name=commit-message::💥 ${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }} build failed"
 
-      - name: Sleep
-        if: ${{ always() }}
-        run: |
-          sleep $[ ( $RANDOM % 30 )  + 1 ]s
-
       - name: Commit changes
         if: ${{ always() }}
         uses: EndBug/add-and-commit@v9
@@ -197,5 +192,5 @@ jobs:
           message: |-
             ${{ steps.build-failed.outputs.commit-message || steps.build-success.outputs.commit-message }}
           default_author: github_actions
-          pull: "--rebase --autostash"
+          pull: "--rebase"
           add: "*.json --force"
