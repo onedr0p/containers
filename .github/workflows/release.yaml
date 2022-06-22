@@ -185,7 +185,8 @@ jobs:
           jq --arg v "${{ steps.envs.outputs.__build_date }}" '.__build_status.__ts = $v' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
           echo "::set-output name=commit-message::💥 ${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }} build failed"
 
-      - name: Git pull changes
+      - name: Git pull in changes
+        if: ${{ always() }}
         run: git pull --rebase --autostash
 
       - name: Git commit changes
