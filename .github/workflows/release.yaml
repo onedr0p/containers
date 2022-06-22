@@ -184,8 +184,11 @@ jobs:
           jq '.__build_status.__success = false' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
           jq --arg v "${{ steps.envs.outputs.__build_date }}" '.__build_status.__ts = $v' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
           echo "::set-output name=commit-message::💥 ${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }} build failed"
-      
-      - name: Commit changes
+
+      - name: Git pull changes
+        run: git pull --rebase --autostash
+
+      - name: Git commit changes
         if: ${{ always() }}
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
@@ -193,7 +196,6 @@ jobs:
             ${{ steps.build-failed.outputs.commit-message || steps.build-success.outputs.commit-message }}
           file_pattern: "images/*.json"
           push_options: "--force"
-          skip_dirty_check: true
 
       # - name: Commit changes
       #   if: ${{ always() }}
