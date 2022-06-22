@@ -184,13 +184,23 @@ jobs:
           jq '.__build_status.__success = false' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
           jq --arg v "${{ steps.envs.outputs.__build_date }}" '.__build_status.__ts = $v' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
           echo "::set-output name=commit-message::💥 ${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }} build failed"
-
+      
       - name: Commit changes
-        if: ${{ always() }}
-        uses: EndBug/add-and-commit@v9
+        uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          message: |-
+          commit_message: |-
             ${{ steps.build-failed.outputs.commit-message || steps.build-success.outputs.commit-message }}
-          default_author: github_actions
-          pull: "--rebase"
-          add: "*.json --force"
+          file_pattern: "images/*.json"
+          push_options: "--force"
+          skip_fetch: true
+          skip_dirty_check: true
+
+      # - name: Commit changes
+      #   if: ${{ always() }}
+      #   uses: EndBug/add-and-commit@v9
+      #   with:
+      #     message: |-
+      #       ${{ steps.build-failed.outputs.commit-message || steps.build-success.outputs.commit-message }}
+      #     default_author: github_actions
+      #     pull: "--rebase"
+      #     add: "*.json --force"
