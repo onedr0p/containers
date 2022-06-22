@@ -56,7 +56,7 @@ RUN \
     && ln -s /usr/bin/vim.tiny /usr/local/bin/emacs \
     && chown -R kah:kah /app \
     && \
-    printf "/bin/bash /shim/greeting.sh\n" >> /etc/bash.bashrc \
+    printf "/bin/bash /scripts/greeting.sh\n" >> /etc/bash.bashrc \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && apt-get autoremove -y \
     && apt-get clean \
@@ -112,7 +112,7 @@ USER kah
 
 VOLUME [ "/config" ]
 
-COPY ./apps/ubuntu/_hack /hack
+COPY ./apps/ubuntu/scripts /scripts
 
 ENTRYPOINT [ "/usr/bin/tini", "--" ]
 

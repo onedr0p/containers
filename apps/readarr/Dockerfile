@@ -51,7 +51,7 @@ USER kah
 
 EXPOSE ${READARR__PORT}/tcp
 
-COPY ./apps/readarr/_hack/config.xml.tmpl /app/config.xml.tmpl
+COPY ./apps/readarr/config.xml.tmpl /app/config.xml.tmpl
 COPY ./apps/readarr/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 

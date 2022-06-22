@@ -74,7 +74,7 @@ WORKDIR "${PLEX_MEDIA_SERVER_HOME}"
 
 EXPOSE 32400/tcp 1900/udp 3005/tcp 5353/udp 8324/tcp 32410/udp 32412/udp 32413/udp 32414/udp 32469/tcp
 
-COPY ./apps/plex/_hack/plex-preferences.sh /hack/plex-preferences.sh
+COPY ./apps/plex/plex-preferences.sh /scripts/plex-preferences.sh
 
 COPY ./apps/plex/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]

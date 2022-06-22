@@ -51,7 +51,7 @@ USER kah
 
 EXPOSE ${PROWLARR__PORT}/tcp
 
-COPY ./apps/prowlarr/_hack/config.xml.tmpl /app/config.xml.tmpl
+COPY ./apps/prowlarr/config.xml.tmpl /app/config.xml.tmpl
 COPY ./apps/prowlarr/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 

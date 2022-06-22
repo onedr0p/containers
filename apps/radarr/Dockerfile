@@ -51,7 +51,7 @@ USER kah
 
 EXPOSE ${RADARR__PORT}/tcp
 
-COPY ./apps/radarr/_hack/config.xml.tmpl /app/config.xml.tmpl
+COPY ./apps/radarr/config.xml.tmpl /app/config.xml.tmpl
 COPY ./apps/radarr/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 

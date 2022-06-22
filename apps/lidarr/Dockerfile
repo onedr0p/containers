@@ -51,7 +51,7 @@ USER kah
 
 EXPOSE ${LIDARR__PORT}/tcp
 
-COPY ./apps/lidarr/_hack/config.xml.tmpl /app/config.xml.tmpl
+COPY ./apps/lidarr/config.xml.tmpl /app/config.xml.tmpl
 COPY ./apps/lidarr/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 

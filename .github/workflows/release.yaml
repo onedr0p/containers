@@ -89,11 +89,16 @@ jobs:
       - name: Setup Goss
         id: goss
         run: |-
-          if test -f "apps/${{ steps.envs.outputs.__app }}/_actions/goss.yaml"; then
+          gossfile="apps/${{ steps.envs.outputs.__app }}/goss.yaml"
+          if test -f "apps/${{ steps.envs.outputs.__app }}/${{ steps.envs.outputs.__stream }}/goss.yaml"; then
+              gossfile="apps/${{ steps.envs.outputs.__app }}/${{ steps.envs.outputs.__stream }}/goss.yaml"
+          fi
+          if test -f "${gossfile}"; then
               echo ::set-output name=enabled::true
           else
               echo ::set-output name=enabled::false
           fi
+          echo ::set-output name=gossfile::${gossfile}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -144,9 +149,9 @@ jobs:
         if: ${{ steps.goss.outputs.enabled == 'true' }}
         env:
           CONTAINER_RUNTIME: docker
-          GOSS_FILE: apps/${{ steps.envs.outputs.__app }}/_actions/goss.yaml
+          GOSS_FILE: ${{ steps.goss.outputs.gossfile }}
           GOSS_OPTS: |-
-            --retry-timeout 30s --sleep 2s --color --format documentation
+            --retry-timeout 60s --sleep 2s --color --format documentation
         run: |-
           dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }}:cachez
 
