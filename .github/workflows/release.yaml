@@ -49,14 +49,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup Env
-        id: setup
+        id: envs
         run: |
           echo ::set-output name=build_date::$(date --rfc-3339=seconds --utc)
           echo ::set-output name=app::$(echo "./${{ matrix.container }}" | awk -F / '{print $3}')
           echo ::set-output name=version::$(jq --raw-output '.version' ${{ matrix.container }})
           echo ::set-output name=image_tag::$(jq --raw-output '.image_tag' ${{ matrix.container }})
           echo ::set-output name=stream::$(jq --raw-output '.stream' ${{ matrix.container }})
+          echo ::set-output name=stable::$(jq --raw-output '.stable' ${{ matrix.container }})
           echo ::set-output name=platforms::$(jq --raw-output '.platforms | join(",")' ${{ matrix.container }})
+      - name: Setup Tags
+        id: tags
+        run: |
+          [[ "${{ steps.envs.outputs.app }}" != "ubuntu" ]] && v="v"
+          [[ "${{ steps.envs.outputs.stable }}" == "true" ]] && s="-${{ steps.envs.outputs.stream }}"
+          rolling="${{ steps.envs.outputs.app }}${s}:rolling"
+          semver="${{ steps.envs.outputs.app }}${s}:${v}${{ steps.envs.outputs.version }}"
+          echo ::set-output name=rolling::ghcr.io/${{ github.repository_owner }}/${rolling}
+          echo ::set-output name=semver::ghcr.io/${{ github.repository_owner }}/${semver}
       
       # - name: Extract metadata (tags, labels) for Docker
       #   id: meta
@@ -67,7 +77,7 @@ jobs:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
         with:
-          platforms: ${{ steps.setup.outputs.platforms }}
+          platforms: ${{ steps.envs.outputs.platforms }}
       - name: Login to GHCR
         uses: docker/login-action@v2
         with:
@@ -85,14 +95,14 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           build-args: |
-            VERSION=${{ steps.setup.outputs.version }}
-            STREAM=${{ steps.setup.outputs.stream }}
+            VERSION=${{ steps.envs.outputs.version }}
+            STREAM=${{ steps.envs.outputs.stream }}
           labels: |
-            org.opencontainers.image.created=${{ steps.setup.outputs.build_date }}
+            org.opencontainers.image.created=${{ steps.envs.outputs.build_date }}
           context: .
-          platforms: ${{ steps.setup.outputs.platforms }}
-          file: ./images/${{ steps.setup.outputs.app }}/Dockerfile
+          platforms: ${{ steps.envs.outputs.platforms }}
+          file: ./images/${{ steps.envs.outputs.app }}/Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/${{ steps.setup.outputs.app }}:rolling
-            ghcr.io/${{ github.repository_owner }}/${{ steps.setup.outputs.app }}:v${{ steps.setup.outputs.version }}
+            ${{ steps.tags.outputs.rolling }}
+            ${{ steps.tags.outputs.semver }}
