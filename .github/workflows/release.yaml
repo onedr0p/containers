@@ -26,12 +26,11 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v23
         with:
-          # dir_names: true
-          quotepath: true
           files: |
             **/metadata.json
       - name: List all changed files
         run: |
+          echo ${{ toJson(steps.changed-files.outputs.all_changed_files) }}
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             echo "$file was changed"
           done
@@ -43,6 +42,7 @@ jobs:
       - changes
     strategy:
       matrix: ${{ fromJson(needs.changes.outputs.matrix) }}
+      max-parallel: 4
       fail-fast: false
     steps:
       - name: Checkout
