@@ -47,4 +47,4 @@ if [[ "${RADARR__LOG_LEVEL}" == "debug" || "${current_log_level}" == "debug" ]];
     xmlstarlet format --omit-decl /config/config.xml
 fi
 
-exec /app/Lidarr --nobrowser --data=/config ${EXTRA_ARGS}
+exec /app/Radarr --nobrowser --data=/config ${EXTRA_ARGS}
