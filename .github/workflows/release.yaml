@@ -89,7 +89,7 @@ jobs:
       - name: Setup Goss
         id: goss
         run: |
-          if test -f "images/${{ steps.envs.outputs.__app }}/goss_wait.yaml"; then
+          if test -f "images/${{ steps.envs.outputs.__app }}/goss.yaml"; then
               echo ::set-output name=enabled::true
           else
               echo ::set-output name=enabled::false
@@ -144,7 +144,9 @@ jobs:
         if: ${{ steps.goss.outputs.enabled == 'true' }}
         env:
           CONTAINER_RUNTIME: docker
-          GOSS_FILES_PATH: images/${{ steps.envs.outputs.__app }}
+          GOSS_FILE: images/${{ steps.envs.outputs.__app }}/goss.yaml
+          GOSS_OPTS: |-
+            --retry-timeout 30s --sleep 2s --color --format documentation
         run: |
           dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }}:cachez
 
