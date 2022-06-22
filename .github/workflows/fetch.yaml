@@ -1,4 +1,5 @@
-name: Fetch new application versions
+---
+name: Fetch
 
 on:
   workflow_dispatch:
