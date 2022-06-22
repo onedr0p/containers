@@ -5,10 +5,10 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 */4 * * *"
-  # push:
-  #   paths:
-  #     - '.github/scripts/fetch.sh'
-  #     - '.github/workflows/fetch.yaml'
+  push:
+    paths:
+      - '.github/scripts/fetch.sh'
+      - '.github/workflows/fetch.yaml'
 
 jobs:
   main:
@@ -28,11 +28,9 @@ jobs:
         run: ./.github/scripts/fetch.sh
 
       - name: Git pull in changes
-        if: ${{ always() }}
         run: git pull --rebase --autostash
 
       - name: Git commit changes
-        if: ${{ always() }}
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: |-
