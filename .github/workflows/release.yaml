@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/metadata.json'
+
+env:
+  GOSS_SLEEP: 20
+
+jobs:
+  changes:
+    name: Get changes
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: "{\"container\": ${{ toJson(steps.changed-files.outputs.all_changed_files) }} }"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # needed for tj-actions/changed-files
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v23
+        with:
+          files: |
+            **/metadata.json
+      - name: List all changed files
+        run: |
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
+
+  release:
+    name: Release container
+    runs-on: ubuntu-latest
+    needs:
+      - changes
+    strategy:
+      matrix: ${{ fromJson(needs.changes.outputs.matrix) }}
+      fail-fast: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Prepare
+        id: prep
+        run: |
+          echo ${{ matrix.container }}

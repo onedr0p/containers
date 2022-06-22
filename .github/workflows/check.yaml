@@ -1,0 +1,33 @@
+name: Check for new application version
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */4 * * *"
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      - name: Fetch new app versions
+        run: |
+          find . -name metadata.json | while read metadata; do
+              app=$(echo "${metadata}" | awk -F / '{print $3}')
+              current_version=$(jq --raw-output ".current_version" "${metadata}")
+              stream=$(echo "${metadata}" | awk -F / '{print $4}')
+              latest_version="$(bash $(dirname $(dirname "${metadata}"))/latest-version.sh "${stream}")"
+              if [[ -n "${latest_version}" || "${latest_version}" != "null" ]]; then
+                  jq --arg v "$latest_version" '.current_version = $v' "${metadata}" | sponge "${metadata}"
+                  echo "${app} ${stream} ${current_version} ${latest_version}"
+              fi
+          done
+      # - name: Commit changes
+      #   uses: EndBug/add-and-commit@v9
+      #   with:
+      #     message: "chore: add new release versions"
+      #     committer_name: GitHub Actions
+      #     committer_email: 41898282+github-actions[bot]@users.noreply.github.com
+      #     add: '*.json'
