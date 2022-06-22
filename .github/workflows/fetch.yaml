@@ -32,18 +32,3 @@ jobs:
           default_author: github_actions
           pull: "--rebase --autostash"
           add: "*.json --force"
-      - name: Get last commit message
-        id: last-commit-message
-        run: |
-          echo "::set-output name=msg::$(git log -1 --pretty=%s)"
-      - name: Ammend commit
-        if: steps.fetch.outputs.commit-message-extra
-        uses: EndBug/add-and-commit@v9
-        with:
-          message: |-
-            ${{ steps.last-commit-message.outputs.msg }}
-
-            ${{ steps.fetch.outputs.commit-message-extra }}
-          default_author: github_actions
-          commit: "--amend --no-edit"
-          push: "--force"
