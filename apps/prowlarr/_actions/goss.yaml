@@ -1,0 +1,13 @@
+---
+process:
+  Prowlarr:
+    running: true
+
+port:
+  tcp6:9696:
+    listening: true
+
+http:
+  http://localhost:9696:
+    status: 200
+    timeout: 5000
