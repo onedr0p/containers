@@ -51,7 +51,7 @@ USER kah
 
 EXPOSE ${SONARR__PORT}/tcp
 
-COPY ./apps/sonarr/config.xml.tmpl /app/config.xml.tmpl
+COPY ./apps/sonarr/${SONARR__BRANCH}/config.xml.tmpl /app/config.xml.tmpl
 COPY ./apps/sonarr/${SONARR__BRANCH}/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
