@@ -1,6 +1,5 @@
 {
   "current_version": "1.0.2.2592",
-  "stream": "develop",
   "stable": false,
   "platforms": [
     "linux/amd64",

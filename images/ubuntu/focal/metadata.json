@@ -1,6 +1,5 @@
 {
   "current_version": "focal-20220531",
-  "stream": "focal",
   "stable": true,
   "platforms": [
     "linux/amd64",

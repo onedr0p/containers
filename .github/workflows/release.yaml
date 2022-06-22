@@ -48,20 +48,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Install moreutils
+        run: |
+          sudo apt install moreutils
       - name: Setup vars from metadata.json
         id: envs
         run: |
           echo ::set-output name=build_date::$(date --rfc-3339=seconds --utc)
           echo ::set-output name=app::$(echo "./${{ matrix.container }}" | awk -F / '{print $3}')
           echo ::set-output name=current_version::$(jq --raw-output '.current_version' ${{ matrix.container }})
-          echo ::set-output name=stream::$(jq --raw-output '.stream' ${{ matrix.container }})
+          echo ::set-output name=stream::$(echo "./${{ matrix.container }}" | awk -F / '{print $4}')
           echo ::set-output name=stable::$(jq --raw-output '.stable' ${{ matrix.container }})
           echo ::set-output name=platforms::$(jq --raw-output '.platforms | join(",")' ${{ matrix.container }})
       - name: Setup Tags
         id: tags
         run: |
           [[ "${{ steps.envs.outputs.app }}" != "ubuntu" ]] && v="v"
-          [[ "${{ steps.envs.outputs.stable }}" == "true" ]] && s="-${{ steps.envs.outputs.stream }}"
+          [[ "${{ steps.envs.outputs.stable }}" == "false" ]] && s="-${{ steps.envs.outputs.stream }}"
           rolling="${{ steps.envs.outputs.app }}${s}:rolling"
           echo ::set-output name=rolling::ghcr.io/${{ github.repository_owner }}/${rolling}
           semver="${{ steps.envs.outputs.app }}${s}:${v}${{ steps.envs.outputs.current_version }}"
@@ -98,3 +101,19 @@ jobs:
           tags: |
             ${{ steps.tags.outputs.rolling }}
             ${{ steps.tags.outputs.semver }}
+      - name: Build failed
+        if: ${{ failure() || success() }}
+        run: |
+          jq '.build_failed = ${{ failure() }}' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
+      # - name: Build success
+      #   if: ${{ success() }}
+      #   run: |
+      #     jq '.build_failed = false' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
+      - name: Commit changes
+        if: ${{ failure() || success() }}
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: "ci: update container build state"
+          committer_name: GitHub Actions
+          committer_email: 41898282+github-actions[bot]@users.noreply.github.com
+          add: '*.json'

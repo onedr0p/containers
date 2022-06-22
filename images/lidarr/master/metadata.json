@@ -1,6 +1,5 @@
 {
   "current_version": "1.0.2.2592",
-  "stream": "master",
   "stable": true,
   "platforms": [
     "linux/amd64",
