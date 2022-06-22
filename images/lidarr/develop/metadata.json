@@ -1,11 +1,12 @@
 {
-  "__current_version": "1.0.2.2592",
+  "__current_version": "1.0.2.23",
   "__stable": false,
   "__platforms": [
-    "linux/amd64"
+    "linux/amd64",
+    "linux/arm64"
   ],
   "__build_status": {
-    "__ts": "2022-06-22 19:15:19+00:00",
-    "__success": true
+    "__ts": "2022-06-22 18:48:43+00:00",
+    "__success": false
   }
 }

@@ -18,17 +18,24 @@ jobs:
         with:
           token: ${{ secrets.TOKEN }}
           fetch-depth: 1
+
       - name: Install OS tools
         run: |
           sudo apt-get install moreutils jo
+
       - name: Fetch new app versions
         id: fetch
         run: ./.github/scripts/fetch.sh
-      - name: Commit changes
-        uses: EndBug/add-and-commit@v9
+
+      - name: Git pull in changes
+        if: ${{ always() }}
+        run: git pull --rebase --autostash
+
+      - name: Git commit changes
+        if: ${{ always() }}
+        uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          message: |-
+          commit_message: |-
             ${{ steps.fetch.outputs.commit-message }}
-          default_author: github_actions
-          pull: "--rebase --autostash"
-          add: "*.json --force"
+          file_pattern: "images/*.json"
+          push_options: "--force"
