@@ -52,7 +52,7 @@ jobs:
         id: setup
         run: |
           echo ::set-output name=build_date::$(date --rfc-3339=seconds --utc)
-          echo ::set-output name=app::$(echo "${{ matrix.container }}" | awk -F / '{print $3}')
+          echo ::set-output name=app::$(echo "${{ matrix.container }}" | awk -F / '{print $2}')
           echo ::set-output name=version::$(jq --raw-output '.version' ${{ matrix.container }})
           echo ::set-output name=image_tag::$(jq --raw-output '.image_tag' ${{ matrix.container }})
           echo ::set-output name=stream::$(jq --raw-output '.stream' ${{ matrix.container }})
