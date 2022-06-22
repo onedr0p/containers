@@ -1,4 +1,4 @@
-FROM ghcr.io/k8s-at-home/ubuntu-focal:rolling@sha256:7f1b8af0e171af574601647215678391d11bff9236525a190e55f5a53e1d5505
+FROM ghcr.io/onedr0p/ubuntu-focal:rolling@sha256:3761cc85d317e073e8e0c04aee8a9aceb41c3f9c25cdc29e21f788fa1c1c5beb
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM

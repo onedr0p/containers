@@ -1,4 +1,4 @@
-FROM ghcr.io/k8s-at-home/ubuntu-jammy:rolling@sha256:fdbafba13f7ed147d6f95ab5269ddaa7f17395e226f1bbc25381de4c6671442f
+FROM ghcr.io/onedr0p/ubuntu-jammy:rolling@sha256:3eb24c4875328f164308d6c71dac21bd283de0edeb81a2c63859510ebb1d7c41
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
