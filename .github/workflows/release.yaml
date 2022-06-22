@@ -128,8 +128,6 @@ jobs:
         with:
           message: |-
             ci(meta/${{ steps.envs.outputs.__app }}/${{ steps.envs.outputs.__stream }}): update container build metadata
-          author_name: GitHub Actions
-          author_email: 41898282+github-actions[bot]@users.noreply.github.com
           committer_name: GitHub Actions
           committer_email: 41898282+github-actions[bot]@users.noreply.github.com
           pull: "--rebase --autostash"

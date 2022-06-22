@@ -35,14 +35,12 @@ jobs:
           pull: "--rebase --autostash"
           add: "*.json --force"
       - name: Ammend commit
-        if: steps.fetch.outputs.commit-message-extra.exists == 'true'
+        if: ${{ steps.fetch.outputs.commit-message-extra.exists == 'true' }}
         uses: EndBug/add-and-commit@v9
         with:
           message: |-
             ${{ steps.fetch.outputs.commit-message-extra }}
           commit: "--amend"
           push: "--force"
-          author_name: GitHub Actions
-          author_email: 41898282+github-actions[bot]@users.noreply.github.com
           committer_name: GitHub Actions
           committer_email: 41898282+github-actions[bot]@users.noreply.github.com
