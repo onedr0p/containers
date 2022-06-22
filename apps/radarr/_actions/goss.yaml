@@ -1,6 +1,6 @@
 ---
 process:
-  Lidarr:
+  Radarr:
     running: true
 
 port:
