@@ -9,8 +9,8 @@ find . -name metadata.json | while read -r metadata; do
     __stream=$(echo "${metadata}" | awk -F / '{print $4}')
     __latest_version="$(bash "$(dirname "$(dirname "${metadata}")")"/latest-version.sh "${__stream}")"
     if [[ -n "${__latest_version}" || "${__latest_version}" != "null" ]]; then
-        # jq --arg v "$__latest_version" '.__current_version = $v' "${metadata}" | sponge "${metadata}"
-        # jq '.__build_status.__success = true' "${metadata}" | sponge "${metadata}"
+        jq --arg v "$__latest_version" '.__current_version = $v' "${metadata}" | sponge "${metadata}"
+        jq '.__build_status.__success = true' "${metadata}" | sponge "${metadata}"
         echo "${__app} | ${__stream} | ${__current_version} | ${__latest_version} | ${metadata}"
         __container_versions+=("ci(release/${__app}/${__stream}): update container image from ${__current_version} to ${__latest_version}")
     fi
