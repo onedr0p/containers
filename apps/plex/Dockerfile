@@ -3,6 +3,7 @@ FROM ghcr.io/k8s-at-home/ubuntu-focal:rolling@sha256:7f1b8af0e171af5746016472156
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 ARG VERSION
+ARG STREAM
 
 USER root
 
@@ -77,3 +78,7 @@ COPY ./apps/plex/_hack/plex-preferences.sh /hack/plex-preferences.sh
 
 COPY ./apps/plex/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
+
+LABEL \
+    org.opencontainers.image.title="Plex - ${STREAM}" \
+    org.opencontainers.image.version="${VERSION}"
