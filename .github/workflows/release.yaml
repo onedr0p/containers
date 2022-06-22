@@ -82,8 +82,8 @@ jobs:
         id: dockerfile
         run: |-
           echo ::set-output name=dockerfile::apps/${{ steps.envs.outputs.__app }}/Dockerfile
-          if test -f "${{ matrix.container }}/Dockerfile"; then
-              echo ::set-output name=dockerfile::${{ matrix.container }}/Dockerfile
+          if test -f "apps/${{ steps.envs.outputs.__app }}/${{ steps.envs.outputs.__stream }}/Dockerfile"; then
+              echo ::set-output name=dockerfile::apps/${{ steps.envs.outputs.__app }}/${{ steps.envs.outputs.__stream }}/Dockerfile
           fi
 
       - name: Setup Goss
@@ -189,16 +189,15 @@ jobs:
         if: ${{ always() }}
         run: |-
           perl -e 'sleep int(rand(15))'
+          perl -e 'sleep int(rand(15))'
 
       - name: Git pull in changes
         if: ${{ always() }}
-        continue-on-error: true
         run: git pull --rebase --autostash
 
       - name: Git commit changes
         id: commit-changes
         if: ${{ always() }}
-        continue-on-error: true
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: |-
@@ -212,7 +211,8 @@ jobs:
       - name: Snoozing randomly (retry)
         if: ${{ steps.commit-changes.outcome == 'failure' }}
         run: |-
-          perl -e 'sleep int(rand(30))'
+          perl -e 'sleep int(rand(15))'
+          perl -e 'sleep int(rand(15))'
 
       - name: Git pull in changes (retry)
         if: ${{ steps.commit-changes.outcome == 'failure' }}
