@@ -13,14 +13,14 @@ find . -name metadata.json | while read -r metadata; do
         # jq '.__build_status.__success = true' "${metadata}" | sponge "${metadata}"
         echo "${__app} | ${__stream} | ${__current_version} | ${__latest_version} | ${metadata}"
         if [[ "${__latest_version}" !=  "${__current_version}" ]]; then
-            __container_versions+=("🌹 ${__app}-${__stream} updated from ${__current_version} to ${__latest_version}")
+            __container_versions+=("🌈 Fetched: ${__app}-${__stream} (${__current_version} → ${__latest_version})")
         fi
     fi
 done
 
 COMMIT_MESSAGE="$(printf "%s" "${__container_versions[@]}")"
 if [[ ${#__container_versions[@]} -gt 1 ]]; then
-COMMIT_MESSAGE="🌹 fetched multiple new application versions"
+COMMIT_MESSAGE="🌈 Fetched: Multiple new application versions"
 COMMIT_MESSAGE=$(cat << EOF
 ${COMMIT_MESSAGE}
 $(printf "%s\n" "${__container_versions[@]}")
