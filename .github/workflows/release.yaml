@@ -170,33 +170,27 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Build successful
-        if: always()
+        id: build-status
+        if: ${{ always() }}
         run: |
           jq '.__build_status.__success = true' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
           jq --arg v "${{ steps.envs.outputs.__build_date }}" '.__build_status.__ts = $v' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
+          echo "::set-output name=commit-message::build successful :tada:"
 
       - name: Build failed
-        if: failure() && (steps.release.outcome != 'success' || steps.dgoss.outcome != 'success')
+        id: build-status
+        if: ${{ failure() && (steps.release.outcome != 'success' || steps.dgoss.outcome != 'success') }}
         run: |
           jq '.__build_status.__success = false' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
           jq --arg v "${{ steps.envs.outputs.__build_date }}" '.__build_status.__ts = $v' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
-
-      - name: Prepare commit message
-        id: commit-message
-        if: always()
-        run: |
-          COMMIT_MESSAGE="build successful :tada:"
-          if [[ "${{ failure() }}" == true ]]; then
-              COMMIT_MESSAGE="build failed :warning:"
-          fi
-          echo "::set-output name=commit-message::${COMMIT_MESSAGE}"
+          echo "::set-output name=commit-message::build successful :warning:"
 
       - name: Commit changes
-        if: always()
+        if: ${{ always() }}
         uses: EndBug/add-and-commit@v9
         with:
           message: |-
-            ci(meta/${{ steps.envs.outputs.__app }}/${{ steps.envs.outputs.__stream }}): updating metadata - ${{ steps.commit-message.outputs.commit-message }}
+            ci(meta/${{ steps.envs.outputs.__app }}/${{ steps.envs.outputs.__stream }}): updating metadata - ${{ steps.build-status.outputs.commit-message }}
           default_author: github_actions
           pull: "--rebase --autostash"
           add: "*.json --force"
