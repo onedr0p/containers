@@ -170,7 +170,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Build successful
-        id: build-status
+        id: build-success
         if: ${{ always() }}
         run: |
           jq '.__build_status.__success = true' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
@@ -178,7 +178,7 @@ jobs:
           echo "::set-output name=commit-message::build successful :tada:"
 
       - name: Build failed
-        id: build-status
+        id: build-failed
         if: ${{ failure() && (steps.release.outcome != 'success' || steps.dgoss.outcome != 'success') }}
         run: |
           jq '.__build_status.__success = false' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
@@ -190,7 +190,7 @@ jobs:
         uses: EndBug/add-and-commit@v9
         with:
           message: |-
-            ci(meta/${{ steps.envs.outputs.__app }}/${{ steps.envs.outputs.__stream }}): updating metadata - ${{ steps.build-status.outputs.commit-message }}
+            ci(meta/${{ steps.envs.outputs.__app }}/${{ steps.envs.outputs.__stream }}): updating metadata - ${{ steps.build-success.outputs.commit-message || steps.build-failed.outputs.commit-message }}
           default_author: github_actions
           pull: "--rebase --autostash"
           add: "*.json --force"
