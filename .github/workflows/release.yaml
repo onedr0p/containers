@@ -31,12 +31,9 @@ jobs:
         run: echo '${{ toJson(steps.filter.outputs) }}'
       - name: List all changed files
         run: |
-          tmp=$(mktemp -d)
-          echo '${{ toJson(steps.filter.outputs) }}' > ${tmp}/changes.json
-          json=$(jq --raw-output '.changed_files' ${tmp}/changes.json)
-          rm -rf ${tmp}
+          tmp=$(mktemp -d) && echo '${{ toJson(steps.filter.outputs) }}' > ${tmp}/changes.json
+          json=$(jq --raw-output '.changed_files | fromjson | .[]' ${tmp}/changes.json) && rm -rf ${tmp}
           echo ::set-output name=containers::${json}
-
 
   release:
     name: Release container
