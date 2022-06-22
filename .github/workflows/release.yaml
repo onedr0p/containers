@@ -86,16 +86,16 @@ jobs:
         run: |
           echo ::set-output name=dockerfile::images/${{ steps.envs.outputs.__app }}/Dockerfile
           if [[ -f "${{ matrix.container }}/Dockerfile" ]]; then
-            echo ::set-output name=dockerfile::${{ matrix.container }}/Dockerfile
+              echo ::set-output name=dockerfile::${{ matrix.container }}/Dockerfile
           fi
 
       - name: Setup Goss
         id: goss
         run: |
           if test -f "images/${{ steps.envs.outputs.__app }}/goss.yaml"; then
-            echo ::set-output name=enabled::true
+              echo ::set-output name=enabled::true
           else
-            echo ::set-output name=enabled::false
+              echo ::set-output name=enabled::false
           fi
 
       - name: Set up QEMU
@@ -124,7 +124,7 @@ jobs:
         with:
           version: v0.3.18
 
-      - name: Build GOSS container
+      - name: Build cache container
         if: ${{ steps.goss.outputs.enabled == 'true' }}
         uses: docker/build-push-action@v3
         with:
@@ -138,7 +138,7 @@ jobs:
           file: ${{ steps.dockerfile.outputs.dockerfile }}
           load: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }}:test
+            ghcr.io/${{ github.repository_owner }}/${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }}:cachez
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -148,7 +148,7 @@ jobs:
         env:
           GOSS_FILE: images/${{ steps.envs.outputs.__app }}/goss.yaml
         run: |
-          dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }}:test
+          dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }}:cachez
 
       - name: Release
         id: release
@@ -181,12 +181,22 @@ jobs:
           jq '.__build_status.__success = false' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
           jq --arg v "${{ steps.envs.outputs.__build_date }}" '.__build_status.__ts = $v' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
 
-      - name: Commit changes
-        uses: EndBug/add-and-commit@v9
+      - name: Prepare commit message
+        id: commit-message
         if: always()
+        run: |
+          COMMIT_MESSAGE="build successful :tada:"
+          if [[ "${{ failure() }}" == true ]]; then
+              COMMIT_MESSAGE="build failed :warning:"
+          fi
+          echo "::set-output name=commit-message::${COMMIT_MESSAGE}"
+
+      - name: Commit changes
+        if: always()
+        uses: EndBug/add-and-commit@v9
         with:
           message: |-
-            ci(meta/${{ steps.envs.outputs.__app }}/${{ steps.envs.outputs.__stream }}): update container build metadata
+            ci(meta/${{ steps.envs.outputs.__app }}/${{ steps.envs.outputs.__stream }}): updating metadata - ${{ steps.commit-message.outputs.commit-message }}
           default_author: github_actions
           pull: "--rebase --autostash"
           add: "*.json --force"
