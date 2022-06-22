@@ -13,7 +13,7 @@ jobs:
     name: Get changes
     runs-on: ubuntu-latest
     outputs:
-      matrix: "{\"container\": ${{ toJson(steps.filter.outputs) }} }"
+      matrix: "{\"container\": ${{ steps.reduce.outputs.containers }} }"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -27,10 +27,12 @@ jobs:
             changed:
               - added|modified:
                   - '**/metadata.json'
-      - run: echo '${{ toJson(steps.filter.outputs) }}'
+      - name: Debug
+        run: echo '${{ toJson(steps.filter.outputs) }}'
       - name: List all changed files
         run: |
-          echo "Hi"
+          json=$(jq --raw-output '.changed_files' ${{ toJson(steps.filter.outputs) }})
+          echo ::set-output name=containers::${json}
 
   release:
     name: Release container
