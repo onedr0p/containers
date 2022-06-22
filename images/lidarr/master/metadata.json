@@ -1,9 +1,9 @@
 {
-  "current_version": "1.0.2.259211111",
+  "current_version": "1.0.2.2592",
   "stable": true,
   "platforms": [
     "linux/amd64",
     "linux/arm64"
   ],
-  "build_failed": true
+  "build_failed": false
 }
