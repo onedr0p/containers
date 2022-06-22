@@ -82,14 +82,14 @@ jobs:
         id: dockerfile
         run: |
           echo ::set-output name=dockerfile::images/${{ steps.envs.outputs.__app }}/Dockerfile
-          if [[ -f "${{ matrix.container }}/Dockerfile" ]]; then
+          if test -f "${{ matrix.container }}/Dockerfile"; then
               echo ::set-output name=dockerfile::${{ matrix.container }}/Dockerfile
           fi
 
       - name: Setup Goss
         id: goss
         run: |
-          if test -f "images/${{ steps.envs.outputs.__app }}/goss.yaml"; then
+          if test -f "images/${{ steps.envs.outputs.__app }}/goss_wait.yaml"; then
               echo ::set-output name=enabled::true
           else
               echo ::set-output name=enabled::false
