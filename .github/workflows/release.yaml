@@ -48,7 +48,7 @@ jobs:
       - changes
     strategy:
       matrix: ${{ fromJson(needs.changes.outputs.matrix) }}
-      max-parallel: 8
+      max-parallel: 5
       fail-fast: false
     steps:
       - name: Checkout
@@ -81,7 +81,7 @@ jobs:
       - name: Setup Dockerfile
         id: dockerfile
         run: |
-          echo ::set-output name=dockerfile::images/${{ steps.envs.outputs.__app }}/Dockerfile
+          echo ::set-output name=dockerfile::apps/${{ steps.envs.outputs.__app }}/Dockerfile
           if test -f "${{ matrix.container }}/Dockerfile"; then
               echo ::set-output name=dockerfile::${{ matrix.container }}/Dockerfile
           fi
@@ -89,7 +89,7 @@ jobs:
       - name: Setup Goss
         id: goss
         run: |
-          if test -f "images/${{ steps.envs.outputs.__app }}/goss.yaml"; then
+          if test -f "apps/${{ steps.envs.outputs.__app }}/_actions/goss.yaml"; then
               echo ::set-output name=enabled::true
           else
               echo ::set-output name=enabled::false
@@ -144,7 +144,7 @@ jobs:
         if: ${{ steps.goss.outputs.enabled == 'true' }}
         env:
           CONTAINER_RUNTIME: docker
-          GOSS_FILE: images/${{ steps.envs.outputs.__app }}/goss.yaml
+          GOSS_FILE: apps/${{ steps.envs.outputs.__app }}/_actions/goss.yaml
           GOSS_OPTS: |-
             --retry-timeout 30s --sleep 2s --color --format documentation
         run: |
@@ -188,14 +188,14 @@ jobs:
       - name: Snoozing randomly
         if: ${{ always() }}
         run: |
-          perl -e 'sleep int(rand(30))'
+          perl -e 'sleep int(rand(15))'
 
-      - name: Git pull in changes (1)
+      - name: Git pull in changes
         if: ${{ always() }}
         continue-on-error: true
         run: git pull --rebase --autostash
 
-      - name: Git commit changes (2)
+      - name: Git commit changes
         id: commit-changes
         if: ${{ always() }}
         continue-on-error: true
@@ -203,20 +203,28 @@ jobs:
         with:
           commit_message: |-
             ${{ steps.build-failed.outputs.commit-message || steps.build-success.outputs.commit-message }}
-          file_pattern: "images/*.json"
+          file_pattern: "apps/*.json"
           push_options: "--force"
 
-      - name: Git pull in changes (3)
+      # In the matrix it is possible for things to complete 
+      # just at the right time to throw a conflict, in that 
+      # case it will try to pull and commit one more time
+      - name: Snoozing randomly (retry)
+        if: ${{ steps.commit-changes.outcome == 'failure' }}
+        run: |
+          perl -e 'sleep int(rand(30))'
+
+      - name: Git pull in changes (retry)
         if: ${{ steps.commit-changes.outcome == 'failure' }}
         continue-on-error: true
         run: git pull --rebase --autostash
 
-      - name: Git commit changes (4)
+      - name: Git commit changes (retry)
         if: ${{ steps.commit-changes.outcome == 'failure' }}
         continue-on-error: true
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: |-
             ${{ steps.build-failed.outputs.commit-message || steps.build-success.outputs.commit-message }}
-          file_pattern: "images/*.json"
+          file_pattern: "apps/*.json"
           push_options: "--force"

@@ -112,7 +112,7 @@ USER kah
 
 VOLUME [ "/config" ]
 
-COPY ./images/ubuntu/shim /shim
+COPY ./apps/ubuntu/_hack /hack
 
 ENTRYPOINT [ "/usr/bin/tini", "--" ]
 

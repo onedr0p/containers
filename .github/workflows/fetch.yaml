@@ -35,5 +35,5 @@ jobs:
         with:
           commit_message: |-
             ${{ steps.fetch.outputs.commit-message }}
-          file_pattern: "images/*.json"
+          file_pattern: "apps/*.json"
           push_options: "--force"
