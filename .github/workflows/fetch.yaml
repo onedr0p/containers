@@ -22,16 +22,34 @@ jobs:
           sudo apt install moreutils jo
       - name: Fetch new app versions
         id: fetch
-        run: ./.github/scripts/fetch.sh
+        run: |
+          shopt -s lastpipe
+          __container_versions=()
+          find . -name metadata.json | while read -r metadata; do
+              __app=$(echo "${metadata}" | awk -F / '{print $3}')
+              __current_version=$(jq --raw-output ".__current_version" "${metadata}")
+              __stream=$(echo "${metadata}" | awk -F / '{print $4}')
+              __latest_version="$(bash "$(dirname "$(dirname "${metadata}")")"/latest-version.sh "${__stream}")"
+              if [[ -n "${__latest_version}" || "${__latest_version}" != "null" ]]; then
+                  jq --arg v "$__latest_version" '.__current_version = $v' "${metadata}" | sponge "${metadata}"
+                  jq '.__build_status.__success = true' "${metadata}" | sponge "${metadata}"
+                  echo "${__app} | ${__stream} | ${__current_version} | ${__latest_version} | ${metadata}"
+                  __container_versions+=("ci(release/${__app}/${__stream}): update container image from ${__current_version} to ${__latest_version}")
+              fi
+          done
+          if [[ ${#__container_versions[@]} -gt 1 ]]; then
+              echo ::set-output name=commit-message::"ci(release/multiple): update container image versions"
+              echo ::set-output name=commit-message-extra::"$(printf "%s\n" "${__container_versions[@]}")"
+          else
+              echo ::set-output name=commit-message::"$(printf "%s" "${__container_versions[@]}")"
+          fi
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
         with:
           message: |-
             ${{ steps.fetch.outputs.commit-message }}
-          author_name: GitHub Actions
-          author_email: 41898282+github-actions[bot]@users.noreply.github.com
           committer_name: GitHub Actions
-          committer_email: 41898282+github-actions[bot]@users.noreply.github.com
+          committer_email: actions@github.com
           pull: "--rebase --autostash"
           add: "*.json --force"
       - name: Ammend commit
@@ -43,4 +61,4 @@ jobs:
           commit: "--amend"
           push: "--force"
           committer_name: GitHub Actions
-          committer_email: 41898282+github-actions[bot]@users.noreply.github.com
+          committer_email: actions@github.com
