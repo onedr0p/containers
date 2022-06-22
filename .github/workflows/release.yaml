@@ -186,6 +186,7 @@ jobs:
           echo "::set-output name=commit-message::💥 ${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }} build failed"
       
       - name: Commit changes
+        if: ${{ always() }}
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: |-
