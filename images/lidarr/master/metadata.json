@@ -1,5 +1,5 @@
 {
-  "__current_version": "1.0.2.9",
+  "__current_version": "1.0.2.2592",
   "__stable": true,
   "__platforms": [
     "linux/amd64",
@@ -7,6 +7,6 @@
   ],
   "__build_status": {
     "__ts": "2022-06-22 17:53:25+00:00",
-    "__success": false
+    "__success": true
   }
 }
