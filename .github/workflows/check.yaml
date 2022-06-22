@@ -3,7 +3,7 @@ name: Check
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 */4 * * *"
+    - cron: "0 * * * *"
 
 jobs:
   main:
@@ -16,18 +16,18 @@ jobs:
         run: |
           find . -name metadata.json | while read metadata; do
               app=$(echo "${metadata}" | awk -F / '{print $3}')
-              version=$(jq --raw-output ".version" "${metadata}")
+              current_version=$(jq --raw-output ".current_version" "${metadata}")
               stream=$(echo "${metadata}" | awk -F / '{print $4}')
               latest_version="$(bash $(dirname $(dirname "${metadata}"))/latest-version.sh "${stream}")"
               if [[ -n "${latest_version}" || "${latest_version}" != "null" ]]; then
-                  jq --arg v "$latest_version" '.version = $v' "${metadata}" | sponge "${metadata}"
-                  echo "${app} ${stream} ${version} ${latest_version}"
+                  jq --arg v "$latest_version" '.current_version = $v' "${metadata}" | sponge "${metadata}"
+                  echo "${app} | ${stream} | ${current_version} | ${latest_version} | ${metadata}"
               fi
           done
-      # - name: Commit changes
-      #   uses: EndBug/add-and-commit@v9
-      #   with:
-      #     message: "chore: add new release versions"
-      #     committer_name: GitHub Actions
-      #     committer_email: 41898282+github-actions[bot]@users.noreply.github.com
-      #     add: '*.json'
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: "chore: add new release versions"
+          committer_name: GitHub Actions
+          committer_email: 41898282+github-actions[bot]@users.noreply.github.com
+          add: '*.json'

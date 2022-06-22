@@ -56,6 +56,6 @@ COPY ./images/lidarr/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
 LABEL \
-    org.opencontainers.image.title="${LIDARR__INSTANCE_NAME}" \
+    org.opencontainers.image.title="${LIDARR__INSTANCE_NAME} - ${LIDARR__BRANCH}" \
     org.opencontainers.image.source="https://github.com/Lidarr/Lidarr" \
     org.opencontainers.image.version="${VERSION}"
