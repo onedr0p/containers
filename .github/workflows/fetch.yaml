@@ -37,7 +37,7 @@ jobs:
         run: |
           echo "::set-output name=msg::$(git log -1 --pretty=%s)"
       - name: Ammend commit
-        # if: steps.fetch.outputs.commit-message-extra.exists == 'true'
+        if: steps.fetch.outputs.commit-message-extra
         uses: EndBug/add-and-commit@v9
         with:
           message: |-
