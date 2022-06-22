@@ -193,7 +193,6 @@ jobs:
             ${{ steps.build-failed.outputs.commit-message || steps.build-success.outputs.commit-message }}
           file_pattern: "images/*.json"
           push_options: "--force"
-          skip_fetch: true
           skip_dirty_check: true
 
       # - name: Commit changes
