@@ -131,7 +131,7 @@ jobs:
           labels: |
             org.opencontainers.image.created=${{ steps.envs.outputs.__build_date }}
           context: .
-          platforms: ${{ steps.envs.outputs.__platforms }}
+          # platforms: ${{ steps.envs.outputs.__platforms }}
           file: ${{ steps.dockerfile.outputs.dockerfile }}
           load: true
           tags: |
