@@ -2,8 +2,7 @@
   "__current_version": "1.0.2.23",
   "__stable": true,
   "__platforms": [
-    "linux/amd64",
-    "linux/arm64"
+    "linux/amd64"
   ],
   "__build_status": {
     "__ts": "2022-06-22 18:48:55+00:00",

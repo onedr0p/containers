@@ -10,3 +10,4 @@ port:
 http:
   http://localhost:8686:
     status: 200
+    timeout: 5000

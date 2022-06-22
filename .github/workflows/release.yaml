@@ -9,9 +9,6 @@ on:
     paths:
       - '**/metadata.json'
 
-env:
-  GOSS_SLEEP: 30
-
 jobs:
   changes:
     name: Get changes
@@ -146,7 +143,8 @@ jobs:
         id: dgoss
         if: ${{ steps.goss.outputs.enabled == 'true' }}
         env:
-          GOSS_FILE: images/${{ steps.envs.outputs.__app }}/goss.yaml
+          CONTAINER_RUNTIME: docker
+          GOSS_FILE: images/${{ steps.envs.outputs.__app }}/goss_wait.yaml
         run: |
           dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }}:cachez
 
