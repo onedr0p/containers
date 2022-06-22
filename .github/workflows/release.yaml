@@ -13,28 +13,35 @@ jobs:
     name: Get changes
     runs-on: ubuntu-latest
     outputs:
-      matrix: "{\"container\": ${{ steps.changed.outputs.containers }} }"
+      # matrix: "{\"container\": ${{ steps.changed.outputs.containers }} }"
+      matrix: "{\"container\": \"${{ toJson(steps.changed-files.outputs.all_changed_files) }}\" }"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0 # needed for tj-actions/changed-files
-      - uses: dorny/paths-filter@v2
-        id: filter
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v23
         with:
-          list-files: json
-          filters: |
-            changed:
-              - added|modified:
-                  - '**/metadata.json'
-      - name: Debug filter
-        run: echo "${{ toJson(steps.filter.outputs) }}"
-      - name: Gather changes
-        id: changed
-        run: |
-          tmp=$(mktemp -d) && echo '${{ toJson(steps.filter.outputs) }}' > "${tmp}/changes.json"
-          changed_files=$(jq --raw-output '.changed_files' "${tmp}/changes.json") && rm -rf "${tmp}"
-          echo ::set-output name=containers::${changed_files}
+          files: |
+            **/metadata.json
+      # - uses: dorny/paths-filter@v2
+      #   id: filter
+      #   with:
+      #     list-files: json
+      #     filters: |
+      #       changed:
+      #         - added|modified:
+      #             - '**/metadata.json'
+      - name: Debug
+        run: echo "${{ toJson(steps.changed-files.outputs.all_changed_files) }}"
+      # - name: Gather changes
+      #   id: changed
+      #   run: |
+      #     tmp=$(mktemp -d) && echo '${{ toJson(steps.filter.outputs) }}' > "${tmp}/changes.json"
+      #     changed_files=$(jq --raw-output '.changed_files' "${tmp}/changes.json") && rm -rf "${tmp}"
+      #     echo ::set-output name=containers::${changed_files}
 
   release:
     name: Release container
@@ -86,7 +93,8 @@ jobs:
           install: true
           version: latest
           driver-opts: image=moby/buildkit:latest
-      - name: Build and Push
+      - name: Release
+        id: release
         uses: docker/build-push-action@v3
         with:
           build-args: |
@@ -101,16 +109,15 @@ jobs:
           tags: |
             ${{ steps.tags.outputs.rolling }}
             ${{ steps.tags.outputs.semver }}
-      - name: Build failed
-        if: ${{ failure() || success() }}
+      - name: Build successful
+        if: always()
         run: |
-          jq '.build_failed = ${{ failure() }}' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
-      # - name: Build success
-      #   if: ${{ success() }}
-      #   run: |
-      #     jq '.build_failed = false' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
+          jq '.build_failed = false }}' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
+      - name: Build failed
+        if: failure() && steps.release.outcome != 'success'
+        run: |
+          jq '.build_failed = true' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
       - name: Commit changes
-        if: ${{ failure() || success() }}
         uses: EndBug/add-and-commit@v9
         with:
           message: "ci: update container build state"
