@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 1
       - name: Install OS tools
         run: |
-          sudo apt install moreutils jo
+          sudo apt-get install moreutils jo
       - name: Fetch new app versions
         id: fetch
         run: ./.github/scripts/fetch.sh

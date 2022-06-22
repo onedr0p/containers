@@ -16,9 +16,18 @@ find . -name metadata.json | while read -r metadata; do
     fi
 done
 
+COMMIT_MESSAGE="$(printf "%s" "${__container_versions[@]}")"
 if [[ ${#__container_versions[@]} -gt 1 ]]; then
-    #shellcheck disable=SC2028
-    echo ::set-output name=commit-message::"ci(release/multiple): update container image versions\\n$(printf "%s\\\n" "${__container_versions[@]}")"
-else
-    echo ::set-output name=commit-message::"$(printf "%s" "${__container_versions[@]}")"
+COMMIT_MESSAGE="ci(release/multiple): update container image versions"
+COMMIT_MESSAGE=$(cat << EOF
+${COMMIT_MESSAGE}
+$(printf "%s\n" "${__container_versions[@]}")
+EOF
+)
 fi
+
+COMMIT_MESSAGE="${COMMIT_MESSAGE//'%'/'%25'}"
+COMMIT_MESSAGE="${COMMIT_MESSAGE//$'\n'/'%0A'}"
+COMMIT_MESSAGE="${COMMIT_MESSAGE//$'\r'/'%0D'}"
+
+echo "::set-output name=commit-message::${COMMIT_MESSAGE}"
