@@ -18,6 +18,7 @@ jobs:
         with:
           token: ${{ secrets.TOKEN }}
           fetch-depth: 1
+
       - name: Install OS tools
         run: |
           sudo apt-get install moreutils jo
