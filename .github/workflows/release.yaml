@@ -9,6 +9,9 @@ on:
     paths:
       - '**/metadata.json'
 
+env:
+  GOSS_SLEEP: 30
+
 jobs:
   changes:
     name: Get changes
