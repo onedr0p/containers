@@ -1,0 +1,9 @@
+{
+  "current_version": "jammy-20220531",
+  "stream": "jammy",
+  "stable": false,
+  "platforms": [
+    "linux/amd64",
+    "linux/arm64"
+  ]
+}
