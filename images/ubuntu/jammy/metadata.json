@@ -1,9 +1,12 @@
 {
-  "current_version": "jammy-20220531",
-  "stable": false,
-  "platforms": [
+  "__current_version": "jammy-20220531",
+  "__stable": false,
+  "__platforms": [
     "linux/amd64",
     "linux/arm64"
   ],
-  "build_failed": false
+  "__build_status": {
+    "__ts": "2022-06-22T11:51:16.373Z",
+    "__success": true
+  }
 }

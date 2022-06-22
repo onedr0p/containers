@@ -48,31 +48,38 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Install moreutils
+      - name: Install OS tools
         run: |
-          sudo apt install moreutils
-      - name: Setup vars from metadata.json
+          sudo apt install moreutils jo
+      - name: Setup common workflow vars
         id: envs
         run: |
-          echo ::set-output name=build_date::$(date --rfc-3339=seconds --utc)
-          echo ::set-output name=app::$(echo "./${{ matrix.container }}" | awk -F / '{print $3}')
-          echo ::set-output name=current_version::$(jq --raw-output '.current_version' ${{ matrix.container }})
-          echo ::set-output name=stream::$(echo "./${{ matrix.container }}" | awk -F / '{print $4}')
-          echo ::set-output name=stable::$(jq --raw-output '.stable' ${{ matrix.container }})
-          echo ::set-output name=platforms::$(jq --raw-output '.platforms | join(",")' ${{ matrix.container }})
+          echo ::set-output name=__build_date::$(date --rfc-3339=seconds --utc)
+          echo ::set-output name=__app::$(echo "${{ matrix.container }}" | awk -F / '{print $2}')
+          echo ::set-output name=__current_version::$(jq --raw-output '.__current_version' ${{ matrix.container }})
+          echo ::set-output name=__stream::$(echo "${{ matrix.container }}" | awk -F / '{print $3}')
+          echo ::set-output name=__stable::$(jq --raw-output '.__stable' ${{ matrix.container }})
+          echo ::set-output name=__platforms::$(jq --raw-output '.__platforms | join(",")' ${{ matrix.container }})
       - name: Setup Tags
         id: tags
         run: |
-          [[ "${{ steps.envs.outputs.app }}" != "ubuntu" ]] && v="v"
-          [[ "${{ steps.envs.outputs.stable }}" == "false" ]] && s="-${{ steps.envs.outputs.stream }}"
-          rolling="${{ steps.envs.outputs.app }}${s}:rolling"
+          [[ "${{ steps.envs.outputs.__app }}" != "ubuntu" ]] && v="v"
+          [[ "${{ steps.envs.outputs.__stable }}" == "false" ]] && s="-${{ steps.envs.outputs.__stream }}"
+          rolling="${{ steps.envs.outputs.__app }}${s}:rolling"
           echo ::set-output name=rolling::ghcr.io/${{ github.repository_owner }}/${rolling}
-          semver="${{ steps.envs.outputs.app }}${s}:${v}${{ steps.envs.outputs.current_version }}"
+          semver="${{ steps.envs.outputs.__app }}${s}:${v}${{ steps.envs.outputs.__current_version }}"
           echo ::set-output name=semver::ghcr.io/${{ github.repository_owner }}/${semver}
+      - name: Setup Dockerfile
+        id: dockerfile
+        run: |
+          echo ::set-output name=dockerfile::images/${{ steps.envs.outputs.__app }}/Dockerfile
+          if [[ -f "${{ matrix.container }}/Dockerfile" ]]; then
+            echo ::set-output name=dockerfile::${{ matrix.container }}/Dockerfile
+          fi
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
         with:
-          platforms: ${{ steps.envs.outputs.platforms }}
+          platforms: ${{ steps.envs.outputs.__platforms }}
       - name: Login to GHCR
         uses: docker/login-action@v2
         with:
@@ -91,13 +98,13 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           build-args: |
-            VERSION=${{ steps.envs.outputs.current_version }}
-            STREAM=${{ steps.envs.outputs.stream }}
+            VERSION=${{ steps.envs.outputs.__current_version }}
+            STREAM=${{ steps.envs.outputs.__stream }}
           labels: |
-            org.opencontainers.image.created=${{ steps.envs.outputs.build_date }}
+            org.opencontainers.image.created=${{ steps.envs.outputs.__build_date }}
           context: .
-          platforms: ${{ steps.envs.outputs.platforms }}
-          file: ./images/${{ steps.envs.outputs.app }}/Dockerfile
+          platforms: ${{ steps.envs.outputs.__platforms }}
+          file: ${{ steps.dockerfile.outputs.dockerfile }}
           push: true
           tags: |
             ${{ steps.tags.outputs.rolling }}
@@ -105,11 +112,13 @@ jobs:
       - name: Build successful
         if: always()
         run: |
-          jq '.build_failed = false' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
+          jq '.__build_status.__success = true' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
+          jq --arg v "${{ steps.envs.outputs.__build_date }}" '.__build_status.__ts = $v' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
       - name: Build failed
         if: failure() && steps.release.outcome != 'success'
         run: |
-          jq '.build_failed = true' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
+          jq '.__build_status.__success = false' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
+          jq --arg v "${{ steps.envs.outputs.__build_date }}" '.__build_status.__ts = $v' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
         if: always()

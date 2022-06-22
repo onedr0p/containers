@@ -12,20 +12,20 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 1
-      - name: Install sponge from moreutils
+      - name: Install OS tools
         run: |
-          sudo apt install moreutils
+          sudo apt install moreutils jo
       - name: Fetch new app versions
         run: |
           find . -name metadata.json | while read metadata; do
-              app=$(echo "${metadata}" | awk -F / '{print $3}')
-              current_version=$(jq --raw-output ".current_version" "${metadata}")
-              stream=$(echo "${metadata}" | awk -F / '{print $4}')
-              latest_version="$(bash $(dirname $(dirname "${metadata}"))/latest-version.sh "${stream}")"
-              if [[ -n "${latest_version}" || "${latest_version}" != "null" ]]; then
-                  jq --arg v "$latest_version" '.current_version = $v' "${metadata}" | sponge "${metadata}"
-                  jq '.build_failed = false' "${metadata}" | sponge "${metadata}"
-                  echo "${app} | ${stream} | ${current_version} | ${latest_version} | ${metadata}"
+              __app=$(echo "${metadata}" | awk -F / '{print $3}')
+              __current_version=$(jq --raw-output ".__current_version" "${metadata}")
+              __stream=$(echo "${metadata}" | awk -F / '{print $4}')
+              __latest_version="$(bash $(dirname $(dirname "${metadata}"))/latest-version.sh "${__stream}")"
+              if [[ -n "${__latest_version}" || "${__latest_version}" != "null" ]]; then
+                  jq --arg v "$__latest_version" '.__current_version = $v' "${metadata}" | sponge "${metadata}"
+                  jq '.__build_status.__success = true' "${metadata}" | sponge "${metadata}"
+                  echo "${__app} | ${__stream} | ${__current_version} | ${__latest_version} | ${metadata}"
               fi
           done
       - name: Commit changes
