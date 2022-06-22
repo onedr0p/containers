@@ -1,4 +1,4 @@
-name: Check for new application version
+name: Check
 
 on:
   workflow_dispatch:
