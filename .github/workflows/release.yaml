@@ -55,12 +55,11 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install OS tools
-        run: |
-          sudo apt-get install moreutils jo
+        run: sudo apt-get install moreutils jo
 
       - name: Setup common workflow vars
         id: envs
-        run: |
+        run: |-
           echo ::set-output name=__build_date::$(date --rfc-3339=seconds --utc)
           echo ::set-output name=__app::$(echo "${{ matrix.container }}" | awk -F / '{print $2}')
           echo ::set-output name=__current_version::$(jq --raw-output '.__current_version' ${{ matrix.container }})
@@ -70,17 +69,18 @@ jobs:
 
       - name: Setup Tags
         id: tags
-        run: |
-          [[ "${{ steps.envs.outputs.__app }}" != "ubuntu" ]] && v="v"
+        run: |-
           [[ "${{ steps.envs.outputs.__stable }}" == "false" ]] && s="-${{ steps.envs.outputs.__stream }}"
-          rolling="${{ steps.envs.outputs.__app }}${s}:rolling"
-          echo ::set-output name=rolling::ghcr.io/${{ github.repository_owner }}/${rolling}
-          semver="${{ steps.envs.outputs.__app }}${s}:${v}${{ steps.envs.outputs.__current_version }}"
-          echo ::set-output name=semver::ghcr.io/${{ github.repository_owner }}/${semver}
+          if [[ "${{ steps.envs.outputs.__app }}" == "ubuntu" ]]; then
+            echo ::set-output name=rolling::ghcr.io/${{ github.repository_owner }}/${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }}:rolling
+          else
+            echo ::set-output name=rolling::ghcr.io/${{ github.repository_owner }}/${{ steps.envs.outputs.__app }}${s}:rolling
+            echo ::set-output name=semver::ghcr.io/${{ github.repository_owner }}/${{ steps.envs.outputs.__app }}${s}:v${{ steps.envs.outputs.__current_version }}
+          fi
 
       - name: Setup Dockerfile
         id: dockerfile
-        run: |
+        run: |-
           echo ::set-output name=dockerfile::apps/${{ steps.envs.outputs.__app }}/Dockerfile
           if test -f "${{ matrix.container }}/Dockerfile"; then
               echo ::set-output name=dockerfile::${{ matrix.container }}/Dockerfile
@@ -88,7 +88,7 @@ jobs:
 
       - name: Setup Goss
         id: goss
-        run: |
+        run: |-
           if test -f "apps/${{ steps.envs.outputs.__app }}/_actions/goss.yaml"; then
               echo ::set-output name=enabled::true
           else
@@ -125,16 +125,16 @@ jobs:
         if: ${{ steps.goss.outputs.enabled == 'true' }}
         uses: docker/build-push-action@v3
         with:
-          build-args: |
+          build-args: |-
             VERSION=${{ steps.envs.outputs.__current_version }}
             STREAM=${{ steps.envs.outputs.__stream }}
-          labels: |
+          labels: |-
             org.opencontainers.image.created=${{ steps.envs.outputs.__build_date }}
           context: .
           # platforms: ${{ steps.envs.outputs.__platforms }}
           file: ${{ steps.dockerfile.outputs.dockerfile }}
           load: true
-          tags: |
+          tags: |-
             ghcr.io/${{ github.repository_owner }}/${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }}:cachez
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -147,23 +147,23 @@ jobs:
           GOSS_FILE: apps/${{ steps.envs.outputs.__app }}/_actions/goss.yaml
           GOSS_OPTS: |-
             --retry-timeout 30s --sleep 2s --color --format documentation
-        run: |
+        run: |-
           dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }}:cachez
 
       - name: Release
         id: release
         uses: docker/build-push-action@v3
         with:
-          build-args: |
+          build-args: |-
             VERSION=${{ steps.envs.outputs.__current_version }}
             STREAM=${{ steps.envs.outputs.__stream }}
-          labels: |
+          labels: |-
             org.opencontainers.image.created=${{ steps.envs.outputs.__build_date }}
           context: .
           platforms: ${{ steps.envs.outputs.__platforms }}
           file: ${{ steps.dockerfile.outputs.dockerfile }}
           push: true
-          tags: |
+          tags: |-
             ${{ steps.tags.outputs.rolling }}
             ${{ steps.tags.outputs.semver }}
           cache-from: type=gha
@@ -172,7 +172,7 @@ jobs:
       - name: Build successful
         id: build-success
         if: ${{ always() }}
-        run: |
+        run: |-
           jq '.__build_status.__success = true' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
           jq --arg v "${{ steps.envs.outputs.__build_date }}" '.__build_status.__ts = $v' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
           echo "::set-output name=commit-message::🎉 ${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }} build success"
@@ -180,14 +180,14 @@ jobs:
       - name: Build failed
         id: build-failed
         if: ${{ failure() && (steps.release.outcome == 'failure' || steps.dgoss.outcome != 'success') }}
-        run: |
+        run: |-
           jq '.__build_status.__success = false' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
           jq --arg v "${{ steps.envs.outputs.__build_date }}" '.__build_status.__ts = $v' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
           echo "::set-output name=commit-message::💥 ${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }} build failed"
 
       - name: Snoozing randomly
         if: ${{ always() }}
-        run: |
+        run: |-
           perl -e 'sleep int(rand(15))'
 
       - name: Git pull in changes
@@ -211,7 +211,7 @@ jobs:
       # case it will try to pull and commit one more time
       - name: Snoozing randomly (retry)
         if: ${{ steps.commit-changes.outcome == 'failure' }}
-        run: |
+        run: |-
           perl -e 'sleep int(rand(30))'
 
       - name: Git pull in changes (retry)
