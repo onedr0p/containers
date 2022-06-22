@@ -26,6 +26,8 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v23
         with:
+          dir_names: true
+          quotepath: true
           files: |
             **/metadata.json
       - name: List all changed files
