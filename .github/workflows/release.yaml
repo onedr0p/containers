@@ -32,7 +32,9 @@ jobs:
       - name: Gather changes
         id: changed
         run: |
-          echo ::set-output name=containers::$(jq --raw-output '.changed_files' "${{ toJson(steps.filter.outputs) }}")
+          tmp=$(mktemp -d) && echo '${{ toJson(steps.filter.outputs) }}' > "${tmp}/changes.json"
+          changed_files=$(jq --raw-output '.changed_files' "${tmp}/changes.json") && rm -rf "${tmp}"
+          echo ::set-output name=containers::${changed_files}
 
   release:
     name: Release container
@@ -46,7 +48,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Prepare
-        id: prep
+      - name: Setup Env
+        id: setup
         run: |
-          echo ${{ matrix.container }}
+          echo ::set-output name=current_version::$(jq --raw-output '.current_version' ${{ matrix.container }})
+          echo ::set-output name=current_tag::$(jq --raw-output '.current_tag' ${{ matrix.container }})
+          echo ::set-output name=stream::$(jq --raw-output '.stream' ${{ matrix.container }})
+          echo ::set-output name=platforms::$(jq --raw-output '.platforms | join(",")' ${{ matrix.container }})
