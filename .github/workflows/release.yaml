@@ -112,8 +112,10 @@ jobs:
           jq '.build_failed = true' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
+        if: always()
         with:
           message: "ci: update container build state"
           committer_name: GitHub Actions
           committer_email: 41898282+github-actions[bot]@users.noreply.github.com
-          add: '*.json'
+          pull: "--rebase"
+          add: "*.json"
