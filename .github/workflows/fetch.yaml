@@ -50,7 +50,7 @@ jobs:
           pull: "--rebase --autostash"
           add: "*.json --force"
       - name: Ammend commit
-        if: ${{ steps.fetch.outputs.commit-message-extra.exists == "true" }}
+        if: (${{ steps.fetch.outputs.commit-message-extra.exists == 'true' }})
         uses: EndBug/add-and-commit@v9
         with:
           message: |-
