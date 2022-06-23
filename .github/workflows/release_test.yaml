@@ -81,6 +81,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     needs:
+      - changed-apps
       - changed-channels
     strategy:
       matrix: ${{ fromJson(needs.changed-channels.outputs.matrix) }}
