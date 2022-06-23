@@ -21,7 +21,7 @@ jobs:
     name: Application Changes
     runs-on: ubuntu-latest
     outputs:
-      matrix: "{\"apps\": ${{ steps.changed-apps.outputs.apps }} }"
+      apps: ${{ steps.changed-apps.outputs.apps }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -42,11 +42,13 @@ jobs:
         run: echo "${{ toJson(steps.filter.outputs) }}"
 
       - name: Gather changes
-        id: changed
+        id: apps
         run: |
-          tmp=$(mktemp -d) && echo '${{ toJson(steps.filter.outputs) }}' > "${tmp}/changes.json"
-          changed_apps=$(jq --raw-output '.changed_apps' "${tmp}/changes.json") && rm -rf "${tmp}"
-          echo ::set-output name=apps::${changed_apps}
+          APPS=$(jq --raw-output '.changed_apps' <<< ${{ toJson(steps.filter.outputs) }}
+          echo ::set-output name=apps::${APPS}
+          # tmp=$(mktemp -d) && echo '${{ toJson(steps.filter.outputs) }}' > "${tmp}/changes.json"
+          # changed_apps=$(jq --raw-output '.changed_apps' "${tmp}/changes.json") && rm -rf "${tmp}"
+          # echo ::set-output name=apps::${changed_apps}
 
   changed-channels:
     name: Channel Changes
@@ -54,9 +56,10 @@ jobs:
     needs:
       - changed-apps
     outputs:
-      matrix: "{\"channel\": ${{ steps.changed-channels.outputs.channels }} }"
+      app: ${{ steps.changed-channels.outputs.app }}
+      channels: ${{ steps.changed-channels.outputs.channels }}
     strategy:
-      matrix: ${{ fromJson(needs.changed-apps.outputs.matrix) }}
+      matrix: ${{ fromJson(needs.changed-apps.outputs.apps) }}
       fail-fast: false
     steps:
       - name: Checkout
@@ -75,6 +78,7 @@ jobs:
           # echo "::add-path::$RUNNER_WORKSPACE/$(basename $GITHUB_REPOSITORY)/bin"
 
       - name: Gather changes
+        id: channels
         run: ./.github/scripts/changed_test.sh
 
   build:
@@ -83,7 +87,9 @@ jobs:
     needs:
       - changed-channels
     strategy:
-      matrix: ${{ fromJson(needs.changed-channels.outputs.matrix) }}
+      matrix: 
+        app: ${{ needs.changed-channels.outputs.apps) }}
+        channel: ${{ fromJson(needs.changed-channels.outputs.channels) }}
       max-parallel: 5
       fail-fast: false
     steps:
@@ -98,7 +104,8 @@ jobs:
       
       - name: Test
         run: |
-          echo ${{ matrix.channel }}
+          echo ${{ app }}
+          echo ${{ channel }}
 
   #     - name: Setup common workflow vars
   #       id: envs
