@@ -21,7 +21,8 @@ jobs:
     name: Application Changes
     runs-on: ubuntu-latest
     outputs:
-      apps: ${{ steps.generate-matrix.outputs.apps }}
+      app: ${{ steps.generate-matrix.outputs.app }}
+      channels: ${{ steps.generate-matrix.outputs.channels }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -45,63 +46,29 @@ jobs:
         id: generate-matrix
         run: |
           apps=$(jq --raw-output '.changed_files' <<< '${{ toJson(steps.filter.outputs) }}')
-          echo "${apps}"
-          echo ::set-output name=apps::${apps}
-
-  changed-channels:
-    name: Channel Changes
-    runs-on: ubuntu-latest
-    needs:
-      - changed-apps
-    outputs:
-      apps: ${{ steps.generate-matrix.outputs.apps }}
-      channels: ${{ steps.generate-matrix.outputs.channels }}
-    strategy:
-      matrix:
-        apps: ${{ fromJson(needs.changed-apps.outputs.apps) }}
-      fail-fast: false
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.TOKEN }}
-          fetch-depth: 1
-
-      - name: Install OS utils
-        run: |
-          sudo apt-get install moreutils jo
-          # curl -fsSL -o $GITHUB_WORKSPACE/bin/spruce \
-          #   $(curl -s https://api.github.com/repos/geofffranks/spruce/releases/latest \
-          #     | jq '.assets[] | select(.name|match("linux-amd64")) | .browser_download_url')
-          # echo "::add-path::$GITHUB_WORKSPACE/bin"
-          # echo "::add-path::$RUNNER_WORKSPACE/$(basename $GITHUB_REPOSITORY)/bin"
-
-      - name: Gather changes
-        id: generate-matrix
-        run: |
           shopt -s lastpipe
           __changed_channels=()
-          __app=$(echo "${{ matrix.apps }}" | awk -F / '{print $2}')
-          jq -c '.__channels | .[]' "${{ matrix.apps }}" | while read -r __channels; do
+          __app=$(echo "${{ apps }}" | awk -F / '{print $2}')
+          jq -c '.__channels | .[]' "${{ apps }}" | while read -r __channels; do
               __name="$(jq --raw-output '.__name' <<< "${__channels}")"
               __version="$(jq --raw-output '.__version' <<< "${__channels}")"
               __fetched_version="$(jq --raw-output '.__fetched_version' <<< "${__channels}")"
               if [[ "${__fetched_version}" != "${__version}" ]]; then
-                  __changed_channels+=("${__app}/${__name}")
+                  __changed_channels+=("${__name}")
               fi
           done
-          echo "::set-output name=apps::$(jo -a "${__app}" | jq --raw-output)"
+          echo "::set-output name=app::$(jo -a "${__app}" | jq --raw-output)"
           echo "::set-output name=channels::$(jo -a "${__changed_channels[@]}" | jq --raw-output)"
 
   build:
     name: Build Changes
     runs-on: ubuntu-latest
     needs:
-      - changed-channels
+      - changed-apps
     strategy:
       matrix: 
-        apps: ${{ fromJson(needs.changed-channels.outputs.apps) }}
-        channels: ${{ fromJson(needs.changed-channels.outputs.channels) }}
+        app: ${{ fromJson(needs.changed-apps.outputs.app) }}
+        channels: ${{ fromJson(needs.changed-apps.outputs.channels) }}
       max-parallel: 5
       fail-fast: false
     steps:
@@ -118,6 +85,81 @@ jobs:
         run: |
           echo ${{ matrix.apps }}
           echo ${{ matrix.channels }}
+
+
+# echo "${apps}"
+# echo ::set-output name=apps::${apps}
+
+  # changed-channels:
+  #   name: Channel Changes
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - changed-apps
+  #   outputs:
+  #     apps: ${{ steps.generate-matrix.outputs.apps }}
+  #     channels: ${{ steps.generate-matrix.outputs.channels }}
+  #   strategy:
+  #     matrix:
+  #       apps: ${{ fromJson(needs.changed-apps.outputs.apps) }}
+  #     fail-fast: false
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #       with:
+  #         token: ${{ secrets.TOKEN }}
+  #         fetch-depth: 1
+
+  #     - name: Install OS utils
+  #       run: |
+  #         sudo apt-get install moreutils jo
+  #         # curl -fsSL -o $GITHUB_WORKSPACE/bin/spruce \
+  #         #   $(curl -s https://api.github.com/repos/geofffranks/spruce/releases/latest \
+  #         #     | jq '.assets[] | select(.name|match("linux-amd64")) | .browser_download_url')
+  #         # echo "::add-path::$GITHUB_WORKSPACE/bin"
+  #         # echo "::add-path::$RUNNER_WORKSPACE/$(basename $GITHUB_REPOSITORY)/bin"
+
+  #     - name: Gather changes
+  #       id: generate-matrix
+  #       run: |
+  #         shopt -s lastpipe
+  #         __changed_channels=()
+  #         __app=$(echo "${{ matrix.apps }}" | awk -F / '{print $2}')
+  #         jq -c '.__channels | .[]' "${{ matrix.apps }}" | while read -r __channels; do
+  #             __name="$(jq --raw-output '.__name' <<< "${__channels}")"
+  #             __version="$(jq --raw-output '.__version' <<< "${__channels}")"
+  #             __fetched_version="$(jq --raw-output '.__fetched_version' <<< "${__channels}")"
+  #             if [[ "${__fetched_version}" != "${__version}" ]]; then
+  #                 __changed_channels+=("${__app}/${__name}")
+  #             fi
+  #         done
+  #         echo "::set-output name=apps::$(jo -a "${__app}" | jq --raw-output)"
+  #         echo "::set-output name=channels::$(jo -a "${__changed_channels[@]}" | jq --raw-output)"
+
+  # build:
+  #   name: Build Changes
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - changed-channels
+  #   strategy:
+  #     matrix: 
+  #       apps: ${{ fromJson(needs.changed-channels.outputs.apps) }}
+  #       channels: ${{ fromJson(needs.changed-channels.outputs.channels) }}
+  #     max-parallel: 5
+  #     fail-fast: false
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #       with:
+  #         token: ${{ secrets.TOKEN }}
+  #         fetch-depth: 1
+
+  #     - name: Install OS tools
+  #       run: sudo apt-get install moreutils jo
+      
+  #     - name: Test
+  #       run: |
+  #         echo ${{ matrix.apps }}
+  #         echo ${{ matrix.channels }}
 
   #     - name: Setup common workflow vars
   #       id: envs
