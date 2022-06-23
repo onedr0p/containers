@@ -104,8 +104,8 @@ jobs:
       
       - name: Test
         run: |
-          echo ${{ app }}
-          echo ${{ channel }}
+          echo ${{ app.app }}
+          echo ${{ channel.channels }}
 
   #     - name: Setup common workflow vars
   #       id: envs
