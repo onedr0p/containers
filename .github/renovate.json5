@@ -1,0 +1,19 @@
+{
+  "extends": [
+    "config:base"
+  ],
+  "packageRules": [
+    {
+      "description": "Auto-merge base container updates",
+      "matchDatasources": ["docker"],
+      "automerge": true,
+      "automergeType": "branch",
+      "requiredStatusChecks": null,
+      "matchPackageNames": [
+        "ghcr.io/onedr0p/alpine",
+        "ghcr.io/onedr0p/ubuntu-focal",
+        "ghcr.io/onedr0p/ubuntu-jammy"
+      ]
+    }
+  ]
+}
