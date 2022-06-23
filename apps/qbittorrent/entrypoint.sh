@@ -46,7 +46,7 @@ if [[ ! -f "$qbtLogFile" ]]; then
     ln -sf /proc/self/fd/1 "$qbtLogFile"
 fi
 
-exec /app/qbittorrent \
+exec /app/qbittorrent-nox \
     ${PROFILE_ARGS} \
     --webui-port="${WEBUI_PORT}" \
     ${EXTRA_ARGS}

@@ -11,10 +11,10 @@ ENV BITTORRENT_PORT=6881 \
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 #hadolint ignore=DL3018
-RUN apk add --no-cache ca-certificates geoip p7zip python3 qbittorrent~"${VERSION}" curl
+RUN apk add --no-cache ca-certificates geoip p7zip python3 qbittorrent-nox~"${VERSION}"
 #hadolint ignore=DL3059
-RUN chmod -R 755 /usr/bin/qbittorrent \
-    ln -s /usr/bin/qbittorrent /app/qbittorrent
+RUN chmod -R 755 /usr/bin/qbittorrent-nox \
+    && ln -s /usr/bin/qbittorrent-nox /app/qbittorrent-nox
 
 USER kah
 
