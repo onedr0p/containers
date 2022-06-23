@@ -32,13 +32,13 @@
       ]
     },
     {
-      "description": "Auto-merge renovate action",
+      "description": "Auto-merge github actions",
       "matchDatasources": ["github-actions"],
       "automerge": true,
       "automergeType": "branch",
       "requiredStatusChecks": null,
       "matchUpdateTypes": ["minor", "patch"],
-      "matchPackageNames": [
+      "matchPackagePattern": [
         "renovatebot/github-action"
       ]
     }
