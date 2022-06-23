@@ -8,5 +8,5 @@ port:
     listening: true
 
 http:
-  http://localhost:8096/web:
+  http://localhost:8096/web/web/index.html:
     status: 200
