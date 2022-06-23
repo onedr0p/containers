@@ -20,18 +20,6 @@
   "commitBodyTable": true,
   "packageRules": [
     {
-      "description": "Auto-merge base container updates",
-      "matchDatasources": ["docker"],
-      "automerge": true,
-      "automergeType": "branch",
-      "requiredStatusChecks": null,
-      "matchUpdateTypes": ["digest"],
-      "matchPackagePatterns": [
-        "ghcr.io/onedr0p/alpine",
-        "ghcr.io/onedr0p/ubuntu"
-      ]
-    },
-    {
       "description": "Auto-merge github actions",
       "matchDatasources": ["github-actions"],
       "automerge": true,
@@ -41,6 +29,16 @@
       "matchPackagePatterns": [
         "renovatebot/github-action"
       ]
+    }
+  ],
+  "regexManagers": [
+    {
+      "description": "Process various dependencies",
+      "matchStrings": [
+        "datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\n.*?\"(?<currentValue>.*)\"\n"
+      ],
+      "datasourceTemplate": "{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}",
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
     }
   ]
 }
