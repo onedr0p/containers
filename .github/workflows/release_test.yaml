@@ -83,7 +83,7 @@ jobs:
       
       - name: Test
         run: |
-          echo ${{ matrix.apps }}
+          echo ${{ matrix.app }}
           echo ${{ matrix.channels }}
 
 
