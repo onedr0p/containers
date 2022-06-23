@@ -87,8 +87,8 @@ jobs:
       - changed-channels
     strategy:
       matrix: 
-        app: ${{ needs.changed-channels.outputs.apps }}
-        channel: ${{ fromJson(needs.changed-channels.outputs.channels) }}
+        app: ${{ needs.changed-channels.outputs.app }}
+        channels: ${{ fromJson(needs.changed-channels.outputs.channels) }}
       max-parallel: 5
       fail-fast: false
     steps:
@@ -104,7 +104,7 @@ jobs:
       - name: Test
         run: |
           echo ${{ matrix.app }}
-          echo ${{ matrix.channel }}
+          echo ${{ matrix.channels }}
 
   #     - name: Setup common workflow vars
   #       id: envs
