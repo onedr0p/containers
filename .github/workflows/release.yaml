@@ -203,6 +203,7 @@ jobs:
       - name: Git commit changes
         id: commit-changes
         if: ${{ always() }}
+        continue-on-error: true
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: |-
@@ -214,18 +215,18 @@ jobs:
       # just at the right time to throw a conflict, in that 
       # case it will try to pull and commit one more time
       - name: Snoozing randomly (retry)
-        if: ${{ steps.commit-changes.outcome == 'failure' }}
+        if: ${{ always() && steps.commit-changes.outcome == 'failure' }}
         run: |-
           perl -e 'sleep int(rand(15))'
           perl -e 'sleep int(rand(15))'
 
       - name: Git pull in changes (retry)
-        if: ${{ steps.commit-changes.outcome == 'failure' }}
+        if: ${{ always() && steps.commit-changes.outcome == 'failure' }}
         continue-on-error: true
         run: git pull --rebase --autostash
 
       - name: Git commit changes (retry)
-        if: ${{ steps.commit-changes.outcome == 'failure' }}
+        if: ${{ always() && steps.commit-changes.outcome == 'failure' }}
         continue-on-error: true
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
