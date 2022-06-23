@@ -41,7 +41,7 @@ jobs:
           changed_files=$(jq --raw-output '.changed_files' "${tmp}/changes.json") && rm -rf "${tmp}"
           echo ::set-output name=containers::${changed_files}
 
-  build:
+  main:
     name: Build
     runs-on: ubuntu-latest
     needs:
