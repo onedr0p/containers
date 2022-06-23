@@ -1,51 +1,34 @@
-FROM ghcr.io/onedr0p/ubuntu-jammy:rolling@sha256:3eb24c4875328f164308d6c71dac21bd283de0edeb81a2c63859510ebb1d7c41
+FROM ghcr.io/onedr0p/alpine:rolling@sha256:12f1f351282f16ec0e6beda919fcad1b11014c4be3e6be8cef00cb8dc94fa764
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 ARG VERSION
 ARG STREAM
 
-USER root
-
 ENV \
     RADARR__INSTANCE_NAME="Radarr" \
     RADARR__BRANCH="${STREAM}" \
     RADARR__PORT="7878"
 
-# hadolint ignore=DL3008,DL3015
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+#hadolint ignore=DL3018
+RUN apk add --no-cache ca-certificates icu-libs libintl sqlite-libs xmlstarlet
+#hadolint ignore=DL3059
 RUN \
-    apt-get -qq update \
-    && \
-    apt-get -qq install -y \
-        ca-certificates \
-        libicu70 \
-        libsqlite3-0 \
-        xmlstarlet \
-    && \
     case "${TARGETPLATFORM}" in \
         'linux/amd64') export ARCH='x64' ;; \
         'linux/arm64') export ARCH='arm64' ;; \
     esac \
     && \
-    curl -fsSL -o /tmp/radarr.tar.gz \
-        "https://radarr.servarr.com/v1/update/${RADARR__BRANCH}/updatefile?version=${VERSION}&os=linux&runtime=netcore&arch=${ARCH}" \
-    && tar ixzf /tmp/radarr.tar.gz -C /app --strip-components 1 \
+    curl -fsSL "https://radarr.servarr.com/v1/update/${RADARR__BRANCH}/updatefile?version=${VERSION}&os=linuxmusl&runtime=netcore&arch=${ARCH}" \
+        | tar xzf - -C /app --strip-components=1 \
     && \
     rm -rf \
-        /app/Radarr.Update* \
+        /app/Radarr.Update \
     && \
     printf "UpdateMethod=docker\nBranch=%s\nPackageVersion=%s\nPackageAuthor=[Team k8s-at-home](https://github.com/k8s-at-home)" "${RADARR__BRANCH}" "${VERSION}" > /app/package_info \
-    && \
-    apt-get autoremove -y \
-    && apt-get clean \
-    && \
-    rm -rf \
-        /tmp/* \
-        /var/lib/apt/lists/* \
-        /var/tmp/ \
-    && chown -R kah:kah /app \
-    && chmod -R u=rwX,go=rX /app \
-    && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
+    && chmod -R 755 /app
 
 USER kah
 

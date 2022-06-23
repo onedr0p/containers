@@ -1,6 +1,5 @@
 ARG VERSION
-
-FROM ubuntu:${VERSION}
+FROM docker.io/library/ubuntu:${VERSION}
 
 ARG VERSION
 ARG STREAM

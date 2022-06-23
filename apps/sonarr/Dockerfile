@@ -1,56 +1,38 @@
-FROM ghcr.io/onedr0p/ubuntu-jammy:rolling@sha256:3eb24c4875328f164308d6c71dac21bd283de0edeb81a2c63859510ebb1d7c41
+FROM ghcr.io/onedr0p/alpine:rolling@sha256:12f1f351282f16ec0e6beda919fcad1b11014c4be3e6be8cef00cb8dc94fa764
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 ARG VERSION
 ARG STREAM
 
-USER root
-
 ENV \
     SONARR__INSTANCE_NAME="Sonarr" \
     SONARR__BRANCH="${STREAM}" \
     SONARR__PORT="8989"
 
-# hadolint ignore=DL3008,DL3015,SC2086
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+#hadolint ignore=DL3018
 RUN \
-    apt-get -qq update \
-    && apt-get -qq install -y gnupg \
-	&& \
-    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF \
-    && echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" | tee /etc/apt/sources.list.d/mono-official.list \
-    && apt-get -qq update \
+    apk add --no-cache ca-certificates sqlite-libs xmlstarlet \
+    && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/main tinyxml2 \
+    && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community libmediainfo \
+    && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing mono
+#hadolint ignore=DL3059
+RUN \
+    case "${TARGETPLATFORM}" in \
+        'linux/amd64') export ARCH='x64' ;; \
+        'linux/arm64') export ARCH='arm64' ;; \
+    esac \
     && \
-    apt-get -qq install -y \
-        ca-certificates \
-        mono-complete \
-        ca-certificates-mono \
-        libmediainfo0v5 \
-        xmlstarlet \
-    && \
-    curl -fsSL -o /tmp/sonarr.tar.gz \
-        "https://download.sonarr.tv/v3/${SONARR__BRANCH}/${VERSION}/Sonarr.${SONARR__BRANCH}.${VERSION}.linux.tar.gz" \
-    && tar ixzf /tmp/sonarr.tar.gz -C /app --strip-components 1 \
+    curl -fsSL "https://download.sonarr.tv/v3/${SONARR__BRANCH}/${VERSION}/Sonarr.${SONARR__BRANCH}.${VERSION}.linux.tar.gz" \
+        | tar xzf - -C /app --strip-components=1 \
     && \
     rm -rf \
-        /app/Sonarr.Update* \
+        /app/Sonarr.Update \
     && \
     printf "UpdateMethod=docker\nBranch=%s\nPackageVersion=%s\nPackageAuthor=[Team k8s-at-home](https://github.com/k8s-at-home)" "${SONARR__BRANCH}" "${VERSION}" > /app/package_info \
-    && \
-    gpgconf --kill all \
-    && apt-get remove -y gnupg \
-    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
-    && apt-get autoremove -y \
-    && apt-get clean \
-    && \
-    rm -rf \
-        /tmp/* \
-        /var/lib/apt/lists/* \
-        /var/cache/apt/* \
-        /var/tmp/ \
-    && chown -R kah:kah /app \
-    && chmod -R u=rwX,go=rX /app \
-    && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
+    && chmod -R 755 /app
 
 USER kah
 

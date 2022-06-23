@@ -39,15 +39,14 @@ Accepted=true
 EOF
 fi
 
-python3 /shim/config.py --output "$qbtConfigFile"
+python3 /scripts/config.py --output "$qbtConfigFile"
 
 if [[ ! -f "$qbtLogFile" ]]; then
     mkdir -p "$(dirname $qbtLogFile)"
     ln -sf /proc/self/fd/1 "$qbtLogFile"
 fi
 
-exec /app/qbittorrent-nox \
+exec /app/qbittorrent \
     ${PROFILE_ARGS} \
     --webui-port="${WEBUI_PORT}" \
     ${EXTRA_ARGS}
-fi

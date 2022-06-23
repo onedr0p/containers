@@ -1,4 +1,4 @@
-FROM ghcr.io/onedr0p/ubuntu-jammy:rolling@sha256:3eb24c4875328f164308d6c71dac21bd283de0edeb81a2c63859510ebb1d7c41
+FROM ghcr.io/onedr0p/alpine:rolling@sha256:12f1f351282f16ec0e6beda919fcad1b11014c4be3e6be8cef00cb8dc94fa764
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
@@ -8,46 +8,17 @@ ARG STREAM
 ENV BITTORRENT_PORT=6881 \
     WEBUI_PORT=8080
 
-USER root
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# hadolint ignore=DL3008,DL3013,DL3015,SC2086
-RUN \
-    export EXTRA_INSTALL_ARG="binutils"; \
-    apt-get -qq update \
-    && \
-    apt-get install -y \
-        geoip-bin \
-        p7zip-full \
-        python3 \
-        unrar \
-        unzip \
-        ${EXTRA_INSTALL_ARG} \
-    && \
-    case "${TARGETPLATFORM}" in \
-        'linux/amd64') export ARCH="x86_64" ;; \
-        'linux/arm64') export ARCH="aarch64" ;; \
-    esac \
-    && curl -fsSL -o /app/qbittorrent-nox "https://github.com/userdocs/qbittorrent-nox-static/releases/latest/download/${ARCH}-cmake-qbittorrent-nox" \
-    && chmod +x /app/qbittorrent-nox \
-    && \
-    apt-get remove -y ${EXTRA_INSTALL_ARG} \
-    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
-    && apt-get autoremove -y \
-    && apt-get clean \
-    && \
-    rm -rf \
-        /tmp/* \
-        /var/lib/apt/lists/* \
-        /var/tmp/ \
-    && chown -R kah:kah /app \
-    && chmod -R u=rwX,go=rX /app \
-    && chown -R kah:kah /config \
-    && chmod -R u=rwX,go=rX /config \
-    && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
+#hadolint ignore=DL3018
+RUN apk add --no-cache ca-certificates geoip p7zip python3 qbittorrent~"${VERSION}" curl
+#hadolint ignore=DL3059
+RUN chmod -R 755 /usr/bin/qbittorrent \
+    ln -s /usr/bin/qbittorrent /app/qbittorrent
 
 USER kah
 
-EXPOSE ${BITTORRENT_PORT} ${BITTORRENT_PORT}/udp ${WEBUI_PORT}
+EXPOSE ${BITTORRENT_PORT}/tcp ${BITTORRENT_PORT}/udp ${WEBUI_PORT}/tcp
 
 COPY ./apps/qbittorrent/config.py /shim/config.py
 COPY ./apps/qbittorrent/entrypoint.sh /entrypoint.sh
@@ -55,6 +26,6 @@ COPY ./apps/qbittorrent/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
 LABEL \
-    org.opencontainers.image.title="qBittorrent" \
+    org.opencontainers.image.title="qBittorrent ($STREAM)" \
     org.opencontainers.image.source="https://github.com/qbittorrent/qBittorrent" \
     org.opencontainers.image.version="${VERSION}"

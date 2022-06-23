@@ -23,22 +23,21 @@ ENV UMASK="0002" \
 WORKDIR /app
 
 #hadolint ignore=DL3018
+RUN apk add --no-cache bash bind-tools curl jq nano tini
+#hadolint ignore=DL3018
 RUN \
     addgroup -S kah --gid 568 \
         && adduser -S kah -G kah --uid 568 \
         && mkdir -p /config \
         && chown -R kah:kah /config \
         && chmod -R 775 /config \
-    && \
-    apk add --no-cache \
-        bash \
-        bind-tools \
-        curl \
-        jq \
-        nano \
-        tini \
     && printf "/bin/bash /scripts/greeting.sh\n" > /etc/profile.d/greeting.sh \
     && printf "umask %d" "${UMASK}" > /etc/profile.d/umask.sh \
+    && ln -s /usr/bin/nano /usr/local/bin/vi \
+    && ln -s /usr/bin/nano /usr/local/bin/vim \
+    && ln -s /usr/bin/nano /usr/local/bin/nano \
+    && ln -s /usr/bin/nano /usr/local/bin/neovim \
+    && ln -s /usr/bin/nano /usr/local/bin/emacs \
     && rm -rf /tmp/*
 
 VOLUME [ "/config" ]
