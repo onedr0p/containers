@@ -1,6 +1,6 @@
 ---
 process:
-  EmbyServer:
+  jellyfin:
     running: true
 
 port:
