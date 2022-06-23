@@ -46,9 +46,6 @@ jobs:
         run: |
           APPS=$(jq --raw-output '.changed_files' <<< '${{ toJson(steps.filter.outputs) }}')
           echo ::set-output name=apps::${APPS}
-          # tmp=$(mktemp -d) && echo '${{ toJson(steps.filter.outputs) }}' > "${tmp}/changes.json"
-          # changed_files=$(jq --raw-output '.changed_files' "${tmp}/changes.json") && rm -rf "${tmp}"
-          # echo ::set-output name=apps::${changed_files}
 
   changed-channels:
     name: Channel Changes
