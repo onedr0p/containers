@@ -26,7 +26,7 @@
       "automergeType": "branch",
       "requiredStatusChecks": null,
       "matchUpdateTypes": ["digest"],
-      "matchPackagePattern": [
+      "matchPackagePatterns": [
         "ghcr.io/onedr0p/alpine",
         "ghcr.io/onedr0p/ubuntu"
       ]
@@ -38,7 +38,7 @@
       "automergeType": "branch",
       "requiredStatusChecks": null,
       "matchUpdateTypes": ["minor", "patch"],
-      "matchPackagePattern": [
+      "matchPackagePatterns": [
         "renovatebot/github-action"
       ]
     }
