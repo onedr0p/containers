@@ -34,6 +34,9 @@
   "regexManagers": [
     {
       "description": "Process various dependencies",
+      "fileMatch": [
+        ".*"
+      ],
       "matchStrings": [
         "datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\n.*?\"(?<currentValue>.*)\"\n"
       ],
