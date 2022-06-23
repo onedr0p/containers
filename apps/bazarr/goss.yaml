@@ -1,0 +1,12 @@
+---
+process:
+  python3:
+    running: true
+
+port:
+  tcp:6767:
+    listening: true
+
+http:
+  http://localhost:6767:
+    status: 200
