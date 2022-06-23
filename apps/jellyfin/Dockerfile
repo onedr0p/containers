@@ -7,7 +7,8 @@ ARG STREAM
 
 USER root
 
-ENV NVIDIA_DRIVER_CAPABILITIES="compute,video,utility"
+ENV NVIDIA_DRIVER_CAPABILITIES="compute,video,utility" \
+    CONFIG_DIR="/config"
 
 # hadolint ignore=DL3008,DL3015,SC2039,SC2086
 RUN \
