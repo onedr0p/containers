@@ -10,7 +10,7 @@ on:
       - '**/metadata.json'
   pull_request:
     paths:
-      - 'apps/**'
+      - '**/metadata.json'
 
 env:
   # renovate: datasource=github-releases depName=aelsabbahy/goss
