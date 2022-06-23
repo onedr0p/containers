@@ -1,0 +1,45 @@
+---
+name: Fetch Test
+
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: "0 */12 * * *"
+  # push:
+  #   paths:
+  #     - '.github/scripts/fetch.sh'
+  #     - '.github/workflows/fetch.yaml'
+
+jobs:
+  main:
+    name: Fetch Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.TOKEN }}
+          fetch-depth: 1
+
+      - name: Install OS utils
+        run: |
+          sudo apt-get install moreutils jo
+          curl -fsSL -o $GITHUB_WORKSPACE/bin/spruce \
+            $(curl -s https://api.github.com/repos/geofffranks/spruce/releases/latest \
+              | jq '.assets[] | select(.name|match("linux-amd64")) | .browser_download_url')
+          echo "::add-path::$GITHUB_WORKSPACE/bin"
+          echo "::add-path::$RUNNER_WORKSPACE/$(basename $GITHUB_REPOSITORY)/bin"
+
+      - name: Fetch new app versions
+        id: fetch
+        run: ./.github/scripts/fetch_test.sh
+
+      - name: Git pull in changes
+        run: git pull --rebase --autostash
+
+      - name: Git commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: |-
+            ${{ steps.fetch.outputs.commit-message }}
+          file_pattern: "apps/*.json"
+          push_options: "--force"

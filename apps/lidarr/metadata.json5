@@ -1,0 +1,49 @@
+{
+  "__channels": [
+    {
+      "__app": "lidarr",
+      "__build_status": {
+        "__success": true,
+        "__ts": "2022-06-23 14:27:13+00:00"
+      },
+      "__fetched_version": "1.0.2.2592",
+      "__name": "master",
+      "__platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "__stable": true,
+      "__version": "1.0.2.2592"
+    },
+    {
+      "__app": "lidarr",
+      "__build_status": {
+        "__success": true,
+        "__ts": "2022-06-23 14:27:13+00:00"
+      },
+      "__fetched_version": "1.0.2.2593",
+      "__name": "develop",
+      "__platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "__stable": false,
+      "__version": "1.0.2.2592"
+    },
+    {
+      "__app": "lidarr",
+      "__build_status": {
+        "__success": true,
+        "__ts": "2022-06-23 14:27:13+00:00"
+      },
+      "__fetched_version": "1.1.0.2603",
+      "__name": "nightly",
+      "__platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "__stable": false,
+      "__version": "1.1.0.2602"
+    }
+  ]
+}
