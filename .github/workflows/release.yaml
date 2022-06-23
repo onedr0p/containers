@@ -180,7 +180,7 @@ jobs:
         run: |-
           jq '.__build_status.__success = true' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
           jq --arg v "${{ steps.envs.outputs.__build_date }}" '.__build_status.__ts = $v' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
-          echo "::set-output name=commit-message::🎉 Success: ${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }} (${{ steps.envs.outputs.__current_version }})"
+          echo "::set-output name=commit-message::🎉 Success building ${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }} (${{ steps.envs.outputs.__current_version }})"
 
       - name: Build failed
         id: build-failed
@@ -188,7 +188,7 @@ jobs:
         run: |-
           jq '.__build_status.__success = false' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
           jq --arg v "${{ steps.envs.outputs.__build_date }}" '.__build_status.__ts = $v' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
-          echo "::set-output name=commit-message::💥 Fail: ${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }} (${{ steps.envs.outputs.__current_version }})"
+          echo "::set-output name=commit-message::💥 Error building ${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }} (${{ steps.envs.outputs.__current_version }})"
 
       - name: Snoozing randomly
         if: ${{ always() }}
