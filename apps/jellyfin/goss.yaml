@@ -4,9 +4,9 @@ process:
     running: true
 
 port:
-  tcp6:8096:
+  tcp:8096:
     listening: true
 
 http:
-  http://localhost:8096/web/web/index.html:
+  http://localhost:8096/web/index.html:
     status: 200
