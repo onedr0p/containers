@@ -51,8 +51,8 @@ RUN \
         /tmp/* \
         /var/lib/apt/lists/* \
         /var/tmp/ \
-    && chown -R kah:kah /app \
-    && chmod -R u=rwX,go=rX /app \
+    && chown -R root:root /app \
+    && chmod -R 755 /app \
     && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
 
 USER kah

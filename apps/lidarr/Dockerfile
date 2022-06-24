@@ -29,6 +29,7 @@ RUN \
         /app/fpcalc \
     && \
     printf "UpdateMethod=docker\nBranch=%s\nPackageVersion=%s\nPackageAuthor=[Team k8s-at-home](https://github.com/k8s-at-home)" "${LIDARR__BRANCH}" "${VERSION}" > /app/package_info \
+    && chown -R root:root /app \
     && chmod -R 755 /app
 
 USER kah

@@ -37,6 +37,7 @@ RUN \
         /tmp/* \
         /var/lib/apt/lists/* \
         /var/tmp/ \
+    && chown -R root:root /app \
     && chmod -R 755 /app \
     && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
 

@@ -24,6 +24,7 @@ RUN \
     curl -fsSL -o /tmp/app.zip \
         "https://github.com/recyclarr/recyclarr/releases/download/v${VERSION}/recyclarr-linux-${ARCH}.zip" \
     && unzip -q /tmp/app.zip -d /app \
+    && chown -R root:root /app \
     && chmod -R 755 /app \
     && apk del .build-deps \
     && rm -rf /tmp/*

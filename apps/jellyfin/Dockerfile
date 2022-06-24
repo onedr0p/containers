@@ -55,7 +55,6 @@ RUN \
         /tmp/* \
         /var/lib/apt/lists/* \
         /var/tmp/ \
-    && chmod -R 755 /app \
     && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
 
 USER kah
