@@ -36,7 +36,6 @@ jobs:
             changed:
               - added|modified:
                   - '**/metadata.json'
-                  - '**/Dockerfile'
 
       - name: Debug filter
         run: echo "${{ toJson(steps.filter.outputs) }}"
@@ -47,10 +46,6 @@ jobs:
           containers=$(jq --raw-output '.changed_files' <<< '${{ toJson(steps.filter.outputs) }}')
           echo "${containers}"
           echo ::set-output name=containers::${containers}
-
-# tmp=$(mktemp -d) && echo '${{ toJson(steps.filter.outputs) }}' > "${tmp}/changes.json"
-# changed_files=$(jq --raw-output '.changed_files' "${tmp}/changes.json") && rm -rf "${tmp}"
-# echo ::set-output name=containers::${changed_files}
 
   build:
     name: Build

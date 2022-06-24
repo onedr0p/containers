@@ -7,6 +7,8 @@ ARG STREAM
 
 USER root
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # hadolint ignore=DL3008,DL3013,DL3015,SC2086
 RUN \
     export EXTRA_INSTALL_ARG="build-essential libffi-dev libssl-dev python3-dev python3-pip"; \
@@ -38,10 +40,9 @@ RUN \
     tar xf \
         /tmp/nzbnotify.tar.gz -C \
         /app/nzbnotify --strip-components=1\
-    && \
-    cd /app/nzbnotify \
-    && \
-    pip3 install --no-cache-dir -U -r requirements.txt \
+    && pushd /app/nzbnotify \
+    && pip3 install --no-cache-dir -U -r requirements.txt \
+    && popd \
     && apt-get remove -y ${EXTRA_INSTALL_ARG} \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && apt-get autoremove -y \

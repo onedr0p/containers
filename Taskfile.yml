@@ -8,5 +8,8 @@ tasks:
     cmds:
       - |
         find . -name metadata.json | while read -r metadata; do
+            if [[ "${metadata}" =~ .*ubuntu.* || "${metadata}" =~ .*alpine.* ]]; then
+                continue
+            fi
             jq --arg v "$(date --rfc-3339=seconds --utc)" '.__build_status.__ts = $v' "${metadata}" | sponge "${metadata}"
         done
