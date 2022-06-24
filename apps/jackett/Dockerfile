@@ -5,6 +5,8 @@ ARG BUILDPLATFORM
 ARG VERSION
 ARG STREAM
 
+ENV XDG_CONFIG_HOME=/config
+
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # hadolint ignore=DL3008,DL3015,SC2039,SC2086

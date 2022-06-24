@@ -20,6 +20,7 @@ RUN \
     # Keep py3-pip installed
     \
     apk add --no-cache \
+        ca-certificates \
         python3 \
         py3-pip \ 
         par2cmdline \

@@ -22,7 +22,7 @@ RUN \
 RUN \
     apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.14/main unrar \
     && \
-    apk add --no-cache p7zip python3 py3-lxml unrar unzip \
+    apk add --no-cache ca-certificates p7zip python3 py3-lxml unrar unzip \
     && \
     apk add --no-cache --virtual .build-deps py3-pip \
     && \
