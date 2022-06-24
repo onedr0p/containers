@@ -23,7 +23,13 @@ RUN \
 
 #hadolint ignore=DL3018,DL3013
 RUN \
-    apk add --no-cache python3 par2cmdline && \
+    # Keep py3-pip installed
+    \
+    apk add --no-cache \
+        python3 \
+        py3-pip \ 
+        par2cmdline \
+    && \
     apk add --no-cache --virtual=build-dependencies \
         build-base \
         libffi-dev \
@@ -31,7 +37,6 @@ RUN \
         musl-dev \
         cargo \
         python3-dev \
-        py3-pip \
     && \
     pip3 install --no-cache-dir --upgrade --requirement /app/requirements.txt \
     && pip3 install --no-cache-dir --upgrade --requirement /app/nzbnotify/requirements.txt \
