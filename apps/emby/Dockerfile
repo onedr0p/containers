@@ -8,8 +8,6 @@ ARG STREAM
 WORKDIR /tmp
 
 RUN \
-    echo "**** set the platform ****" \
-    && \
     case "${TARGETPLATFORM}" in \
         'linux/amd64') \
             export ARCH='x86_64'; \
@@ -19,24 +17,16 @@ RUN \
         ;; \
     esac \
     && \
-    echo "**** install packages ****" \
-    && \
     apt-get update \
     && \
-    apt-get install -y \
-        cpio \
-        rpm2cpio \
-    && \
-    echo "**** install emby ****" \
+    apt-get install -y cpio rpm2cpio \
     && \
     mkdir -p /app/emby \
     && \
-    curl -o \
-        emby.rpm -L \
+    curl -fsSL -o emby.rpm \
         "https://github.com/MediaBrowser/Emby.Releases/releases/download/${VERSION}/emby-server-rpm_${VERSION}_${ARCH}.rpm" \
     && \
-    rpm2cpio emby.rpm \
-        | cpio -i --make-directories \
+    rpm2cpio emby.rpm | cpio -i --make-directories \
     && \
     mv -t \
         /app/emby \
@@ -54,6 +44,8 @@ ARG VERSION
 ARG STREAM
 
 ENV NVIDIA_DRIVER_CAPABILITIES="compute,video,utility"
+
+USER root
 
 RUN \
     case "${TARGETPLATFORM}" in \
