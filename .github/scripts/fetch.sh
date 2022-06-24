@@ -13,8 +13,8 @@ find . -name metadata.json | while read -r metadata; do
         if [[ -n "${__latest_version}" || "${__latest_version}" != "null" ]]; then
             jq --arg v "$__latest_version" '.__current_version = $v' "${metadata}" | sponge "${metadata}"
             jq '.__build_status.__success = true' "${metadata}" | sponge "${metadata}"
-            echo "${__app} | ${__channel} | ${__current_version} | ${__latest_version} | ${metadata}"
             if [[ "${__latest_version}" !=  "${__current_version}" ]]; then
+                echo "${__app} | ${__channel} | ${__current_version} | ${__latest_version} | ${metadata}"
                 __container_versions+=("⚡ Fetched new version for ${__app}-${__channel} (${__current_version} → ${__latest_version})")
             fi
         fi
