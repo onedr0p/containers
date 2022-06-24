@@ -46,8 +46,7 @@ jobs:
       - name: Gather changes
         id: changed
         run: |
-          containers=$(jq --raw-output '.changed_files' <<< '${{ toJson(steps.filter.outputs) }}')
-          containers=$(jq --raw-output '.[] | rtrimstr("/Dockerfile") | rtrimstr("/metadata.json5")' | jo -a | jq '. | unique' <<< ${containers})
+          containers=$(jq --raw-output '.changed_files' <<< '${{ toJson(steps.filter.outputs) }}' | jq --raw-output '.[] | rtrimstr("/Dockerfile") | rtrimstr("/metadata.json5")' | jo -a | jq '. | unique')
           echo "${containers}"
           echo ::set-output name=containers::${containers}
 
