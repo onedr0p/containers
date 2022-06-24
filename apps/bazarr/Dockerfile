@@ -7,15 +7,13 @@ ARG STREAM
 
 # hadolint ignore=DL3008,DL3015,SC2086
 RUN \
-    export EXTRA_INSTALL_ARG="build-essential libxml2-dev libxslt1-dev python3-dev python3-pip"; \
+    export EXTRA_INSTALL_ARG="build-essential libxml2-dev libxslt1-dev python3-dev python3-pip unzip unrar"; \
     apt-get -qq update \
     && \
     apt-get -qq install -y \
         python3 \
         python3-distutils \
         ffmpeg \
-        unrar \
-        unzip \
         ${EXTRA_INSTALL_ARG} \
     && \
     ln -s /usr/bin/python3 /usr/bin/python \
@@ -31,6 +29,7 @@ RUN \
         /tmp/* \
         /var/lib/apt/lists/* \
         /var/tmp/ \
+    && chown -R root:root /app \
     && chmod -R 755 /app \
     && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
 
