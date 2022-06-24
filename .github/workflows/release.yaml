@@ -46,7 +46,7 @@ jobs:
       - name: Gather changes
         id: changed
         run: |
-          containers=$(jq --raw-output '.changed_files' <<< '${{ toJson(steps.filter.outputs) }}' | jq --raw-output '.[] | rtrimstr("/Dockerfile") | rtrimstr("/metadata.json5")' | jo -a | jq '. | unique')
+          containers=$(jq --raw-output '.changed_files' <<< '${{ toJson(steps.filter.outputs) }}')
           echo "${containers}"
           echo ::set-output name=containers::${containers}
 
@@ -76,11 +76,11 @@ jobs:
         id: envs
         run: |-
           echo ::set-output name=__build_date::$(date --rfc-3339=seconds --utc)
-          echo ::set-output name=__app::$(echo "${{ matrix.container }}/metadata.json5" | awk -F / '{print $2}')
-          echo ::set-output name=__current_version::$(jq --raw-output '.__current_version' ${{ matrix.container }}/metadata.json5)
-          echo ::set-output name=__stream::$(echo "${{ matrix.container }}/metadata.json5" | awk -F / '{print $3}')
-          echo ::set-output name=__stable::$(jq --raw-output '.__stable' ${{ matrix.container }}/metadata.json5)
-          echo ::set-output name=__platforms::$(jq --raw-output '.__platforms | join(",")' ${{ matrix.container }}/metadata.json5)
+          echo ::set-output name=__app::$(echo "${{ matrix.container }}" | awk -F / '{print $2}')
+          echo ::set-output name=__current_version::$(jq --raw-output '.__current_version' ${{ matrix.container }})
+          echo ::set-output name=__stream::$(echo "${{ matrix.container }}" | awk -F / '{print $3}')
+          echo ::set-output name=__stable::$(jq --raw-output '.__stable' ${{ matrix.container }})
+          echo ::set-output name=__platforms::$(jq --raw-output '.__platforms | join(",")' ${{ matrix.container }})
           if [ "${{ github.event_name }}" == "pull_request" ]; then
             echo ::set-output name=__container_push::false
             echo ::set-output name=__cache_from::""
@@ -203,16 +203,16 @@ jobs:
         id: build-success
         if: ${{ always() && github.event_name != 'pull_request' }}
         run: |-
-          jq '.__build_status.__success = true' "${{ matrix.container }}/metadata.json5" | sponge "${{ matrix.container }}/metadata.json5"
-          jq --arg v "${{ steps.envs.outputs.__build_date }}" '.__build_status.__ts = $v' "${{ matrix.container }}/metadata.json5" | sponge "${{ matrix.container }}/metadata.json5"
+          jq '.__build_status.__success = true' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
+          jq --arg v "${{ steps.envs.outputs.__build_date }}" '.__build_status.__ts = $v' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
           echo "::set-output name=commit-message::🎉 Success building ${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }} (${{ steps.envs.outputs.__current_version }})"
 
       - name: Build failed
         id: build-failed
         if: ${{ failure() && github.event_name != 'pull_request' && (steps.release.outcome == 'failure' || steps.dgoss.outcome != 'success') }}
         run: |-
-          jq '.__build_status.__success = false' "${{ matrix.container }}/metadata.json5" | sponge "${{ matrix.container }}/metadata.json5"
-          jq --arg v "${{ steps.envs.outputs.__build_date }}" '.__build_status.__ts = $v' "${{ matrix.container }}/metadata.json5" | sponge "${{ matrix.container }}/metadata.json5"
+          jq '.__build_status.__success = false' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
+          jq --arg v "${{ steps.envs.outputs.__build_date }}" '.__build_status.__ts = $v' "${{ matrix.container }}" | sponge "${{ matrix.container }}"
           echo "::set-output name=commit-message::💥 Error building ${{ steps.envs.outputs.__app }}-${{ steps.envs.outputs.__stream }} (${{ steps.envs.outputs.__current_version }})"
 
       - name: Snoozing randomly
