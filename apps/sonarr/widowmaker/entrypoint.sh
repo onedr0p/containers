@@ -22,7 +22,7 @@ if [[ -f /config/config.xml ]]; then
 fi
 
 # Update config.xml with environment variables
-/usr/local/bin/envsubst < /app/config.xml.tmpl > /config/config.xml
+envsubst < /app/config.xml.tmpl > /config/config.xml
 
 # Override configuation values from existing config.xml if there are no SONARR__ variables set
 [[ -z "${SONARR__LOG_LEVEL}" && -n "${current_log_level}" ]] && xmlstarlet edit --inplace --update //LogLevel -v "${current_log_level}" /config/config.xml
