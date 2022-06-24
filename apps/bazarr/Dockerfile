@@ -5,8 +5,6 @@ ARG BUILDPLATFORM
 ARG VERSION
 ARG STREAM
 
-USER root
-
 # hadolint ignore=DL3008,DL3015,SC2086
 RUN \
     export EXTRA_INSTALL_ARG="build-essential libxml2-dev libxslt1-dev python3-dev python3-pip"; \
