@@ -32,7 +32,7 @@
       ]
     },
     {
-      "description": "Auto-merge github actions",
+      "description": "Auto-merge Github Actions",
       "matchDatasources": ["github-actions"],
       "automerge": true,
       "automergeType": "branch",
@@ -45,7 +45,7 @@
   ],
   "regexManagers": [
     {
-      "description": "Process various dependencies",
+      "description": "Process Dependencies",
       "fileMatch": [
         ".*"
       ],
