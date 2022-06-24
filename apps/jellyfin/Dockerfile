@@ -1,4 +1,4 @@
-FROM ghcr.io/onedr0p/ubuntu-focal:rolling@sha256:a67d288a6a143bc7c1779f56141fa57aafabe57ef582f211e9dafe1751675375
+FROM ghcr.io/onedr0p/ubuntu-focal:rolling@sha256:72de8714ed3958baa0843658d58e574dda22cbf297d97d7e36da74483aa856c7
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
