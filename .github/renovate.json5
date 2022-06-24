@@ -4,9 +4,7 @@
     "docker:enableMajor",
     ":disableRateLimiting",
     ":dependencyDashboard",
-    ":semanticCommits",
-    ":automergeDigest",
-    ":automergeBranchPush"
+    ":semanticCommits"
   ],
   "platform": "github",
   "username": "rosey-bot[bot]",
@@ -20,20 +18,8 @@
   "commitBodyTable": true,
   "packageRules": [
     {
-      "description": "Auto-merge Ubuntu and Alpine",
-      "matchDatasources": ["docker"],
-      "automerge": true,
-      "automergeType": "branch",
-      "requiredStatusChecks": null,
-      "matchUpdateTypes": ["digest"],
-      "matchPackagePatterns": [
-        "ghcr.io/onedr0p/alpine",
-        "ghcr.io/onedr0p/ubuntu"
-      ]
-    },
-    {
       "description": "Auto-merge Github Actions",
-      "matchDatasources": ["github-actions"],
+      "matchDatasources": ["github-tags"],
       "automerge": true,
       "automergeType": "branch",
       "requiredStatusChecks": null,
