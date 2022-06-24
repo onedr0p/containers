@@ -26,7 +26,7 @@ WORKDIR /app
 USER root
 
 #hadolint ignore=DL3018
-RUN apk add --no-cache bash bind-tools curl iputils jo jq nano tini
+RUN apk add --no-cache bash bind-tools curl iputils jo jq nano tini tzdata
 #hadolint ignore=DL3018
 RUN \
     addgroup -S kah --gid 568 \
@@ -43,7 +43,6 @@ RUN \
     && ln -s /usr/bin/nano /usr/local/bin/emacs \
     && rm -rf /tmp/*
 
-VOLUME [ "/config" ]
 COPY ./apps/alpine/scripts /scripts
 COPY --from=builder /go/bin/envsubst /usr/local/bin/envsubst
 ENTRYPOINT ["/sbin/tini", "--"]
