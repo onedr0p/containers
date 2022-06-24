@@ -38,6 +38,8 @@ RUN \
         cargo \
         python3-dev \
     && \
+    pip3 install --no-cache-dir --upgrade pip \
+    && \
     pip3 install --no-cache-dir --upgrade --requirement /app/requirements.txt \
     && pip3 install --no-cache-dir --upgrade --requirement /app/nzbnotify/requirements.txt \
     && apk del --purge build-dependencies \

@@ -25,6 +25,8 @@ RUN \
     && \
     apk add --no-cache --virtual .build-deps py3-pip make gcc g++ python3-dev \
     && \
+    pip3 install --no-cache-dir --upgrade pip \
+    && \
     pip3 install --no-cache-dir --upgrade \
         plexapi \
         pycryptodomex \

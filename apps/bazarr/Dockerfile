@@ -22,6 +22,8 @@ RUN \
     && \
     apk add --no-cache --virtual .build-deps py3-pip gcc python3-dev musl-dev \
     && \
+    pip3 install --no-cache-dir --upgrade pip \
+    && \
     pip3 install --no-cache-dir --upgrade \
         gevent-websocket \
         webrtcvad-wheels \
