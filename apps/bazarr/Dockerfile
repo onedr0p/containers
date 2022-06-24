@@ -36,8 +36,6 @@ RUN \
 
 USER kah
 
-EXPOSE 6767
-
 COPY ./apps/bazarr/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 

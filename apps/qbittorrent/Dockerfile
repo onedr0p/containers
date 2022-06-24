@@ -18,8 +18,6 @@ RUN chmod -R 755 /usr/bin/qbittorrent-nox \
 
 USER kah
 
-EXPOSE ${BITTORRENT_PORT}/tcp ${BITTORRENT_PORT}/udp ${WEBUI_PORT}/tcp
-
 COPY ./apps/qbittorrent/config.py /scripts/config.py
 COPY ./apps/qbittorrent/entrypoint.sh /entrypoint.sh
 

@@ -87,8 +87,6 @@ COPY --from=builder /app/emby /app/emby
 USER kah
 WORKDIR /app
 
-EXPOSE 8096 8920
-
 COPY ./apps/emby/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 

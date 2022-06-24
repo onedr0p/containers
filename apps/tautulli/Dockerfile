@@ -42,8 +42,6 @@ RUN \
 
 USER kah
 
-EXPOSE 8181
-
 COPY ./apps/tautulli/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 

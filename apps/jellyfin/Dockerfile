@@ -64,8 +64,6 @@ RUN \
 
 USER kah
 
-EXPOSE 8096
-
 COPY ./apps/jellyfin/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
