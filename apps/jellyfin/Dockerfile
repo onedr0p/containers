@@ -5,10 +5,11 @@ ARG BUILDPLATFORM
 ARG VERSION
 ARG STREAM
 
-USER root
-
 ENV NVIDIA_DRIVER_CAPABILITIES="compute,video,utility" \
-    CONFIG_DIR="/config"
+    JELLYFIN_CONFIG_DIR="/config" \
+    JELLYFIN_DATA_DIR="/config/data" \
+    JELLYFIN_LOG_DIR="/config/log" \
+    JELLYFIN_CACHE_DIR="/config/cache"
 
 # hadolint ignore=DL3008,DL3015,SC2039,SC2086
 RUN \
@@ -58,8 +59,7 @@ RUN \
         /tmp/* \
         /var/lib/apt/lists/* \
         /var/tmp/ \
-    && chown -R kah:kah /app \
-    && chmod -R u=rwX,go=rX /app \
+    && chmod -R 755 /app \
     && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
 
 USER kah

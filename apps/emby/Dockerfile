@@ -5,7 +5,6 @@ ARG BUILDPLATFORM
 ARG VERSION
 ARG STREAM
 
-USER root
 WORKDIR /tmp
 
 RUN \
@@ -54,7 +53,6 @@ ARG BUILDPLATFORM
 ARG VERSION
 ARG STREAM
 
-USER root
 ENV NVIDIA_DRIVER_CAPABILITIES="compute,video,utility"
 
 RUN \
@@ -82,8 +80,7 @@ RUN \
         /tmp/* \
         /var/lib/apt/lists/* \
         /var/tmp/ \
-    && chown -R kah:kah /app \
-    && chmod -R u=rwX,go=rX /app \
+    && chmod -R 755 /app \
     && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
 
 COPY --from=builder /app/emby /app/emby

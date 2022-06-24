@@ -5,8 +5,6 @@ ARG BUILDPLATFORM
 ARG VERSION
 ARG STREAM
 
-USER root
-
 ENV NVIDIA_DRIVER_CAPABILITIES="compute,video,utility" \
     PLEX_DOWNLOAD="https://downloads.plex.tv/plex-media-server-new" \
     PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR="/config/Library/Application Support" \
@@ -64,8 +62,7 @@ RUN \
     /tmp/* \
     /var/lib/apt/lists/* \
     /var/tmp/ \
-  && chown -R kah:kah "${PLEX_MEDIA_SERVER_HOME}" \
-  && chmod -R u=rwX,go=rX "${PLEX_MEDIA_SERVER_HOME}" \
+  && chmod -R 755 "${PLEX_MEDIA_SERVER_HOME}" \
   && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
 
 USER kah
