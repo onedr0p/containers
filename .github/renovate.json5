@@ -4,9 +4,7 @@
     "docker:enableMajor",
     ":disableRateLimiting",
     ":dependencyDashboard",
-    ":semanticCommits",
-    ":automergeDigest",
-    ":automergeBranchPush"
+    ":semanticCommits"
   ],
   "platform": "github",
   "username": "rosey-bot[bot]",
@@ -20,8 +18,8 @@
   "commitBodyTable": true,
   "packageRules": [
     {
-      "description": "Auto-merge github actions",
-      "matchDatasources": ["github-actions"],
+      "description": "Auto-merge Github Actions",
+      "matchDatasources": ["github-tags"],
       "automerge": true,
       "automergeType": "branch",
       "requiredStatusChecks": null,
@@ -33,7 +31,7 @@
   ],
   "regexManagers": [
     {
-      "description": "Process various dependencies",
+      "description": "Process Dependencies",
       "fileMatch": [
         ".*"
       ],

@@ -1,4 +1,16 @@
 ARG VERSION
+FROM docker.io/library/golang:1.18-alpine3.16 as builder
+ARG TARGETOS
+ARG TARGETARCH
+ARG TARGETVARIANT=""
+ENV GO111MODULE=on \
+    CGO_ENABLED=0 \
+    GOOS=${TARGETOS} \
+    GOARCH=${TARGETARCH} \
+    GOARM=${TARGETVARIANT}
+#hadolint ignore=DL3018
+RUN go install github.com/drone/envsubst/cmd/envsubst@latest
+
 FROM docker.io/library/ubuntu:${VERSION}
 
 ARG VERSION
@@ -12,7 +24,11 @@ ENV \
     DEBCONF_NONINTERACTIVE_SEEN=true \
     DEBIAN_FRONTEND="noninteractive" \
     APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=DontWarn \
-    UMASK=0002
+    UMASK="0002" \
+    TZ="Etc/UTC"
+
+# hadolint ignore=DL3002
+USER root
 
 RUN \
     adduser kah \
@@ -68,50 +84,8 @@ RUN \
 
 ENV LANG en_US.UTF-8
 
-# hadolint ignore=DL3008,DL3015
-RUN \
-    export GO_VERSION=1.18 \
-    && export GOPATH=/go \
-    && \
-    apt-get update -yq \
-    && apt-get install -yq \
-        gnupg \
-        lsb-release \
-    && export DISTRO="$(lsb_release -s -c)" \
-    && apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 52B59B1571A79DBC054901C0F6BC817356A3D45E \
-    && echo "deb http://ppa.launchpad.net/longsleep/golang-backports/ubuntu $DISTRO main" | tee /etc/apt/sources.list.d/gosource.list \
-    && echo "deb-src http://ppa.launchpad.net/longsleep/golang-backports/ubuntu $DISTRO main" | tee -a /etc/apt/sources.list.d/gosource.list \
-    && apt-get update -yq \
-    && apt-get install -yq \
-        golang-${GO_VERSION} \
-    && \
-    /usr/lib/go-${GO_VERSION}/bin/go install github.com/drone/envsubst/cmd/envsubst@latest \
-    && mv /go/bin/envsubst /usr/local/bin/envsubst \
-    && envsubst --version \
-    && \
-    apt-key del 52B59B1571A79DBC054901C0F6BC817356A3D45E \
-    && \
-    apt-get remove -y gnupg golang-${GO_VERSION} lsb-release \
-    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
-    && apt-get autoremove -y \
-    && apt-get clean \
-    && unset GO_VERSION \
-    && unset GOPATH \
-    && unset DISTRO \
-    && \
-    rm -rf \
-        /go \
-        /etc/apt/sources.list.d/gosource.list \
-        /tmp/* \
-        /var/lib/apt/lists/* \
-        /var/cache/apt/* \
-        /var/tmp/*
-
-USER kah
-
-VOLUME [ "/config" ]
-
 COPY ./apps/ubuntu/scripts /scripts
+COPY --from=builder /go/bin/envsubst /usr/local/bin/envsubst
 
 ENTRYPOINT [ "/usr/bin/tini", "--" ]
 

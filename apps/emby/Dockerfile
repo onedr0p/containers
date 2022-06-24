@@ -1,16 +1,16 @@
-FROM ghcr.io/onedr0p/ubuntu-focal:rolling@sha256:6f09f6d36597a0af4130fe1b2a44fa76bc2994cd0e0e552de28f2b50ad0d8dea as builder
+FROM ghcr.io/onedr0p/ubuntu-focal:rolling@sha256:72de8714ed3958baa0843658d58e574dda22cbf297d97d7e36da74483aa856c7 as builder
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 ARG VERSION
 ARG STREAM
 
-USER root
 WORKDIR /tmp
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# hadolint ignore=DL3008,DL3015,SC2039,SC2086
 RUN \
-    echo "**** set the platform ****" \
-    && \
     case "${TARGETPLATFORM}" in \
         'linux/amd64') \
             export ARCH='x86_64'; \
@@ -20,24 +20,16 @@ RUN \
         ;; \
     esac \
     && \
-    echo "**** install packages ****" \
+    apt-get update -qq \
     && \
-    apt-get update \
-    && \
-    apt-get install -y \
-        cpio \
-        rpm2cpio \
-    && \
-    echo "**** install emby ****" \
+    apt-get install -qqy cpio rpm2cpio \
     && \
     mkdir -p /app/emby \
     && \
-    curl -o \
-        emby.rpm -L \
+    curl -fsSL -o emby.rpm \
         "https://github.com/MediaBrowser/Emby.Releases/releases/download/${VERSION}/emby-server-rpm_${VERSION}_${ARCH}.rpm" \
     && \
-    rpm2cpio emby.rpm \
-        | cpio -i --make-directories \
+    rpm2cpio emby.rpm | cpio -i --make-directories \
     && \
     mv -t \
         /app/emby \
@@ -54,9 +46,13 @@ ARG BUILDPLATFORM
 ARG VERSION
 ARG STREAM
 
-USER root
 ENV NVIDIA_DRIVER_CAPABILITIES="compute,video,utility"
 
+USER root
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# hadolint ignore=DL3008,DL3015,SC2039,SC2086
 RUN \
     case "${TARGETPLATFORM}" in \
         'linux/amd64') \
@@ -71,9 +67,8 @@ RUN \
         ;; \
     esac \
     && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
-        libva2 ${EXTRA_INSTALL_ARG} \
+    apt-get update -qq && \
+    apt-get install -qqy ${EXTRA_INSTALL_ARG} \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && apt-get autoremove -y \
     && apt-get clean \
@@ -82,16 +77,12 @@ RUN \
         /tmp/* \
         /var/lib/apt/lists/* \
         /var/tmp/ \
-    && chown -R kah:kah /app \
-    && chmod -R u=rwX,go=rX /app \
+    && chown -R root:root /app \
+    && chmod -R 755 /app \
     && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
 
-COPY --from=builder /app/emby /app/emby
 USER kah
-WORKDIR /app
-
-EXPOSE 8096 8920
-
+COPY --from=builder /app/emby /app/emby
 COPY ./apps/emby/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 

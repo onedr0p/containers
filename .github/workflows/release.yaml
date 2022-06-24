@@ -26,7 +26,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.TOKEN }}
           fetch-depth: 0 # needed for tj-actions/changed-files
 
       - uses: dorny/paths-filter@v2
@@ -44,11 +43,11 @@ jobs:
       - name: Gather changes
         id: changed
         run: |
-          tmp=$(mktemp -d) && echo '${{ toJson(steps.filter.outputs) }}' > "${tmp}/changes.json"
-          changed_files=$(jq --raw-output '.changed_files' "${tmp}/changes.json") && rm -rf "${tmp}"
-          echo ::set-output name=containers::${changed_files}
+          containers=$(jq --raw-output '.changed_files' <<< '${{ toJson(steps.filter.outputs) }}')
+          echo "${containers}"
+          echo ::set-output name=containers::${containers}
 
-  main:
+  build:
     name: Build
     runs-on: ubuntu-latest
     needs:
@@ -60,6 +59,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
 
       - name: Install OS tools
         run: sudo apt-get install moreutils jo

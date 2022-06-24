@@ -1,16 +1,15 @@
-FROM ghcr.io/onedr0p/ubuntu-focal:rolling@sha256:6f09f6d36597a0af4130fe1b2a44fa76bc2994cd0e0e552de28f2b50ad0d8dea
+FROM ghcr.io/onedr0p/ubuntu-focal:rolling@sha256:72de8714ed3958baa0843658d58e574dda22cbf297d97d7e36da74483aa856c7
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 ARG VERSION
 ARG STREAM
 
-USER root
+ENV NVIDIA_DRIVER_CAPABILITIES="compute,video,utility"
 
-ENV NVIDIA_DRIVER_CAPABILITIES="compute,video,utility" \
-    CONFIG_DIR="/config"
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# hadolint ignore=DL3008,DL3015,SC2039,SC2086
+# hadolint ignore=DL3008,DL3015,SC2086
 RUN \
     apt-get -qq update \
     && \
@@ -58,14 +57,9 @@ RUN \
         /tmp/* \
         /var/lib/apt/lists/* \
         /var/tmp/ \
-    && chown -R kah:kah /app \
-    && chmod -R u=rwX,go=rX /app \
     && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
 
 USER kah
-
-EXPOSE 8096
-
 COPY ./apps/jellyfin/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 

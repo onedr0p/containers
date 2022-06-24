@@ -1,0 +1,12 @@
+{
+  "__current_version": "21.1",
+  "__stable": true,
+  "__platforms": [
+    "linux/amd64",
+    "linux/arm64"
+  ],
+  "__build_status": {
+    "__ts": "2022-06-24 18:07:40+00:00",
+    "__success": true
+  }
+}

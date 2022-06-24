@@ -1,51 +1,39 @@
-FROM ghcr.io/onedr0p/ubuntu-jammy:rolling@sha256:bee318ee3f33ecee0d752a3cd9a53ea1ea19632f5b930b12d7049dc0b7eca074
+FROM ghcr.io/onedr0p/alpine:rolling@sha256:c85683b371b07fc4cc5ddcd088268242dead371c8eba114b39d6678391559c5b
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 ARG VERSION
 ARG STREAM
 
-USER root
 ENV TAUTULLI_DOCKER="True"
 
-# hadolint ignore=DL3008,DL3013,DL3015,SC2086
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 RUN \
-    export EXTRA_INSTALL_ARG="build-essential libssl-dev libffi-dev python3-dev python3-pip"; \
-    apt-get -qq update \
-    && \
-    apt-get -qq install -y \
-        python3 \
-        python3-setuptools \
-        ${EXTRA_INSTALL_ARG} \
-    && \
-    ln -s /usr/bin/python3 /usr/bin/python \
-    && \
     curl -fsSL "https://github.com/Tautulli/Tautulli/archive/v${VERSION}.tar.gz" | tar xzf - -C /app --strip-components 1 \
     && \
-    echo "${VERSION}" > /app/version.txt \
+    echo "v${VERSION}" > /app/version.txt \
     && \
-    echo "master" > /app/branch.txt \
+    echo "${STREAM}" > /app/branch.txt \
+    && chown -R root:root /app \
+    && chmod -R 755 /app \
+    && rm -rf /tmp/*
+
+#hadolint ignore=DL3018,DL3013
+RUN \
+    apk add --no-cache ca-certificates python3 py3-lxml py3-openssl py3-setuptools \
     && \
-    pip3 install --no-cache-dir -U \
-	    plexapi pycryptodomex \
+    apk add --no-cache --virtual .build-deps py3-pip make gcc g++ python3-dev \
     && \
-    apt-get remove -y ${EXTRA_INSTALL_ARG} \
-    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
-    && apt-get autoremove -y \
-    && apt-get clean \
+    pip3 install --no-cache-dir --upgrade pip \
     && \
-    rm -rf \
-        /tmp/* \
-        /var/lib/apt/lists/* \
-        /var/tmp/ \
-    && chown -R kah:kah /app \
-    && chmod -R u=rwX,go=rX /app \
-    && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
+    pip3 install --no-cache-dir --upgrade \
+        plexapi \
+        pycryptodomex \
+    && apk del --purge .build-deps \
+    && rm -rf /tmp/*
 
 USER kah
-
-EXPOSE 8181
-
 COPY ./apps/tautulli/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 

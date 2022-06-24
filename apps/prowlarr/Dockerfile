@@ -1,4 +1,4 @@
-FROM ghcr.io/onedr0p/alpine:rolling@sha256:05007e71bc03db450ca455f02efd74ce69b4a6ca18340fe6d3ef5703e79d2351
+FROM ghcr.io/onedr0p/alpine:rolling@sha256:c85683b371b07fc4cc5ddcd088268242dead371c8eba114b39d6678391559c5b
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
@@ -28,11 +28,11 @@ RUN \
         /app/Prowlarr.Update \
     && \
     printf "UpdateMethod=docker\nBranch=%s\nPackageVersion=%s\nPackageAuthor=[Team k8s-at-home](https://github.com/k8s-at-home)" "${PROWLARR__BRANCH}" "${VERSION}" > /app/package_info \
-    && chmod -R 755 /app
+    && chown -R root:root /app \
+    && chmod -R 755 /app \
+    && rm -rf /tmp/*
 
 USER kah
-
-EXPOSE ${PROWLARR__PORT}/tcp
 
 COPY ./apps/prowlarr/config.xml.tmpl /app/config.xml.tmpl
 COPY ./apps/prowlarr/entrypoint.sh /entrypoint.sh
