@@ -6,6 +6,7 @@ ARG VERSION
 ARG STREAM
 
 USER root
+ENV NGINX_WEB_ROOT "/usr/share/nginx/html"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -22,20 +23,20 @@ RUN \
     && \
     grep -rl 'https://theme-park.dev' /tmp | xargs sed -i 's/https\:\/\/theme-park.dev//g' \
     && \
-    cp -r /tmp/css/ /usr/share/nginx/html/ \
-    && cp -r /tmp/resources/ /usr/share/nginx/html/ \
-    && cp /tmp/index.html /usr/share/nginx/html/ \
+    cp -r /tmp/css/ "${NGINX_WEB_ROOT}" \
+    && cp -r /tmp/resources/ "${NGINX_WEB_ROOT}" \
+    && cp /tmp/index.html "${NGINX_WEB_ROOT}" \
     && apt-get remove -y python3 \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && apt-get autoremove -y \
     && apt-get clean \
-    && chown -R nginx:nginx /usr/share/nginx/html \
-    && chmod -R 755 /usr/share/nginx/html \
+    && chown -R nginx:nginx "${NGINX_WEB_ROOT}" \
+    && chmod -R 755 "${NGINX_WEB_ROOT}" \
     && rm -rf /tmp/*
 
 USER nginx
 
-WORKDIR /usr/share/nginx/hmtl/
+WORKDIR ${NGINX_WEB_ROOT}
 
 LABEL \
     org.opencontainers.image.title="theme.park (${STREAM})" \
