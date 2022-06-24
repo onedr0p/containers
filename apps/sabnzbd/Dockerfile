@@ -11,13 +11,7 @@ RUN \
     curl -fsSL "https://github.com/sabnzbd/sabnzbd/releases/download/${VERSION}/SABnzbd-${VERSION}-src.tar.gz" \
         | tar xzf - -C /app --strip-components=1 \
     && \
-    NZBNOTIFY_VERSION=$(curl -fsSL "https://api.github.com/repos/caronc/nzb-notify/releases/latest" | jq --raw-output '.tag_name') \
-    && \
-    mkdir -p /app/nzbnotify \
-    && \
-    curl -fsSL "https://api.github.com/repos/caronc/nzb-notify/tarball/${NZBNOTIFY_VERSION}" \
-        | tar xzf - -C /app/nzbnotify --strip-components=1 \
-    && chown -R root:root /app \
+    chown -R root:root /app \
     && chmod -R 755 /app \
     && rm -rf /tmp/*
 
@@ -41,7 +35,6 @@ RUN \
     pip3 install --no-cache-dir --upgrade pip \
     && \
     pip3 install --no-cache-dir --upgrade --requirement /app/requirements.txt \
-    && pip3 install --no-cache-dir --upgrade --requirement /app/nzbnotify/requirements.txt \
     && apk del --purge build-dependencies \
     && rm -rf /tmp/*
 
