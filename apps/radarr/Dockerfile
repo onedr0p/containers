@@ -29,7 +29,8 @@ RUN \
     && \
     printf "UpdateMethod=docker\nBranch=%s\nPackageVersion=%s\nPackageAuthor=[Team k8s-at-home](https://github.com/k8s-at-home)" "${RADARR__BRANCH}" "${VERSION}" > /app/package_info \
     && chown -R root:root /app \
-    && chmod -R 755 /app
+    && chmod -R 755 /app \
+    && rm -rf /tmp/*
 
 USER kah
 

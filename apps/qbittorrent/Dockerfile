@@ -15,7 +15,8 @@ RUN apk add --no-cache ca-certificates geoip p7zip python3 qbittorrent-nox~"${VE
 #hadolint ignore=DL3059
 RUN chown -R root:root /usr/bin/qbittorrent-nox \
     && chmod -R 755 /usr/bin/qbittorrent-nox \
-    && ln -s /usr/bin/qbittorrent-nox /app/qbittorrent-nox
+    && ln -s /usr/bin/qbittorrent-nox /app/qbittorrent-nox \
+    && rm -rf /tmp/*
 
 USER kah
 

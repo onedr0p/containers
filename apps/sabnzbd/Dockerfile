@@ -1,60 +1,42 @@
-FROM ghcr.io/onedr0p/ubuntu-jammy:rolling@sha256:43491c269ae133c34f3c68b7ebf28ad8b2be9a6de25c2ae9bf239c56c1ab3ca4
+FROM ghcr.io/onedr0p/alpine:rolling@sha256:05007e71bc03db450ca455f02efd74ce69b4a6ca18340fe6d3ef5703e79d2351
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 ARG VERSION
 ARG STREAM
 
-USER root
-
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# hadolint ignore=DL3008,DL3013,DL3015,SC2086
 RUN \
-    export EXTRA_INSTALL_ARG="build-essential libffi-dev libssl-dev python3-dev python3-pip"; \
-    apt-get -qq update \
-    && \
-    apt-get -qq install -y \
-        p7zip-full \
-        par2 \
-        python3 \
-        python3-distutils \
-        python3-pkg-resources \
-        unrar \
-        unzip \
-        ${EXTRA_INSTALL_ARG} \
-    && \
-    ln -s /usr/bin/python3 /usr/bin/python \
-    && \
-    curl -fsSL "https://github.com/sabnzbd/sabnzbd/releases/download/${VERSION}/SABnzbd-${VERSION}-src.tar.gz" | tar xzf - -C /app --strip-components=1 \
-    && \
-    pip3 install --no-cache-dir -U -r /app/requirements.txt \
+    curl -fsSL "https://github.com/sabnzbd/sabnzbd/releases/download/${VERSION}/SABnzbd-${VERSION}-src.tar.gz" \
+        | tar xzf - -C /app --strip-components=1 \
     && \
     NZBNOTIFY_VERSION=$(curl -fsSL "https://api.github.com/repos/caronc/nzb-notify/releases/latest" | jq --raw-output '.tag_name') \
     && \
     mkdir -p /app/nzbnotify \
     && \
-    curl -fsSL -o /tmp/nzbnotify.tar.gz \
-        "https://api.github.com/repos/caronc/nzb-notify/tarball/${NZBNOTIFY_VERSION}" \
-    && \
-    tar xf \
-        /tmp/nzbnotify.tar.gz -C \
-        /app/nzbnotify --strip-components=1\
-    && pushd /app/nzbnotify \
-    && pip3 install --no-cache-dir -U -r requirements.txt \
-    && popd \
-    && apt-get remove -y ${EXTRA_INSTALL_ARG} \
-    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
-    && apt-get autoremove -y \
-    && apt-get clean \
-    && \
-    rm -rf \
-        /tmp/* \
-        /var/lib/apt/lists/* \
-        /var/tmp/ \
+    curl -fsSL "https://api.github.com/repos/caronc/nzb-notify/tarball/${NZBNOTIFY_VERSION}" \
+        | tar xzf - -C /app/nzbnotify --strip-components=1 \
     && chown -R root:root /app \
     && chmod -R 755 /app \
-    && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
+    && rm -rf /tmp/*
+
+#hadolint ignore=DL3018,DL3013
+RUN \
+    apk add --no-cache par2cmdline && \
+    apk add --no-cache --virtual=build-dependencies \
+        build-base \
+        libffi-dev \
+        openssl-dev \
+        musl-dev \
+        cargo \
+        python3-dev \
+        py3-pip \
+    && \
+    pip3 install --no-cache-dir --upgrade --requirement /app/requirements.txt \
+    && pip3 install --no-cache-dir --upgrade --requirement /app/nzbnotify/requirements.txt \
+    && apk del --purge build-dependencies \
+    && rm -rf /tmp/*
 
 USER kah
 COPY ./apps/sabnzbd/sabnzbd.ini /app/sabnzbd.ini

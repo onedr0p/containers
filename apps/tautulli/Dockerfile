@@ -1,4 +1,4 @@
-FROM ghcr.io/onedr0p/ubuntu-jammy:rolling@sha256:43491c269ae133c34f3c68b7ebf28ad8b2be9a6de25c2ae9bf239c56c1ab3ca4
+FROM ghcr.io/onedr0p/alpine:rolling@sha256:05007e71bc03db450ca455f02efd74ce69b4a6ca18340fe6d3ef5703e79d2351
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
@@ -9,39 +9,27 @@ ENV TAUTULLI_DOCKER="True"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# hadolint ignore=DL3008,DL3013,DL3015,SC2086
 RUN \
-    export EXTRA_INSTALL_ARG="build-essential libssl-dev libffi-dev python3-dev python3-pip"; \
-    apt-get -qq update \
-    && \
-    apt-get -qq install -y \
-        python3 \
-        python3-setuptools \
-        ${EXTRA_INSTALL_ARG} \
-    && \
-    ln -s /usr/bin/python3 /usr/bin/python \
-    && \
     curl -fsSL "https://github.com/Tautulli/Tautulli/archive/v${VERSION}.tar.gz" | tar xzf - -C /app --strip-components 1 \
     && \
-    echo "${VERSION}" > /app/version.txt \
+    echo "v${VERSION}" > /app/version.txt \
     && \
-    echo "master" > /app/branch.txt \
-    && \
-    pip3 install --no-cache-dir -U \
-	    plexapi pycryptodomex \
-    && \
-    apt-get remove -y ${EXTRA_INSTALL_ARG} \
-    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
-    && apt-get autoremove -y \
-    && apt-get clean \
-    && \
-    rm -rf \
-        /tmp/* \
-        /var/lib/apt/lists/* \
-        /var/tmp/ \
+    echo "${STREAM}" > /app/branch.txt \
     && chown -R root:root /app \
     && chmod -R 755 /app \
-    && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
+    && rm -rf /tmp/*
+
+#hadolint ignore=DL3018,DL3013
+RUN \
+    apk add --no-cache python3 py3-lxml py3-openssl py3-setuptools \
+    && \
+    apk add --no-cache --virtual .build-deps py3-pip make gcc g++ python3-dev \
+    && \
+    pip3 install --no-cache-dir --upgrade \
+        plexapi \
+        pycryptodomex \
+    && apk del --purge .build-deps \
+    && rm -rf /tmp/*
 
 USER kah
 COPY ./apps/tautulli/entrypoint.sh /entrypoint.sh
