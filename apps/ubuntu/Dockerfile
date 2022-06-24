@@ -81,8 +81,6 @@ RUN \
 
 ENV LANG en_US.UTF-8
 
-USER kah
-
 VOLUME [ "/config" ]
 
 COPY ./apps/ubuntu/scripts /scripts
