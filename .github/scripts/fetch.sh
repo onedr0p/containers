@@ -7,9 +7,9 @@ find . -name metadata.json | while read -r metadata; do
     __app=$(echo "${metadata}" | awk -F / '{print $3}')
     __current_version=$(jq --raw-output ".__current_version" "${metadata}")
     __stream=$(echo "${metadata}" | awk -F / '{print $4}')
-    __latest_version="$(bash "$(dirname "$(dirname "${metadata}")")"/latest-version.sh "${__stream}")"
     __script="$(dirname "$(dirname "${metadata}")")/latest-version.sh)"
     if test -f "${__script}"; then
+         __latest_version="$(bash "${__script}" "${__stream}")"
         if [[ -n "${__latest_version}" || "${__latest_version}" != "null" ]]; then
             jq --arg v "$__latest_version" '.__current_version = $v' "${metadata}" | sponge "${metadata}"
             jq '.__build_status.__success = true' "${metadata}" | sponge "${metadata}"
