@@ -8,9 +8,11 @@ on:
       - main
     paths:
       - '**/metadata.json'
+      - '**/Dockerfile'
   pull_request:
     paths:
       - '**/metadata.json'
+      - '**/Dockerfile'
 
 env:
   # renovate: datasource=github-releases depName=aelsabbahy/goss
