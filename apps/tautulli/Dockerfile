@@ -41,7 +41,6 @@ RUN \
     && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
 
 USER kah
-
 COPY ./apps/tautulli/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 

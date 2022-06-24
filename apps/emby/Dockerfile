@@ -83,10 +83,8 @@ RUN \
     && chmod -R 755 /app \
     && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
 
-COPY --from=builder /app/emby /app/emby
 USER kah
-WORKDIR /app
-
+COPY --from=builder /app/emby /app/emby
 COPY ./apps/emby/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 

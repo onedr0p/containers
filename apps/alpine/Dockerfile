@@ -22,6 +22,9 @@ ENV UMASK="0002" \
 
 WORKDIR /app
 
+# hadolint ignore=DL3002
+USER root
+
 #hadolint ignore=DL3018
 RUN apk add --no-cache bash bind-tools curl iputils jo jq nano tini
 #hadolint ignore=DL3018

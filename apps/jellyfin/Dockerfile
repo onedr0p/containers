@@ -63,7 +63,6 @@ RUN \
     && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
 
 USER kah
-
 COPY ./apps/jellyfin/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 

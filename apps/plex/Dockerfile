@@ -65,12 +65,9 @@ RUN \
   && chmod -R 755 "${PLEX_MEDIA_SERVER_HOME}" \
   && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
 
-USER kah
-
 WORKDIR "${PLEX_MEDIA_SERVER_HOME}"
-
+USER kah
 COPY ./apps/plex/plex-preferences.sh /scripts/plex-preferences.sh
-
 COPY ./apps/plex/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 

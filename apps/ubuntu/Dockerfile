@@ -27,6 +27,9 @@ ENV \
     UMASK="0002" \
     TZ="Etc/UTC"
 
+# hadolint ignore=DL3002
+USER root
+
 RUN \
     adduser kah \
         --uid 568 \

@@ -56,9 +56,7 @@ RUN \
     && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
 
 USER kah
-
 COPY ./apps/sabnzbd/sabnzbd.ini /app/sabnzbd.ini
-
 COPY ./apps/sabnzbd/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
