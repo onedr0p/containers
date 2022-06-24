@@ -5,11 +5,7 @@ ARG BUILDPLATFORM
 ARG VERSION
 ARG STREAM
 
-ENV NVIDIA_DRIVER_CAPABILITIES="compute,video,utility" \
-    JELLYFIN_CONFIG_DIR="/config" \
-    JELLYFIN_DATA_DIR="/config/data" \
-    JELLYFIN_LOG_DIR="/config/log" \
-    JELLYFIN_CACHE_DIR="/config/cache"
+ENV NVIDIA_DRIVER_CAPABILITIES="compute,video,utility"
 
 # hadolint ignore=DL3008,DL3015,SC2039,SC2086
 RUN \
