@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-version=$(curl -sX GET "https://api.github.com/repos/userdocs/qbittorrent-nox-static/releases/latest" | jq -r '.tag_name')
-version="${version#*release-}"
+version=$(curl -sX GET "https://pkgs.alpinelinux.org/packages?name=qbittorrent-nox&branch=v3.16&arch" | grep -oP '(?<=<td class="version">)[^<]*')
 version="${version%%_*}"
+version="${version%%-*}"
 printf "%s" "${version}"
