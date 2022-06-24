@@ -17,9 +17,9 @@ RUN \
         ;; \
     esac \
     && \
-    apt-get update \
+    apt-get update -qq \
     && \
-    apt-get install -y cpio rpm2cpio \
+    apt-get install -qqy cpio rpm2cpio \
     && \
     mkdir -p /app/emby \
     && \
@@ -61,9 +61,8 @@ RUN \
         ;; \
     esac \
     && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
-        libva2 ${EXTRA_INSTALL_ARG} \
+    apt-get update -qq && \
+    apt-get install -qqy ${EXTRA_INSTALL_ARG} \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && apt-get autoremove -y \
     && apt-get clean \
@@ -72,6 +71,7 @@ RUN \
         /tmp/* \
         /var/lib/apt/lists/* \
         /var/tmp/ \
+    && chown -R root:root /app \
     && chmod -R 755 /app \
     && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
 
