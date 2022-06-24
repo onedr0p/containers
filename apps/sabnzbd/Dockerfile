@@ -23,7 +23,7 @@ RUN \
 
 #hadolint ignore=DL3018,DL3013
 RUN \
-    apk add --no-cache par2cmdline && \
+    apk add --no-cache python3 par2cmdline && \
     apk add --no-cache --virtual=build-dependencies \
         build-base \
         libffi-dev \
