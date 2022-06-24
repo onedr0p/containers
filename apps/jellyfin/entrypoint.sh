@@ -4,4 +4,9 @@
 test -f "/scripts/umask.sh" && source "/scripts/umask.sh"
 test -f "/scripts/vpn.sh" && source "/scripts/vpn.sh"
 
-exec /usr/bin/jellyfin --ffmpeg="/usr/lib/jellyfin-ffmpeg/ffmpeg" --webdir="/usr/share/jellyfin/web"
+exec \
+    /usr/bin/jellyfin \
+    --ffmpeg="/usr/lib/jellyfin-ffmpeg/ffmpeg" \
+    --webdir="/usr/share/jellyfin/web" \
+    --datadir="/config" \
+    --cachedir="/config/cache"
