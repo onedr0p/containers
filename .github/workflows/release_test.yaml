@@ -25,8 +25,8 @@ jobs:
         run: |-
           container_app=${{ matrix.app }}
           container_channel=${{ matrix.channel }}
-          container_stable=$(jq --arg c "${container_channel}" '(.channels | .[] | select(.name == $c)).stable' ${container_app}/metadata.json5)
-          container_platforms=$(jq --arg c "${container_channel}" '(.channels | .[] | select(.name == $c)).platforms | join(",")' ${container_app}/metadata.json5)
+          container_stable=$(jq --arg c "${container_channel}" '(.channels | .[] | select(.name == $c)).stable' ./apps/${container_app}/metadata.json5)
+          container_platforms=$(jq --arg c "${container_channel}" '(.channels | .[] | select(.name == $c)).platforms | join(",")' ./apps/${container_app}/metadata.json5)
           container_published_version=$(./.github/workflows/scripts/published.sh "${container_app}" "${container_channel}" "${container_stable}")
           container_upstream_version=$(./.github/workflows/scripts/upstream.sh "${container_app}" "${container_channel}")
 
@@ -80,7 +80,7 @@ jobs:
           version: latest
           driver-opts: image=moby/buildkit:latest
 
-      - name: Set up GOSS
+      - name: Set up Goss
         uses: e1himself/goss-installation-action@v1.0.4
         if: ${{ steps.vars.outputs.container_goss_enabled == 'true' }}
         with:
@@ -103,7 +103,7 @@ jobs:
           cache-from: ${{ steps.vars.outputs.container_cache_from }}
           cache-to: ${{ steps.vars.outputs.container_cache_to }}
 
-      - name: Run GOSS tests
+      - name: Run Goss tests
         id: dgoss
         if: ${{ steps.vars.outputs.container_goss_enabled == 'true' }}
         env:
