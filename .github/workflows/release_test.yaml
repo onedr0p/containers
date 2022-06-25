@@ -28,10 +28,10 @@ jobs:
     strategy:
       matrix:
         app: ${{ fromJson(github.event.client_payload.app) }}
-        channel: ${{ fromJson(github.event.client_payload.channels) }}
+        # app: ${{ fromJson(github.event.client_payload.app) }}
+        # channel: ${{ fromJson(github.event.client_payload.channels) }}
       fail-fast: false
     steps:
       - name: Build Test
         run: |-
           echo "${{ matrix.app }}"
-          echo "${{ matrix.channel }}"
