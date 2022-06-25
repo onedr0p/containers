@@ -47,7 +47,7 @@ jobs:
       - name: Test
         id: filter
         run: |-
-          echo "::set-output name=changes::${{ matrix.changes }}"
+          echo "::set-output name=changes::${{ toJson(matrix.changes) }}"
 
   build:
     name: Build Test
@@ -56,7 +56,9 @@ jobs:
       - fetch
       - filter
     strategy:
-      matrix: ${{ fromJson(needs.filter.outputs.changes) }}
+      matrix: 
+        app: ${{ fromJson(needs.filter.outputs.changes.app) }}
+        channels: ${{ fromJson(needs.filter.outputs.changes.channels) }}
       fail-fast: false
     steps:
       - name: Test
