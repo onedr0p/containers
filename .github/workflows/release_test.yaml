@@ -65,6 +65,13 @@ jobs:
               echo "::set-output name=container_dockerfile::./apps/${container_app}/${container_channel}/Dockerfile"
           fi
 
+          echo "${container_app}"
+          echo "${container_channel}"
+          echo "${container_stable}"
+          echo "${container_platforms}"
+          echo "${container_published_version}"
+          echo "${container_upstream_version}"
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
         with:
