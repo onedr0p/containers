@@ -43,7 +43,8 @@ jobs:
       - name: Test
         id: envs
         run: |-
-          echo "${{ matrix.changes }}"
+          echo "${{ matrix.changes.app }}"
+          echo "${{ matrix.changes.channels }}"
 
       # - name: Repository Dispatch
       #   uses: peter-evans/repository-dispatch@v2
