@@ -12,7 +12,7 @@ fi
 tags=$( \
     curl -fsSL \
         -H "Accept: application/vnd.github.v3+json" \
-        -H "Authorization: token ${{ secrets.TOKEN }}" \
+        -H "Authorization: token \${{ secrets.TOKEN }}" \
         "https://api.github.com/users/onedr0p/packages/container/${APP}/versions" \
 )
 
