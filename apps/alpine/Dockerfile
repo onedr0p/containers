@@ -1,4 +1,4 @@
-ARG VERSION="3.16.0"
+ARG VERSION
 FROM docker.io/library/golang:1.18-alpine3.16 as builder
 ARG TARGETOS
 ARG TARGETARCH
@@ -56,7 +56,7 @@ RUN \
     && ln -s /usr/bin/nano /usr/local/bin/emacs \
     && rm -rf /tmp/*
 
-COPY ./bases/scripts /scripts
+COPY ./apps/alpine/scripts /scripts
 COPY --from=builder /go/bin/envsubst /usr/local/bin/envsubst
 ENTRYPOINT ["/sbin/tini", "--"]
 

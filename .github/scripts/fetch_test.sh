@@ -13,23 +13,28 @@ declare -A __app
 find ./apps -name metadata.json5 | while read -r metadata; do
     declare -a __channels=()
     app="$(jq --raw-output '.app' "${metadata}")"
+    [[ "${app}" == "ubuntu" || "${app}" == "alpine" ]] && continue
     jq --raw-output -c '.channels | .[]' "${metadata}" | while read -r channels; do
         channel="$(jq --raw-output '.name' <<< "${channels}")"
         stable="$(jq --raw-output '.stable' <<< "${channels}")"
         published_version=$(./.github/scripts/versions/published.sh "${app}" "${channel}" "${stable}")
         upstream_version=$(./.github/scripts/versions/upstream.sh "${app}" "${channel}" "${stable}")
-        if [[ "${published_version}" != "${upstream_version}" ]]; then
-            echo "${app}/${channel}: ${published_version} -> ${upstream_version}"
+        if [[ "${published_version#*v}" == "${upstream_version}" ]]; then
+            echo "${app}/${channel}: ${published_version#*v} -> ${upstream_version}"
             __channels+=("${channel}")
         fi
-        # __channels+=("${channel}")
     done
     __app[$app]="${__channels[*]}"
 done
 
-# for key in "${!__app[@]}"; do
-#     #shellcheck disable=SC2086
-#     jo app="$key" channels="$(jo -a ${__app[$key]})"
-# done
+declare -a __apps=()
+for key in "${!__app[@]}"; do
+    #shellcheck disable=SC2086
+    app=$(jo app="$key" channels="$(jo -a ${__app[$key]})")
+    echo "${app}"
+    __apps+=("${app}")
+done
 
-# printf "%s" "${arr[@]}"
+# printf "%s" "$(jo changes="$(jo -a ${__apps[*]})")"
+
+echo "::set-output name=changes::$(jo changes="$(jo -a ${__apps[*]})")"

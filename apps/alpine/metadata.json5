@@ -1,0 +1,13 @@
+{
+  "app": "alpine",
+  "channels": [
+    {
+      "name": "3.15",
+      "platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "stable": true
+    }
+  ]
+}

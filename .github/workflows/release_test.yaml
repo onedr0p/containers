@@ -1,0 +1,20 @@
+---
+name: Release
+
+on:
+  repository_dispatch:
+    types: [changes]
+
+env:
+  # renovate: datasource=github-releases depName=aelsabbahy/goss
+  GOSS_VERSION: v0.3.18
+
+jobs:
+  changes:
+    name: Get changes
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ github.event.client_payload.changes }}
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo ${{ github.event.client_payload.changes }}

@@ -8,6 +8,7 @@ if [[ -n "${APP}" && -n "${CHANNEL}" && "${STABLE}" != true ]]; then
     APP="${APP}-${CHANNEL}"
 fi
 
+# TODO: replace read-only packages token with workflow secret
 tags=$( \
     curl -fsSL \
         -H "Accept: application/vnd.github.v3+json" \

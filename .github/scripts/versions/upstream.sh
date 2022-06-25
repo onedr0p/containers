@@ -3,4 +3,4 @@
 APP="${1}"
 CHANNEL="${2}"
 
-bash ./apps/"${APP}"/latest-version.sh "${CHANNEL}"
+bash ./apps/"${APP}"/ci/latest.sh "${CHANNEL}"
