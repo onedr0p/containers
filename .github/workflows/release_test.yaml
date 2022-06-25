@@ -27,7 +27,8 @@ jobs:
     #   - setup
     strategy:
       matrix: 
-        app: ${{ toJson(github.event.client_payload.app) }}
+        app: 
+          - ${{ github.event.client_payload.app }}
         channel: ${{ github.event.client_payload.app.channels }}
         # app: ${{ fromJson(github.event.client_payload.app) }}
         # channel: ${{ fromJson(github.event.client_payload.channels) }}
@@ -36,3 +37,4 @@ jobs:
       - name: Build Test
         run: |-
           echo "${{ matrix.app }}"
+          echo "${{ matrix.channel }}"
