@@ -17,8 +17,8 @@ jobs:
       - name: Setup Test
         id: setup
         run: |-
-          echo ::set-output name=app::${{ toJson(github.event.client_payload.app) }}
-          echo ::set-output name=channels::${{ toJson(github.event.client_payload.channels) }}
+          echo ::set-output name=app::${{ github.event.client_payload.app }}
+          echo ::set-output name=channels::${{ github.event.client_payload.channels }}
 
   build:
     name: Build Container Test
