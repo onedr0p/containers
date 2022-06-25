@@ -29,7 +29,7 @@ jobs:
       matrix: 
         app: 
           - ${{ github.event.client_payload.app }}
-        channel: ${{ github.event.client_payload.app.channels }}
+        channel: ${{ github.event.client_payload.channels }}
         # app: ${{ fromJson(github.event.client_payload.app) }}
         # channel: ${{ fromJson(github.event.client_payload.channels) }}
       fail-fast: false
