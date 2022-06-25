@@ -10,20 +10,16 @@ jobs:
     name: Setup Matrix Test
     runs-on: ubuntu-latest
     outputs:
-      app: ${{ steps.filter.outputs.app }}
-      channels: ${{ steps.filter.outputs.channels }}
+      app: ${{ steps.setup.outputs.app }}
+      channels: ${{ steps.setup.outputs.channels }}
     steps:
       - uses: actions/checkout@v3
-      - name: Test
-        id: filter
+      - name: Setup Test
+        id: setup
         run: |-
-          app=$(jq --raw-output '.app | [.]' <<< '${{ toJson(github.event.client_payload.changes) }}')
-          echo "${app}"
-          channels=$(jq --raw-output '.channels' <<< '${{ toJson(github.event.client_payload.changes) }}')
-          echo "${channels}"
-          echo ::set-output name=app::${app}
-          echo ::set-output name=channels::${channels}
-  
+          echo ::set-output name=app::${{ toJson(github.event.client_payload.app) }}
+          echo ::set-output name=channels::${{ toJson(github.event.client_payload.channels) }}
+
   build:
     name: Build Container Test
     runs-on: ubuntu-latest
