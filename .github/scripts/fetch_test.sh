@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 
+# Overview:
+# Builds a JSON string what images and their channels to process
+# Outputs:
+# {"changes":[{"app":"ubuntu","channels":["focal","jammy"]},...]}
+
 shopt -s lastpipe
 
-declare -A __app
+declare -A app_channel_array
 find ./apps -name metadata.json5 | while read -r metadata; do
     declare -a __channels=()
     app="$(jq --raw-output '.app' "${metadata}")"
@@ -17,16 +22,15 @@ find ./apps -name metadata.json5 | while read -r metadata; do
         fi
     done
     if [[ "${#__channels[@]}" -gt 0 ]]; then
-        __app[$app]="${__channels[*]}"
+        app_channel_array[$app]="${__channels[*]}"
     fi
 done
 
-declare -a __apps=()
-for app in "${!__app[@]}"; do
+declare -a changes_array=()
+for app in "${!app_channel_array[@]}"; do
     #shellcheck disable=SC2086
-    app=$(jo app="$app" channels="$(jo -a -- -s ${__app[$app]})")
-    __apps+=("${app}")
+    changes_array+=("$(jo app="$app" channels="$(jo -a -- -s ${app_channel_array[$app]})")")
 done
 
 #shellcheck disable=SC2048,SC2086
-echo "::set-output name=changes::$(jo changes="$(jo -a ${__apps[*]})")"
+echo "::set-output name=changes::$(jo changes="$(jo -a ${changes_array[*]})")"
