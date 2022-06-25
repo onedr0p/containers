@@ -35,9 +35,10 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - fetch
+    outputs:
+      matrix: ${{ matrix.changes }}
     strategy:
       matrix: ${{ fromJson(needs.fetch.outputs.matrix) }}
-      max-parallel: 5
       fail-fast: false
     steps:
       - name: Test
@@ -45,6 +46,22 @@ jobs:
         run: |-
           echo "${{ matrix.changes.app }}"
           echo "${{ matrix.changes.channels }}"
+
+  build:
+    name: Filter Test
+    runs-on: ubuntu-latest
+    needs:
+      - fetch
+      - filter
+    strategy:
+      matrix: ${{ fromJson(needs.filter.outputs.matrix) }}
+      fail-fast: false
+    steps:
+      - name: Test
+        id: envs
+        run: |-
+          echo "${{ matrix.app }}"
+          echo "${{ matrix.channels }}"
 
       # - name: Repository Dispatch
       #   uses: peter-evans/repository-dispatch@v2
