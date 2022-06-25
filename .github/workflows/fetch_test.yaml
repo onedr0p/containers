@@ -11,6 +11,9 @@ on:
       - '.github/scripts/versions/*.sh'
       - '.github/workflows/fetch_test.yaml'
 
+env:
+  TOKEN: ${{ secrets.TOKEN }}
+
 jobs:
   fetch:
     name: Fetch Test
@@ -20,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          token: ${{ secrets.TOKEN }}
+          token: ${{ env.TOKEN }}
 
       - name: Install tools
         run: |
@@ -28,7 +31,7 @@ jobs:
 
       - name: Fetch new app versions
         id: fetch
-        run: ./.github/scripts/fetch_test.sh
+        run: ./.github/scripts/fetch_test.sh "${{ secrets.TOKEN }}"
 
   filter:
     name: Filter Test
@@ -46,6 +49,7 @@ jobs:
         run: |-
           echo "${{ toJson(matrix.changes) }}"
           echo "::set-output name=changes::${{ toJson(matrix.changes) }}"
+
   build:
     name: Build Test
     runs-on: ubuntu-latest
