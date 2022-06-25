@@ -39,7 +39,8 @@ jobs:
     needs:
       - fetch
     outputs:
-      matrix: ${{ steps.filter.outputs.changes }}
+      app: ${{ steps.filter.outputs.changes.app }}
+      channels: ${{ steps.filter.outputs.changes.channels }}
     strategy:
       matrix: ${{ fromJson(needs.fetch.outputs.matrix) }}
       fail-fast: false
@@ -57,14 +58,15 @@ jobs:
       - filter
     strategy:
       matrix: 
-        app: ${{ fromJson(needs.filter.outputs.changes.app) }}
-        channels: ${{ fromJson(needs.filter.outputs.changes.channels) }}
+        app: ${{ fromJson(needs.filter.outputs.app) }}
+        channel: ${{ fromJson(needs.filter.outputs.channels) }}
       fail-fast: false
     steps:
       - name: Test
         id: envs
         run: |-
-          echo "${{ toJson(matrix) }}"
+          echo "${{ matrix.app }}"
+          echo "${{ matrix.channel }}"
 
       # - name: Repository Dispatch
       #   uses: peter-evans/repository-dispatch@v2
