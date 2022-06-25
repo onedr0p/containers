@@ -51,7 +51,7 @@ jobs:
         with:
           token: ${{ env.TOKEN }}
           repository: onedr0p/containers
-          event-type: release
+          event-type: release-test
           client-payload: ${{ toJson(matrix.changes) }}
   #     - name: Test
   #       id: filter
