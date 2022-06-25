@@ -31,10 +31,8 @@ declare -a __apps=()
 for key in "${!__app[@]}"; do
     #shellcheck disable=SC2086
     app=$(jo app="$key" channels="$(jo -a ${__app[$key]})")
-    echo "${app}"
     __apps+=("${app}")
 done
 
 # printf "%s" "$(jo changes="$(jo -a ${__apps[*]})")"
-
 echo "::set-output name=changes::$(jo changes="$(jo -a ${__apps[*]})")"

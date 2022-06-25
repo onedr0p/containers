@@ -45,7 +45,6 @@ jobs:
       fail-fast: false
     steps:
       - name: Test
-        id: envs
         run: |-
           echo "${{ toJson(matrix.changes) }}"
           echo "::set-output name=changes::${{ toJson(matrix.changes) }}"
@@ -63,8 +62,7 @@ jobs:
       - name: Test
         id: envs
         run: |-
-          echo "${{ matrix.app }}"
-          echo "${{ matrix.channels }}"
+          echo "${{ toJson(matrix) }}"
 
       # - name: Repository Dispatch
       #   uses: peter-evans/repository-dispatch@v2
