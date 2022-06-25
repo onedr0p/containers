@@ -1,5 +1,7 @@
-ARG VERSION
-FROM docker.io/library/golang:1.18-alpine3.16 as builder
+ARG GOLANG_VERSION="1.18-alpine3.16"
+ARG UBUNTU_VERSION="focal-20220531"
+
+FROM docker.io/library/golang:${GOLANG_VERSION} as builder
 ARG TARGETOS
 ARG TARGETARCH
 ARG TARGETVARIANT=""
@@ -11,10 +13,9 @@ ENV GO111MODULE=on \
 #hadolint ignore=DL3018
 RUN go install github.com/drone/envsubst/cmd/envsubst@latest
 
-FROM docker.io/library/ubuntu:${VERSION}
+FROM docker.io/library/ubuntu:${UBUNTU_VERSION}
 
-ARG VERSION
-ARG STREAM
+ARG UBUNTU_VERSION
 ARG TARGETPLATFORM
 ENV TARGETPLATFORM=${TARGETPLATFORM:-linux/amd64}
 
@@ -84,12 +85,12 @@ RUN \
 
 ENV LANG en_US.UTF-8
 
-COPY ./apps/ubuntu/scripts /scripts
+COPY ./bases/scripts /scripts
 COPY --from=builder /go/bin/envsubst /usr/local/bin/envsubst
 
 ENTRYPOINT [ "/usr/bin/tini", "--" ]
 
 LABEL \
-    org.opencontainers.image.base.name="ghcr.io/onedr0p/ubuntu-${STREAM}" \
-    org.opencontainers.image.base.version="${VERSION}" \
+    org.opencontainers.image.base.name="ghcr.io/onedr0p/ubuntu-focal" \
+    org.opencontainers.image.base.version="${UBUNTU_VERSION}" \
     org.opencontainers.image.authors="Devin Buhl <devin.kray@gmail.com>, Bernd Schorgers <me@bjw-s.dev>"
