@@ -39,8 +39,8 @@ jobs:
     needs:
       - fetch
     outputs:
-      app: ${{ steps.filter.outputs.changes.app }}
-      channels: ${{ steps.filter.outputs.changes.channels }}
+      app: ${{ steps.filter.outputs.app }}
+      channels: ${{ steps.filter.outputs.channels }}
     strategy:
       matrix: ${{ fromJson(needs.fetch.outputs.matrix) }}
       fail-fast: false
@@ -48,7 +48,8 @@ jobs:
       - name: Test
         id: filter
         run: |-
-          echo "::set-output name=changes::${{ toJson(matrix.changes) }}"
+          echo "::set-output name=app::${{ toJson(matrix.changes.app) }}"
+          echo "::set-output name=channels::${{ toJson(matrix.changes.channels) }}"
 
   build:
     name: Build Test
