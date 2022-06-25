@@ -31,7 +31,7 @@ jobs:
 
       - name: Fetch new app versions
         id: fetch
-        run: ./.github/scripts/fetch_test.sh "${{ secrets.TOKEN }}"
+        run: ./.github/scripts/fetch_test.sh
 
   filter:
     name: Filter Test
