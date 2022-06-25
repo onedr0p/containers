@@ -6,29 +6,29 @@ on:
     types: [release]
 
 jobs:
-  setup:
-    name: Setup Matrix Test
-    runs-on: ubuntu-latest
-    outputs:
-      app: ${{ steps.setup.outputs.app }}
-      channels: ${{ steps.setup.outputs.channels }}
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup Test
-        id: setup
-        run: |-
-          echo ::set-output name=app::$(jq -ncR '[inputs]' <<< '${{ toJson(github.event.client_payload.app) }}')
-          echo ::set-output name=channels::${{ toJson(github.event.client_payload.channels) }}
+  # setup:
+  #   name: Setup Matrix Test
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     app: ${{ steps.setup.outputs.app }}
+  #     channels: ${{ steps.setup.outputs.channels }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Setup Test
+  #       id: setup
+  #       run: |-
+  #         echo ::set-output name=app::$(jq -ncR '[inputs]' <<< '${{ toJson(github.event.client_payload.app) }}')
+  #         echo ::set-output name=channels::${{ toJson(github.event.client_payload.channels) }}
 
   build:
     name: Build Container Test
     runs-on: ubuntu-latest
-    needs:
-      - setup
+    # needs:
+    #   - setup
     strategy:
-      matrix: 
-        app: ${{ fromJson(needs.setup.outputs.app) }}
-        channel: ${{ fromJson(needs.setup.outputs.channels) }}
+      matrix:
+        app: ${{ fromJson(github.event.client_payload.app) }}
+        channel: ${{ fromJson(github.event.client_payload.channels) }}
       fail-fast: false
     steps:
       - name: Build Test
