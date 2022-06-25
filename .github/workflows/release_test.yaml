@@ -27,7 +27,7 @@ jobs:
     #   - setup
     strategy:
       matrix: 
-        app: ${{ github.event.client_payload.app }}
+        app: ${{ join(github.event.client_payload.app, ",") }}
         channel: ${{ github.event.client_payload.app.channels }}
         # app: ${{ fromJson(github.event.client_payload.app) }}
         # channel: ${{ fromJson(github.event.client_payload.channels) }}
