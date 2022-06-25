@@ -14,7 +14,7 @@ RUN go install github.com/drone/envsubst/cmd/envsubst@latest
 FROM docker.io/library/ubuntu:${VERSION}
 
 ARG VERSION
-ARG STREAM
+ARG CHANNEL
 ARG TARGETPLATFORM
 ENV TARGETPLATFORM=${TARGETPLATFORM:-linux/amd64}
 
@@ -90,6 +90,6 @@ COPY --from=builder /go/bin/envsubst /usr/local/bin/envsubst
 ENTRYPOINT [ "/usr/bin/tini", "--" ]
 
 LABEL \
-    org.opencontainers.image.base.name="ghcr.io/onedr0p/ubuntu-${STREAM}" \
+    org.opencontainers.image.base.name="Ubuntu ${CHANNEL}" \
     org.opencontainers.image.base.version="${VERSION}" \
     org.opencontainers.image.authors="Devin Buhl <devin.kray@gmail.com>, Bernd Schorgers <me@bjw-s.dev>"
