@@ -36,6 +36,8 @@ jobs:
           container_published_version=$(bash ./.github/scripts/published_test.sh "${container_app}" "${container_channel}" "${container_stable}")
           container_upstream_version=$(bash ./.github/scripts/upstream_test.sh "${container_app}" "${container_channel}")
 
+          echo "::set-output name=container_published_version::${container_published_version}"
+          echo "::set-output name=container_upstream_version::${container_upstream_version}"
           echo "::set-output name=container_build_date::$(date --rfc-3339=seconds --utc)"
           echo "::set-output name=container_stable::${container_stable}"
           echo "::set-output name=container_platforms::${container_platforms}"
