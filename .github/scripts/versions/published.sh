@@ -8,6 +8,7 @@ if [[ -n "${APP}" && -n "${CHANNEL}" && "${STABLE}" != true ]]; then
     APP="${APP}-${CHANNEL}"
 fi
 
+
 tags=$( \
     curl -fsSL \
         -H "Accept: application/vnd.github.v3+json" \
