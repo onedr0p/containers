@@ -39,14 +39,15 @@ jobs:
     needs:
       - fetch
     outputs:
-      matrix: ${{ matrix.changes }}
+      matrix: ${{ steps.filter.outputs.changes }}
     strategy:
       matrix: ${{ fromJson(needs.fetch.outputs.matrix) }}
       fail-fast: false
     steps:
       - name: Test
+        id: filter
         run: |-
-          echo "::set-output name=changes::${{ matrix.changes }}"
+          echo "::set-output name=changes::${{ toJson(matrix.changes) }}"
 
   build:
     name: Build Test

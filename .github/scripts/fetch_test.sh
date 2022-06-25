@@ -35,4 +35,6 @@ for key in "${!__app[@]}"; do
 done
 
 # printf "%s" "$(jo changes="$(jo -a ${__apps[*]})")"
+
+#shellcheck disable=SC2048,SC2086
 echo "::set-output name=changes::$(jo changes="$(jo -a ${__apps[*]})")"
