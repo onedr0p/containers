@@ -46,8 +46,7 @@ jobs:
     steps:
       - name: Test
         run: |-
-          echo "${{ toJson(matrix.changes) }}"
-          echo "::set-output name=changes::${{ toJson(matrix.changes) }}"
+          echo "::set-output name=changes::${{ matrix.changes }}"
 
   build:
     name: Build Test
