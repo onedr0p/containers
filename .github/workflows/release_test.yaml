@@ -18,8 +18,10 @@ jobs:
         id: setup
         run: |-
           app=$(jq -ncR '[inputs]' <<< '${{ github.event.client_payload.app }}')
-          echo ::set-output name=app::$app
-          echo ::set-output name=channels::${{ github.event.client_payload.channels }}
+          channels="${{ toJson(github.event.client_payload.channels) }}"
+          echo "${app} - ${channels}"
+          echo ::set-output name=app::"${app}"
+          echo ::set-output name=channels::"${channels}"
 
   build:
     name: Build Container Test
