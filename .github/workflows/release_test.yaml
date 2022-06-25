@@ -17,12 +17,8 @@ jobs:
       - name: Setup Test
         id: setup
         run: |-
-          app=$(jq -ncR '[inputs]' <<< '${{ github.event.client_payload.app }}')
-          channels=${{ toJson(github.event.client_payload.channels) }}
-          printf "\n\n${app}\n\n"
-          printf "\n\n${channels}\n\n"
-          echo ::set-output name=app::${app}
-          echo ::set-output name=channels::${channels}
+          echo ::set-output name=app::$(jq -ncR '[inputs]' <<< '${{ toJson(github.event.client_payload.app) }}')
+          echo ::set-output name=channels::${{ toJson(github.event.client_payload.channels) }}
 
   build:
     name: Build Container Test
@@ -35,8 +31,7 @@ jobs:
         channel: ${{ fromJson(needs.setup.outputs.channels) }}
       fail-fast: false
     steps:
-      - name: Test
-        id: envs
+      - name: Build Test
         run: |-
           echo "${{ matrix.app }}"
           echo "${{ matrix.channel }}"
