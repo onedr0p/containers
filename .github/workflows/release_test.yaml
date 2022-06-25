@@ -1,17 +1,13 @@
 ---
-name: Release
+name: Release Test
 
 on:
   repository_dispatch:
     types: [release]
 
-env:
-  # renovate: datasource=github-releases depName=aelsabbahy/goss
-  GOSS_VERSION: v0.3.18
-
 jobs:
-  changes:
-    name: Get changes
+  setup:
+    name: Setup Matrix Test
     runs-on: ubuntu-latest
     outputs:
       app: ${{ steps.filter.outputs.app }}
@@ -29,14 +25,14 @@ jobs:
           echo ::set-output name=channels::${channels}
   
   build:
-    name: Build Test
+    name: Build Container Test
     runs-on: ubuntu-latest
     needs:
-      - changes
+      - setup
     strategy:
       matrix: 
-        app: ${{ fromJson(needs.changes.outputs.app) }}
-        channel: ${{ fromJson(needs.changes.outputs.channels) }}
+        app: ${{ fromJson(needs.setup.outputs.app) }}
+        channel: ${{ fromJson(needs.setup.outputs.channels) }}
       fail-fast: false
     steps:
       - name: Test
