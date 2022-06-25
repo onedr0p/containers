@@ -44,9 +44,8 @@ jobs:
       - name: Test
         id: envs
         run: |-
-          echo "${{ matrix.changes.app }}"
-          echo "${{ matrix.changes.channels }}"
-          echo ::set-output name=changes::${{ toJson(matrix.changes) }}
+          echo "${{ toJson(matrix.changes) }}"
+          echo "::set-output name=changes::${{ toJson(matrix.changes) }}"
   build:
     name: Build Test
     runs-on: ubuntu-latest
