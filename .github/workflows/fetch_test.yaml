@@ -48,8 +48,8 @@ jobs:
       - name: Test
         id: filter
         run: |-
-          app="$(jq -c '.app' <<< ${{ matrix.changes }})"
-          channels="$(jq -c '.channels' <<< ${{ matrix.changes }})"
+          app="$(jq -c '.app' <<< ${{ toJson(matrix.changes) }})"
+          channels="$(jq -c '.channels' <<< ${{ toJson(matrix.changes) }})"
           echo "::set-output name=app::${app}"
           echo "::set-output name=channels::${channels}"
 
