@@ -26,7 +26,20 @@ WORKDIR /app
 USER root
 
 #hadolint ignore=DL3018
-RUN apk add --no-cache ca-certificates bash bind-tools curl iputils jo jq nano tini tzdata
+RUN \
+    apk add --no-cache \
+    ca-certificates \
+    bash \
+    bind-tools \
+    curl \
+    iputils \
+    jo \
+    jq \
+    nano \
+    tini \
+    tzdata \
+    util-linux \
+    wget
 #hadolint ignore=DL3018
 RUN \
     addgroup -S kah --gid 568 \

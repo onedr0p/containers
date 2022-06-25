@@ -41,6 +41,6 @@ COPY ./apps/nzbget/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
 LABEL \
-  org.opencontainers.image.title="NZBGet ($STREAM)" \
+  org.opencontainers.image.title="NZBGet (${STREAM})" \
   org.opencontainers.image.source="https://github.com/nzbget/nzbget" \
   org.opencontainers.image.version="${VERSION}"

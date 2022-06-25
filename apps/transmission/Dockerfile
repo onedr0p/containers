@@ -32,6 +32,6 @@ COPY ./apps/transmission/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
 LABEL \
-  org.opencontainers.image.title="Transmission  ($STREAM)" \
+  org.opencontainers.image.title="Transmission  (${STREAM})" \
   org.opencontainers.image.source="https://github.com/transmission/transmission" \
   org.opencontainers.image.version="${VERSION}"

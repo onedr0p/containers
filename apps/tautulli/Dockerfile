@@ -38,6 +38,6 @@ COPY ./apps/tautulli/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
 LABEL \
-    org.opencontainers.image.title="Tautulli ($STREAM)" \
+    org.opencontainers.image.title="Tautulli (${STREAM})" \
     org.opencontainers.image.source="https://github.com/Tautulli/Tautulli" \
     org.opencontainers.image.version="${VERSION}"

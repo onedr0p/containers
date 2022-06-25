@@ -29,6 +29,6 @@ COPY ./apps/qbittorrent/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
 LABEL \
-    org.opencontainers.image.title="qBittorrent ($STREAM)" \
+    org.opencontainers.image.title="qBittorrent (${STREAM})" \
     org.opencontainers.image.source="https://github.com/qbittorrent/qBittorrent" \
     org.opencontainers.image.version="${VERSION}"

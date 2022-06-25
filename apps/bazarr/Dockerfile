@@ -35,6 +35,6 @@ COPY ./apps/bazarr/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
 LABEL \
-    org.opencontainers.image.title="Bazarr ($STREAM)" \
+    org.opencontainers.image.title="Bazarr (${STREAM})" \
     org.opencontainers.image.source="https://github.com/morpheus65535/bazarr" \
     org.opencontainers.image.version="${VERSION}"
