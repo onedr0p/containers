@@ -32,8 +32,8 @@ jobs:
           container_channel=${{ matrix.channel }}
           container_stable=$(jq --arg c "${container_channel}" '(.channels | .[] | select(.name == $c)).stable' ./apps/${container_app}/metadata.json5)
           container_platforms=$(jq --arg c "${container_channel}" '(.channels | .[] | select(.name == $c)).platforms | join(",")' ./apps/${container_app}/metadata.json5)
-          container_published_version=$(./.github/workflows/scripts/published.sh "${container_app}" "${container_channel}" "${container_stable}")
-          container_upstream_version=$(./.github/workflows/scripts/upstream.sh "${container_app}" "${container_channel}")
+          container_published_version=$(./.github/scripts/published.sh "${container_app}" "${container_channel}" "${container_stable}")
+          container_upstream_version=$(./.github/scripts/upstream.sh "${container_app}" "${container_channel}")
 
           echo "::set-output name=container_build_date::$(date --rfc-3339=seconds --utc)"
           echo "::set-output name=container_stable::${container_stable}"
