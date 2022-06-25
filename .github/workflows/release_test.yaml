@@ -6,6 +6,7 @@ on:
     types: [release-test]
 
 env:
+  TOKEN: ${{ secrets.TOKEN }}
   # renovate: datasource=github-releases depName=aelsabbahy/goss
   GOSS_VERSION: v0.3.18
 
