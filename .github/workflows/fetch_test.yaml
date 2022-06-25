@@ -7,8 +7,7 @@ on:
   #   - cron: "0 */4 * * *"
   push:
     paths:
-      - '.github/scripts/fetch_test.sh'
-      - '.github/scripts/versions/*.sh'
+      - '.github/scripts/*.sh'
       - '.github/workflows/fetch_test.yaml'
       - '.github/workflows/release_test.yaml'
 

@@ -28,10 +28,14 @@ current_tags=$( \
             <<< "${tags}" \
 )
 
+# echo "${current_tags}" | jq --raw-output
+
 tag=$( \
     jq --compact-output \
         'map( select( index("rolling") | not ) )' \
             <<< "${current_tags}"
 )
+
+# echo "${tags}" | jq --raw-output
 
 printf "%s" "$(jq --raw-output '.[0]' <<< "${tag}")"
