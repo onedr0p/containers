@@ -20,7 +20,12 @@ jobs:
         channel: ${{ github.event.client_payload.channels }}
       fail-fast: false
     steps:
-      - name: Set up environment
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.TOKEN }}
+          fetch-depth: 1
+
+      - name: Set up workflow variables
         id: vars
         run: |-
           container_app=${{ matrix.app }}
