@@ -3,11 +3,11 @@ FROM ghcr.io/onedr0p/alpine:rolling@sha256:c85683b371b07fc4cc5ddcd088268242dead3
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 ARG VERSION
-ARG STREAM
+ARG CHANNEL
 
 ENV \
     SONARR__INSTANCE_NAME="Sonarr" \
-    SONARR__BRANCH="${STREAM}" \
+    SONARR__BRANCH="${CHANNEL}" \
     SONARR__PORT="8989"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -42,7 +42,4 @@ COPY ./apps/sonarr/config.xml.tmpl /app/config.xml.tmpl
 COPY ./apps/sonarr/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
-LABEL \
-    org.opencontainers.image.title="${SONARR__INSTANCE_NAME} (${SONARR__BRANCH})" \
-    org.opencontainers.image.source="https://github.com/Sonarr/Sonarr" \
-    org.opencontainers.image.version="${VERSION}"
+LABEL org.opencontainers.image.source="https://github.com/Sonarr/Sonarr"

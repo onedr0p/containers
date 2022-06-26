@@ -1,0 +1,30 @@
+{
+  "app": "sonarr",
+  "base": false,
+  "channels": [
+    {
+      "name": "main",
+      "platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "stable": true
+    },
+    {
+      "name": "develop",
+      "platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "stable": false
+    },
+    {
+      "name": "widowmaker",
+      "platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "stable": false
+    }
+  ]
+}

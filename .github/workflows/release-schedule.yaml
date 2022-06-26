@@ -1,5 +1,5 @@
 ---
-name: Fetch Test
+name: Release Schedule
 
 on:
   workflow_dispatch:
@@ -8,15 +8,15 @@ on:
   push:
     paths:
       - '.github/scripts/*.sh'
-      - '.github/workflows/fetch_test.yaml'
-      - '.github/workflows/release_test.yaml'
+      - '.github/workflows/fetch.yaml'
+      - '.github/workflows/release.yaml'
 
 env:
   TOKEN: ${{ secrets.TOKEN }}
 
 jobs:
-  fetch:
-    name: Fetch Test
+  setup:
+    name: Setup
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.fetch.outputs.changes }}
@@ -26,20 +26,19 @@ jobs:
           token: ${{ env.TOKEN }}
 
       - name: Install tools
-        run: |
-          sudo apt-get install moreutils jo
+        run: sudo apt-get install moreutils jo
 
       - name: Fetch new app versions
         id: fetch
-        run: ./.github/scripts/fetch_test.sh
+        run: ./.github/scripts/fetch.sh
 
   dispatch:
-    name: Dispatch Test
+    name: Dispatch
     runs-on: ubuntu-latest
     needs:
-      - fetch
+      - setup
     strategy:
-      matrix: ${{ fromJson(needs.fetch.outputs.matrix) }}
+      matrix: ${{ fromJson(needs.setup.outputs.matrix) }}
       fail-fast: false
     steps:
       - name: Repository Dispatch
@@ -47,5 +46,5 @@ jobs:
         with:
           token: ${{ env.TOKEN }}
           repository: onedr0p/containers
-          event-type: release-dispatcher
+          event-type: release-dispatch
           client-payload: ${{ toJson(matrix.changes) }}
