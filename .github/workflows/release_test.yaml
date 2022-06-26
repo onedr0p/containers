@@ -32,22 +32,28 @@ jobs:
           container_app=${{ matrix.app }}
           container_channel=${{ matrix.channel }}
 
+          container_base=$(jq '.base' ./apps/${container_app}/metadata.json5)
           container_stable=$(jq --arg c "${container_channel}" '(.channels | .[] | select(.name == $c)).stable' ./apps/${container_app}/metadata.json5)
           container_platforms=$(jq --arg c "${container_channel}" '(.channels | .[] | select(.name == $c)).platforms | join(",")' ./apps/${container_app}/metadata.json5)
           container_published_version=$(bash ./.github/scripts/published_test.sh "${container_app}" "${container_channel}" "${container_stable}")
           container_upstream_version=$(bash ./.github/scripts/upstream_test.sh "${container_app}" "${container_channel}")
 
-          echo "::set-output name=container_published_version::${container_published_version}"
-          echo "::set-output name=container_upstream_version::${container_upstream_version}"
           echo "::set-output name=container_build_date::$(date --rfc-3339=seconds --utc)"
           echo "::set-output name=container_stable::${container_stable}"
           echo "::set-output name=container_platforms::${container_platforms}"
+          echo "::set-output name=container_published_version::${container_published_version}"
+          echo "::set-output name=container_upstream_version::${container_upstream_version}"
           echo "::set-output name=container_push::true"
           echo "::set-output name=container_cache_from::type=gha"
           echo "::set-output name=container_cache_to::type=gha,mode=max"
+          
           if test -f "./apps/${container_app}/ci/goss.yaml"; then
               echo "::set-output name=container_goss_enabled::true"
               echo "::set-output name=container_goss_config::./apps/${container_app}/ci/goss.yaml"
+          fi
+
+          if [[ "${container_base}" == true ]]; then
+              echo "::set-output name=container_goss_args::tail -f /dev/null"
           fi
 
           if [[ "${container_app}" == "ubuntu" || "${container_app}" == "alpine" ]]; then
@@ -121,7 +127,7 @@ jobs:
           GOSS_OPTS: |-
             --retry-timeout 60s --sleep 2s --color --format documentation
         run: |-
-          dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_rolling }}
+          dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_rolling }} ${{ steps.vars.outputs.container_goss_args }}
 
       # - name: Release
       #   id: release

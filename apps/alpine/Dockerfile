@@ -59,7 +59,6 @@ RUN \
 COPY ./apps/alpine/scripts /scripts
 COPY --from=builder /go/bin/envsubst /usr/local/bin/envsubst
 ENTRYPOINT ["/sbin/tini", "--"]
-CMD [ "/bin/bash" ]
 
 LABEL \
     org.opencontainers.image.base.name="Alpine (${CHANNEL})" \

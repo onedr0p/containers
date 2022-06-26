@@ -88,7 +88,6 @@ COPY ./apps/ubuntu/scripts /scripts
 COPY --from=builder /go/bin/envsubst /usr/local/bin/envsubst
 
 ENTRYPOINT [ "/usr/bin/tini", "--" ]
-CMD [ "/bin/bash" ]
 
 LABEL \
     org.opencontainers.image.base.name="Ubuntu ${CHANNEL}" \
