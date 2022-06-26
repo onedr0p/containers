@@ -59,9 +59,11 @@ jobs:
           fi
 
           if [[ "${container_stable}" == true ]]; then
+              echo "::set-output name=container_tag_cache::${{ matrix.app }}:cachez"
               echo "::set-output name=container_tag_rolling::${{ matrix.app }}:rolling"
               echo "::set-output name=container_tag_version::${{ matrix.app }}:${container_upstream_version}"
           else
+              echo "::set-output name=container_tag_cache::${{ matrix.app }}-${{ matrix.channel }}:cachez"
               echo "::set-output name=container_tag_rolling::${{ matrix.app }}-${{ matrix.channel }}:rolling"
               echo "::set-output name=container_tag_version::${{ matrix.app }}-${{ matrix.channel }}:${container_upstream_version}"
           fi
@@ -103,8 +105,7 @@ jobs:
           file: ${{ steps.vars.outputs.container_dockerfile }}
           load: true
           tags: |-
-            ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_rolling }}
-            ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_version }}
+            ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_cache }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -116,7 +117,7 @@ jobs:
           GOSS_OPTS: |-
             --retry-timeout 60s --sleep 2s --color --format documentation
         run: |-
-          dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_rolling }} ${{ steps.vars.outputs.container_goss_args }}
+          dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_cache }} ${{ steps.vars.outputs.container_goss_args }}
 
       - name: Build & Push
         if: ${{ github.event.client_payload.push == true }}
