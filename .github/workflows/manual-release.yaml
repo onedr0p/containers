@@ -31,8 +31,9 @@ jobs:
       - name: Build payload
         run: |-
           app=${{ github.event.inputs.app }}
-          channels=${{ github.event.inputs.app }}
-          jo app=${app} channels=$(jo -a ${channels/,/ })
+          channels=${{ github.event.inputs.channels }}
+          push=${{ github.event.inputs.push }}
+          jo app=${app} channels=$(jo -a ${channels/,/ }) push=${{ github.event.inputs.push }}
 
       # - name: Repository Dispatch
       #   uses: peter-evans/repository-dispatch@v2
