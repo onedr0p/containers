@@ -160,41 +160,40 @@ jobs:
           jq --arg c "${{ matrix.channel }}" --arg d "${{ steps.vars.outputs.container_build_date }}" '(.channels | .[] | select(.name == $c)).build_status.ts = $d' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
           echo "::set-output name=commit-message::💥 ${{ matrix.app }}-${{ matrix.channel }} (${{ steps.vars.outputs.container_upstream_version }})"
 
-      # - name: Commit statuses
-      #   id: commit-status
-      #   if: ${{ always() && github.event.client_payload.push == true }}
-      #   continue-on-error: true
-      #   uses: EndBug/add-and-commit@v9
-      #   with:
-      #     default_author: github_actions
-      #     pull: --rebase --autostash
-      #     message: |-
-      #       ${{ steps.build-failed.outputs.commit-message || steps.build-success.outputs.commit-message }}
+      - name: Commit Release Status
+        id: commit-status
+        if: ${{ always() && github.event.client_payload.push == true }}
+        continue-on-error: true
+        uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github_actions
+          pull: --rebase --autostash
+          message: |-
+            ${{ steps.build-failed.outputs.commit-message || steps.build-success.outputs.commit-message }}
 
-      #       View run at: https://github.com/onedr0p/containers/actions/runs/${{ github.run_id }}
-      #     add: "*.json5"
+            View run at: https://github.com/onedr0p/containers/actions/runs/${{ github.run_id }}
+          add: "*.json5"
 
-      # # In the matrix it is possible for things to complete 
-      # # just at the right time to throw a conflict, in that 
-      # # case it will try to pull and commit one more time
-      # - name: Snoozing randomly (retry)
-      #   if: ${{ always() && steps.commit-status.outcome == 'failure' }}
-      #   run: |-
-      #     perl -e 'sleep int(rand(15))'
-      #     perl -e 'sleep int(rand(15))'
+      # In the matrix it is possible for things to complete 
+      # just at the right time to throw a conflict, in that 
+      # case it will try to pull and commit one more time
+      - name: Snoozing randomly (retry)
+        if: ${{ always()  && github.event.client_payload.push == true && steps.commit-status.outcome == 'failure' }}
+        run: |-
+          perl -e 'sleep int(rand(30))'
 
       # - name: Git pull in changes (retry)
-      #   if: ${{ always() && steps.commit-status.outcome == 'failure' }}
+      #   if: ${{ always()  && github.event.client_payload.push == true && steps.commit-status.outcome == 'failure' }}
       #   run: git pull --rebase --autostash
 
-      # - name: Commit statuses (retry)
-      #   if: ${{ always() }}
-      #   uses: EndBug/add-and-commit@v9
-      #   with:
-      #     default_author: github_actions
-      #     pull: --rebase --autostash
-      #     message: |-
-      #       ${{ steps.build-failed.outputs.commit-message || steps.build-success.outputs.commit-message }}
+      - name: Commit statuses (retry)
+        if: ${{ always() && github.event.client_payload.push == true && steps.commit-status.outcome == 'failure' }}
+        uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github_actions
+          pull: --rebase --autostash
+          message: |-
+            ${{ steps.build-failed.outputs.commit-message || steps.build-success.outputs.commit-message }}
 
-      #       View run at: https://github.com/onedr0p/containers/actions/runs/${{ github.run_id }}
-      #     add: "*.json5"
+            View run at: https://github.com/onedr0p/containers/actions/runs/${{ github.run_id }}
+          add: "*.json5"
