@@ -43,7 +43,7 @@ jobs:
           token: ${{ env.TOKEN }}
           repository: onedr0p/containers
           event-type: release-dispatch
-          client-payload: ${{ toJson(steps.payload.outputs.data) }}
+          client-payload: ${{ steps.payload.outputs.data }}
 
   # dispatch:
   #   name: Dispatch
