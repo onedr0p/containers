@@ -166,7 +166,7 @@ jobs:
         if: ${{ always() }}
         run: |-
           jq --arg c "${{ matrix.channel }}" '(.channels | .[] | select(.name == $c)).build_status.success = true' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
-          jq --arg c "${{ matrix.channel }}" --arg d "${{ steps.vars.outputs.container_build_date }}" '(.channels | .[] | select(.name == $c)).build_status.success = $d' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
+          jq --arg c "${{ matrix.channel }}" --arg d "${{ steps.vars.outputs.container_build_date }}" '(.channels | .[] | select(.name == $c)).build_status.ts = $d' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
           echo "::set-output name=commit-message::🎉 ${{ matrix.app }}-${{ matrix.channel }} (${{ steps.vars.outputs.container_upstream_version }})"
 
       - name: Build failed
@@ -174,7 +174,7 @@ jobs:
         if: ${{ failure() && (steps.release.outcome == 'failure' || steps.dgoss.outcome != 'success') }}
         run: |-
           jq --arg c "${{ matrix.channel }}" '(.channels | .[] | select(.name == $c)).build_status.success = false' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
-          jq --arg c "${{ matrix.channel }}" --arg d "${{ steps.vars.outputs.container_build_date }}" '(.channels | .[] | select(.name == $c)).build_status.success = $d' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
+          jq --arg c "${{ matrix.channel }}" --arg d "${{ steps.vars.outputs.container_build_date }}" '(.channels | .[] | select(.name == $c)).build_status.ts = $d' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
           echo "::set-output name=commit-message::💥 ${{ matrix.app }}-${{ matrix.channel }} (${{ steps.vars.outputs.container_upstream_version }})"
 
       - name: Commit statuses
