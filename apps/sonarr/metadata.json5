@@ -24,7 +24,11 @@
         "linux/amd64",
         "linux/arm64"
       ],
-      "stable": false
+      "stable": false,
+      "build": {
+        "success": true,
+        "ts": "2022-06-26 05:52:36+00:00"
+      }
     },
     {
       "name": "widowmaker",
