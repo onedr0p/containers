@@ -26,7 +26,7 @@ jobs:
           fetch-depth: 1
       
       - name: Install Tools
-        run: sudo apt-get install moreutils
+        run: sudo apt-get install moreutils jo
 
       - name: Setup Workflow Variables
         id: vars
