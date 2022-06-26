@@ -1,0 +1,21 @@
+---
+file:
+  /scripts/greeting.sh:
+    exists: true
+  /scripts/umask.sh:
+    exists: true
+  /scripts/vpn.sh:
+    exists: true
+  /usr/local/bin/envsubst:
+    exists: true
+
+group:
+  kah:
+    exists: true
+    gid: 568
+
+user:
+  kah:
+    exists: true
+    uid: 568
+    gid: 568

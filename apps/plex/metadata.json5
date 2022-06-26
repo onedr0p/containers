@@ -1,5 +1,6 @@
 {
   "app": "plex",
+  "base": false,
   "channels": [
     {
       "name": "stable",

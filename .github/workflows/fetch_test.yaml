@@ -38,9 +38,6 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - fetch
-    # outputs:
-    #   app: ${{ steps.filter.outputs.app }}
-    #   channels: ${{ steps.filter.outputs.channels }}
     strategy:
       matrix: ${{ fromJson(needs.fetch.outputs.matrix) }}
       fail-fast: false
@@ -50,59 +47,5 @@ jobs:
         with:
           token: ${{ env.TOKEN }}
           repository: onedr0p/containers
-          event-type: release-test
+          event-type: release-dispatcher
           client-payload: ${{ toJson(matrix.changes) }}
-  #     - name: Test
-  #       id: filter
-  #       run: |-
-  #         app=$(jq --raw-output '.app | [.]' <<< '${{ toJson(matrix.changes) }}')
-  #         echo "${app}"
-  #         channels=$(jq --raw-output '.channels' <<< '${{ toJson(matrix.changes) }}')
-  #         echo "${channels}"
-  #         echo ::set-output name=app::${app}
-  #         echo ::set-output name=channels::${channels}
-
-  # build:
-  #   name: Build Test
-  #   runs-on: ubuntu-latest
-  #   needs:
-  #     - filter
-  #   strategy:
-  #     matrix: 
-  #       app: ${{ fromJson(needs.filter.outputs.app) }}
-  #       channel: ${{ fromJson(needs.filter.outputs.channels) }}
-  #     fail-fast: false
-  #   steps:
-  #     - name: Test
-  #       id: envs
-  #       run: |-
-  #         echo "${{ matrix.app }}"
-  #         echo "${{ matrix.channel }}"
-
-      # - name: Repository Dispatch
-      #   uses: peter-evans/repository-dispatch@v2
-      #   with:
-      #     token: ${{ secrets.TOKEN }}
-      #     repository: onedr0p/containers
-      #     event-type: changes
-      #     client-payload: ${{ steps.fetch.outputs.changes }}
-
-  # release:
-  #   name: Release
-  #   runs-on: ubuntu-latest
-  #   needs:
-  #     - fetch
-  #   strategy:
-  #     matrix: ${{ fromJson(needs.fetch.outputs.matrix) }}
-  #     # matrix:
-  #     #   app: [lidarr]
-  #     #   channels: [master,develop,nightly]
-  #     max-parallel: 5
-  #     fail-fast: false
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-
-  #     - name: Test
-  #       run: |-
-  #         echo "${{ matrix.changes }}"

@@ -1,16 +1,9 @@
 {
   "app": "ubuntu",
+  "base": true,
   "channels": [
     {
       "name": "focal",
-      "platforms": [
-        "linux/amd64",
-        "linux/arm64"
-      ],
-      "stable": true
-    },
-    {
-      "name": "jammy",
       "platforms": [
         "linux/amd64",
         "linux/arm64"

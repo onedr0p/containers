@@ -3,7 +3,7 @@ name: Release Test
 
 on:
   repository_dispatch:
-    types: [release-test]
+    types: [release-dispatcher]
 
 env:
   TOKEN: ${{ secrets.TOKEN }}
@@ -67,13 +67,6 @@ jobs:
               echo "::set-output name=container_dockerfile::./apps/${container_app}/${container_channel}/Dockerfile"
           fi
 
-          echo "${container_app}"
-          echo "${container_channel}"
-          echo "${container_stable}"
-          echo "${container_platforms}"
-          echo "${container_published_version}"
-          echo "${container_upstream_version}"
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
         with:
@@ -129,21 +122,21 @@ jobs:
         run: |-
           dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_rolling }}
 
-      - name: Release
-        id: release
-        uses: docker/build-push-action@v3
-        with:
-          build-args: |-
-            VERSION=${{ steps.vars.outputs.container_upstream_version }}
-            CHANNEL=${{ steps.vars.outputs.container_channel }}
-          labels: |-
-            org.opencontainers.image.created=${{ steps.vars.outputs.container_build_date }}
-          context: .
-          platforms: ${{ steps.vars.outputs.container_platforms }}
-          file: ${{ steps.vars.outputs.container_dockerfile }}
-          push: ${{ steps.vars.outputs.container_push }}
-          tags: |-
-            ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_rolling }}
-            ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_version }}
-          cache-from: ${{ steps.vars.outputs.container_cache_from }}
-          cache-to: ${{ steps.vars.outputs.container_cache_to }}
+      # - name: Release
+      #   id: release
+      #   uses: docker/build-push-action@v3
+      #   with:
+      #     build-args: |-
+      #       VERSION=${{ steps.vars.outputs.container_upstream_version }}
+      #       CHANNEL=${{ steps.vars.outputs.container_channel }}
+      #     labels: |-
+      #       org.opencontainers.image.created=${{ steps.vars.outputs.container_build_date }}
+      #     context: .
+      #     platforms: ${{ steps.vars.outputs.container_platforms }}
+      #     file: ${{ steps.vars.outputs.container_dockerfile }}
+      #     push: ${{ steps.vars.outputs.container_push }}
+      #     tags: |-
+      #       ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_rolling }}
+      #       ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_version }}
+      #     cache-from: ${{ steps.vars.outputs.container_cache_from }}
+      #     cache-to: ${{ steps.vars.outputs.container_cache_to }}

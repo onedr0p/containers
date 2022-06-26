@@ -1,24 +1,9 @@
 {
   "app": "alpine",
+  "base": true,
   "channels": [
     {
       "name": "3.16",
-      "platforms": [
-        "linux/amd64",
-        "linux/arm64"
-      ],
-      "stable": true
-    },
-    {
-      "name": "3.15",
-      "platforms": [
-        "linux/amd64",
-        "linux/arm64"
-      ],
-      "stable": true
-    },
-    {
-      "name": "3.14",
       "platforms": [
         "linux/amd64",
         "linux/arm64"
