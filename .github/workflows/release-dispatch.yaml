@@ -182,10 +182,6 @@ jobs:
         run: |-
           perl -e 'sleep int(rand(30))'
 
-      # - name: Git pull in changes (retry)
-      #   if: ${{ always()  && github.event.client_payload.push == true && steps.commit-status.outcome == 'failure' }}
-      #   run: git pull --rebase --autostash
-
       - name: Commit statuses (retry)
         if: ${{ always() && github.event.client_payload.push == true && steps.commit-status.outcome == 'failure' }}
         uses: EndBug/add-and-commit@v9
