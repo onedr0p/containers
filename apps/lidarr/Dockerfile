@@ -3,11 +3,11 @@ FROM ghcr.io/onedr0p/alpine:rolling@sha256:c85683b371b07fc4cc5ddcd088268242dead3
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 ARG VERSION
-ARG STREAM
+ARG CHANNEL
 
 ENV \
     LIDARR__INSTANCE_NAME="Lidarr" \
-    LIDARR__BRANCH="${STREAM}" \
+    LIDARR__BRANCH="${CHANNEL}" \
     LIDARR__PORT="8686"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -39,7 +39,4 @@ COPY ./apps/lidarr/config.xml.tmpl /app/config.xml.tmpl
 COPY ./apps/lidarr/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
-LABEL \
-    org.opencontainers.image.title="${LIDARR__INSTANCE_NAME} (${LIDARR__BRANCH})" \
-    org.opencontainers.image.source="https://github.com/Lidarr/Lidarr" \
-    org.opencontainers.image.version="${VERSION}"
+LABEL org.opencontainers.image.source="https://github.com/Lidarr/Lidarr"

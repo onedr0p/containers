@@ -59,8 +59,3 @@ RUN \
 COPY ./apps/alpine/scripts /scripts
 COPY --from=builder /go/bin/envsubst /usr/local/bin/envsubst
 ENTRYPOINT ["/sbin/tini", "--"]
-
-LABEL \
-    org.opencontainers.image.base.name="Alpine (${CHANNEL})" \
-    org.opencontainers.image.base.version="${VERSION}" \
-    org.opencontainers.image.authors="Devin Buhl <devin.kray@gmail.com>, Bernd Schorgers <me@bjw-s.dev>"

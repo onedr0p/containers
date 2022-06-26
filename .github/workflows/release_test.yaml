@@ -54,6 +54,12 @@ jobs:
               fi
           fi
 
+          if [[ "${container_base}" == true ]]; then
+              echo "::set-output name=container_label_type::org.opencontainers.image.base"
+          else
+              echo "::set-output name=container_label_type::org.opencontainers.image"
+          fi
+
           if test -f "./apps/${{ matrix.app }}/${{ matrix.channel }}/Dockerfile"; then
               echo "::set-output name=container_dockerfile::./apps/${{ matrix.app }}/${{ matrix.channel }}/Dockerfile"
           else
@@ -103,7 +109,10 @@ jobs:
             VERSION=${{ steps.vars.outputs.container_upstream_version }}
             CHANNEL=${{ matrix.channel }}
           labels: |-
-            org.opencontainers.image.created=${{ steps.vars.outputs.container_build_date }}
+            ${{ steps.vars.outputs.container_label_type }}.created="${{ steps.vars.outputs.container_build_date }}"
+            ${{ steps.vars.outputs.container_label_type }}.title="${{ matrix.channel }} (${{ matrix.channel }})"
+            ${{ steps.vars.outputs.container_label_type }}.version="${{ steps.vars.outputs.container_upstream_version }}"
+            ${{ steps.vars.outputs.container_label_type }}.authors="Devin Buhl <devin.kray@gmail.com>, Bernd Schorgers <me@bjw-s.dev>"
           context: .
           file: ${{ steps.vars.outputs.container_dockerfile }}
           load: true
