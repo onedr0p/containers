@@ -3,8 +3,8 @@ name: Release Schedule
 
 on:
   workflow_dispatch:
-  # schedule:
-  #   - cron: "0 */4 * * *"
+  schedule:
+    - cron: "0 * * * *"
 
 env:
   TOKEN: ${{ secrets.TOKEN }}
