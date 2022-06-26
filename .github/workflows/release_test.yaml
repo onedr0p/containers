@@ -29,49 +29,43 @@ jobs:
       - name: Set up workflow variables
         id: vars
         run: |-
-          container_app=${{ matrix.app }}
-          container_channel=${{ matrix.channel }}
-
-          container_base=$(jq '.base' ./apps/${container_app}/metadata.json5)
-          container_stable=$(jq --arg c "${container_channel}" '(.channels | .[] | select(.name == $c)).stable' ./apps/${container_app}/metadata.json5)
-          container_platforms=$(jq --arg c "${container_channel}" '(.channels | .[] | select(.name == $c)).platforms | join(",")' ./apps/${container_app}/metadata.json5)
-          container_published_version=$(bash ./.github/scripts/published_test.sh "${container_app}" "${container_channel}" "${container_stable}")
-          container_upstream_version=$(bash ./.github/scripts/upstream_test.sh "${container_app}" "${container_channel}")
+          container_base=$(jq '.base' ./apps/${{ matrix.app }}/metadata.json5)
+          container_stable=$(jq --arg c "${{ matrix.channel }}" '(.channels | .[] | select(.name == $c)).stable' ./apps/${{ matrix.app }}/metadata.json5)
+          container_platforms=$(jq --arg c "${{ matrix.channel }}" '(.channels | .[] | select(.name == $c)).platforms | join(",")' ./apps/${{ matrix.app }}/metadata.json5)
+          container_published_version=$(bash ./.github/scripts/published_test.sh "${{ matrix.app }}" "${{ matrix.channel }}" "${container_stable}")
+          container_upstream_version=$(bash ./.github/scripts/upstream_test.sh "${{ matrix.app }}" "${{ matrix.channel }}")
 
           echo "::set-output name=container_build_date::$(date --rfc-3339=seconds --utc)"
           echo "::set-output name=container_stable::${container_stable}"
           echo "::set-output name=container_platforms::${container_platforms}"
+          
           echo "::set-output name=container_published_version::${container_published_version}"
           echo "::set-output name=container_upstream_version::${container_upstream_version}"
+          
           echo "::set-output name=container_push::true"
           echo "::set-output name=container_cache_from::type=gha"
           echo "::set-output name=container_cache_to::type=gha,mode=max"
           
-          if test -f "./apps/${container_app}/ci/goss.yaml"; then
+          if test -f "./apps/${{ matrix.app }}/ci/goss.yaml"; then
               echo "::set-output name=container_goss_enabled::true"
-              echo "::set-output name=container_goss_config::./apps/${container_app}/ci/goss.yaml"
-          fi
-
-          if [[ "${container_base}" == true ]]; then
-              echo "::set-output name=container_goss_args::tail -f /dev/null"
-          fi
-
-          if [[ "${container_app}" == "ubuntu" || "${container_app}" == "alpine" ]]; then
-              echo "::set-output name=container_tag_rolling::${container_app}:${container_channel/./-}-rolling"
-              echo "::set-output name=container_tag_version::${container_app}:${container_upstream_version}"
-          else
-              if [[ "${container_stable}" == true ]]; then
-                  echo "::set-output name=container_tag_rolling::${container_app}:rolling"
-                  echo "::set-output name=container_tag_version::${container_app}:v${container_upstream_version}"
-              else
-                  echo "::set-output name=container_tag_rolling::${container_app}-${container_channel}:rolling"
-                  echo "::set-output name=container_tag_version::${container_app}-${container_channel}:v${container_upstream_version}"
+              echo "::set-output name=container_goss_config::./apps/${{ matrix.app }}/ci/goss.yaml"
+              if [[ "${container_base}" == true ]]; then
+                  echo "::set-output name=container_goss_args::tail -f /dev/null"
               fi
           fi
 
-          echo "::set-output name=container_dockerfile::./apps/${container_app}/Dockerfile"
-          if test -f "./apps/${container_app}/${container_channel}/Dockerfile"; then
-              echo "::set-output name=container_dockerfile::./apps/${container_app}/${container_channel}/Dockerfile"
+          if test -f "./apps/${{ matrix.app }}/${{ matrix.channel }}/Dockerfile"; then
+              echo "::set-output name=container_dockerfile::./apps/${{ matrix.app }}/${{ matrix.channel }}/Dockerfile"
+          else
+              echo "::set-output name=container_dockerfile::./apps/${{ matrix.app }}/Dockerfile"
+          fi
+
+          if [[ "${container_stable}" == true ]]; then
+              echo "::set-output name=container_tag_rolling::${{ matrix.app }}:rolling"
+              echo "::set-output name=container_tag_version::${{ matrix.app }}:${container_upstream_version}"
+          else
+              echo "::set-output name=container_tag_rolling::${{ matrix.app }}-${{ matrix.channel }}:rolling"
+              echo "::set-output name=container_tag_version::${{ matrix.app }}-${{ matrix.channel }}:${container_upstream_version}"
           fi
 
       - name: Set up QEMU
@@ -107,7 +101,7 @@ jobs:
         with:
           build-args: |-
             VERSION=${{ steps.vars.outputs.container_upstream_version }}
-            CHANNEL=${{ steps.vars.outputs.container_channel }}
+            CHANNEL=${{ matrix.channel }}
           labels: |-
             org.opencontainers.image.created=${{ steps.vars.outputs.container_build_date }}
           context: .
@@ -115,6 +109,7 @@ jobs:
           load: true
           tags: |-
             ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_rolling }}
+            ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_version }}
           cache-from: ${{ steps.vars.outputs.container_cache_from }}
           cache-to: ${{ steps.vars.outputs.container_cache_to }}
 
