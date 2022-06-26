@@ -188,7 +188,7 @@ jobs:
           message: |-
             ${{ steps.build-failed.outputs.commit-message || steps.build-success.outputs.commit-message }}
 
-            View run at: https://github.com/onedr0p/containers/actions/runs/${{ env.GITHUB_RUN_ID }}
+            View run at: https://github.com/onedr0p/containers/actions/runs/${{ github.run_id }}
           add: "*.json5"
 
       # In the matrix it is possible for things to complete 
@@ -213,5 +213,5 @@ jobs:
           message: |-
             ${{ steps.build-failed.outputs.commit-message || steps.build-success.outputs.commit-message }}
 
-            View run at: https://github.com/onedr0p/containers/actions/runs/${{ env.GITHUB_RUN_ID }}
+            View run at: https://github.com/onedr0p/containers/actions/runs/${{ github.run_id }}
           add: "*.json5"
