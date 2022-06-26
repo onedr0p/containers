@@ -25,9 +25,6 @@ jobs:
         with:
           token: ${{ env.TOKEN }}
 
-      - name: Install tools
-        run: sudo apt-get install moreutils jo
-
       - name: Fetch new app versions
         id: fetch
         run: ./.github/scripts/fetch.sh

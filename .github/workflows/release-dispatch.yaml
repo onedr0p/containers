@@ -24,6 +24,9 @@ jobs:
         with:
           token: ${{ secrets.TOKEN }}
           fetch-depth: 1
+      
+      - name: Install Tools
+        run: sudo apt-get install moreutils
 
       - name: Setup Workflow Variables
         id: vars
