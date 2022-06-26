@@ -3,7 +3,7 @@ FROM ghcr.io/onedr0p/ubuntu-focal:rolling@sha256:72de8714ed3958baa0843658d58e574
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 ARG VERSION
-ARG STREAM
+ARG CHANNEL
 
 ENV NVIDIA_DRIVER_CAPABILITIES="compute,video,utility"
 
@@ -63,7 +63,4 @@ USER kah
 COPY ./apps/jellyfin/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
-LABEL \
-    org.opencontainers.image.title="Jellyfin - (${STREAM})" \
-    org.opencontainers.image.source="https://github.com/jellyfin/jellyfin" \
-    org.opencontainers.image.version="${VERSION}"
+LABEL org.opencontainers.image.source="https://github.com/jellyfin/jellyfin"

@@ -1,0 +1,30 @@
+{
+  "app": "radarr",
+  "base": false,
+  "channels": [
+    {
+      "name": "master",
+      "platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "stable": true
+    },
+    {
+      "name": "develop",
+      "platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "stable": false
+    },
+    {
+      "name": "nightly",
+      "platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "stable": false
+    }
+  ]
+}

@@ -3,7 +3,7 @@ FROM ghcr.io/onedr0p/alpine:rolling@sha256:c85683b371b07fc4cc5ddcd088268242dead3
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 ARG VERSION
-ARG STREAM
+ARG CHANNEL
 
 ENV TAUTULLI_DOCKER="True"
 
@@ -14,7 +14,7 @@ RUN \
     && \
     echo "v${VERSION}" > /app/version.txt \
     && \
-    echo "${STREAM}" > /app/branch.txt \
+    echo "${CHANNEL}" > /app/branch.txt \
     && chown -R root:root /app \
     && chmod -R 755 /app \
     && rm -rf /tmp/*
@@ -37,7 +37,4 @@ USER kah
 COPY ./apps/tautulli/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
-LABEL \
-    org.opencontainers.image.title="Tautulli (${STREAM})" \
-    org.opencontainers.image.source="https://github.com/Tautulli/Tautulli" \
-    org.opencontainers.image.version="${VERSION}"
+LABEL org.opencontainers.image.source="https://github.com/Tautulli/Tautulli"

@@ -5,7 +5,7 @@ CHANNEL="${2}"
 STABLE="${3}"
 TOKEN="${TOKEN:-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}"
 
-if [[ ! "${STABLE}" ]]; then
+if [[ -z "${STABLE}" || "${STABLE}" == false ]]; then
     APP="${APP}-${CHANNEL}"
 fi
 

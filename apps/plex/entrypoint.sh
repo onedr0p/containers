@@ -13,4 +13,7 @@ export PLEX_MEDIA_SERVER_INFO_PLATFORM_VERSION=$(uname -r)
 [[ -f "${PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}/Plex Media Server/plexmediaserver.pid" ]] && \
     rm -f "${PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}/Plex Media Server/plexmediaserver.pid"
 
-exec /usr/lib/plexmediaserver/Plex\ Media\ Server
+#shellcheck disable=SC2086
+exec \
+    /usr/lib/plexmediaserver/Plex\ Media\ Server \
+    ${EXTRA_ARGS}

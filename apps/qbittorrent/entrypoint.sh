@@ -46,7 +46,9 @@ if [[ ! -f "$qbtLogFile" ]]; then
     ln -sf /proc/self/fd/1 "$qbtLogFile"
 fi
 
-exec /app/qbittorrent-nox \
-    ${PROFILE_ARGS} \
-    --webui-port="${WEBUI_PORT}" \
-    ${EXTRA_ARGS}
+#shellcheck disable=SC2086,SC2090
+exec \
+    /app/qbittorrent-nox \
+        ${PROFILE_ARGS} \
+        --webui-port="${WEBUI_PORT}" \
+        ${EXTRA_ARGS}

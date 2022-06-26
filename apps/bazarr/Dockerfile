@@ -3,7 +3,7 @@ FROM ghcr.io/onedr0p/alpine:rolling@sha256:c85683b371b07fc4cc5ddcd088268242dead3
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 ARG VERSION
-ARG STREAM
+ARG CHANNEL
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -16,9 +16,7 @@ RUN \
 
 #hadolint ignore=DL3018,DL3013
 RUN \
-    apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.14/main unrar \
-    && \
-    apk add --no-cache ca-certificates ffmpeg python3 py3-lxml py3-numpy py3-gevent py3-cryptography py3-setuptools unrar unzip \
+    apk add --no-cache ca-certificates ffmpeg python3 py3-lxml py3-numpy py3-gevent py3-cryptography py3-setuptools \
     && \
     apk add --no-cache --virtual .build-deps py3-pip gcc python3-dev musl-dev \
     && \
@@ -34,7 +32,4 @@ USER kah
 COPY ./apps/bazarr/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
-LABEL \
-    org.opencontainers.image.title="Bazarr (${STREAM})" \
-    org.opencontainers.image.source="https://github.com/morpheus65535/bazarr" \
-    org.opencontainers.image.version="${VERSION}"
+LABEL org.opencontainers.image.source="https://github.com/morpheus65535/bazarr"

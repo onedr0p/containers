@@ -21,4 +21,11 @@ if [[ -n ${HOST_WHITELIST_ENTRIES} ]]; then
     sed -i -e "s/^host_whitelist *=.*$/host_whitelist = ${HOSTNAME}, ${HOST_WHITELIST_ENTRIES}/g" /config/sabnzbd.ini
 fi
 
-exec /usr/bin/python3 /app/SABnzbd.py --browser 0 --server 0.0.0.0:8080 --config-file /config/sabnzbd.ini ${EXTRA_ARGS}
+#shellcheck disable=SC2086
+exec \
+    /usr/bin/python3 \
+        /app/SABnzbd.py \
+        --browser 0 \
+        --server 0.0.0.0:8080 \
+        --config-file /config/sabnzbd.ini \
+        ${EXTRA_ARGS}

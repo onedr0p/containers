@@ -136,15 +136,18 @@ jobs:
         run: |-
           dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_rolling }} ${{ steps.vars.outputs.container_goss_args }}
 
-      # - name: Release
+      # - name: Build & Push
       #   id: release
       #   uses: docker/build-push-action@v3
       #   with:
       #     build-args: |-
       #       VERSION=${{ steps.vars.outputs.container_upstream_version }}
-      #       CHANNEL=${{ steps.vars.outputs.container_channel }}
+      #       CHANNEL=${{ matrix.channel }}
       #     labels: |-
-      #       org.opencontainers.image.created=${{ steps.vars.outputs.container_build_date }}
+      #       ${{ steps.vars.outputs.container_label_type }}.created="${{ steps.vars.outputs.container_build_date }}"
+      #       ${{ steps.vars.outputs.container_label_type }}.title="${{ matrix.app }} (${{ matrix.channel }})"
+      #       ${{ steps.vars.outputs.container_label_type }}.version="${{ steps.vars.outputs.container_upstream_version }}"
+      #       ${{ steps.vars.outputs.container_label_type }}.authors="Devin Buhl <devin.kray@gmail.com>, Bernd Schorgers <me@bjw-s.dev>"
       #     context: .
       #     platforms: ${{ steps.vars.outputs.container_platforms }}
       #     file: ${{ steps.vars.outputs.container_dockerfile }}

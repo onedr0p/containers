@@ -15,6 +15,7 @@ if [[ ! -f "/config/nzbget.conf" ]]; then
         "/config/nzbget.conf"
 fi
 
+#shellcheck disable=SC2086
 exec \
     /app/nzbget \
         --server \

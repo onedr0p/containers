@@ -3,11 +3,11 @@ FROM ghcr.io/onedr0p/alpine:rolling@sha256:c85683b371b07fc4cc5ddcd088268242dead3
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 ARG VERSION
-ARG STREAM
+ARG CHANNEL
 
 ENV \
     RADARR__INSTANCE_NAME="Radarr" \
-    RADARR__BRANCH="${STREAM}" \
+    RADARR__BRANCH="${CHANNEL}" \
     RADARR__PORT="7878"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -38,7 +38,4 @@ COPY ./apps/radarr/config.xml.tmpl /app/config.xml.tmpl
 COPY ./apps/radarr/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
-LABEL \
-    org.opencontainers.image.title="${RADARR__INSTANCE_NAME} (${RADARR__BRANCH})" \
-    org.opencontainers.image.source="https://github.com/Radarr/Radarr" \
-    org.opencontainers.image.version="${VERSION}"
+LABEL org.opencontainers.image.source="https://github.com/Radarr/Radarr"

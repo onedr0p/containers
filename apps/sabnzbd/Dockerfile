@@ -3,7 +3,7 @@ FROM ghcr.io/onedr0p/alpine:rolling@sha256:c85683b371b07fc4cc5ddcd088268242dead3
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 ARG VERSION
-ARG STREAM
+ARG CHANNEL
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -44,7 +44,4 @@ COPY ./apps/sabnzbd/sabnzbd.ini /app/sabnzbd.ini
 COPY ./apps/sabnzbd/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
-LABEL \
-    org.opencontainers.image.title="SABnzbd" \
-    org.opencontainers.image.source="https://github.com/sabnzbd/sabnzbd" \
-    org.opencontainers.image.version="${VERSION}"
+LABEL org.opencontainers.image.source="https://github.com/sabnzbd/sabnzbd"

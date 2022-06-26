@@ -3,7 +3,7 @@ FROM ghcr.io/onedr0p/ubuntu-focal:rolling@sha256:72de8714ed3958baa0843658d58e574
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 ARG VERSION
-ARG STREAM
+ARG CHANNEL
 
 WORKDIR /tmp
 
@@ -44,7 +44,7 @@ FROM ghcr.io/k8s-at-home/ubuntu-focal:rolling@sha256:7f1b8af0e171af5746016472156
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 ARG VERSION
-ARG STREAM
+ARG CHANNEL
 
 ENV NVIDIA_DRIVER_CAPABILITIES="compute,video,utility"
 
@@ -85,7 +85,3 @@ USER kah
 COPY --from=builder /app/emby /app/emby
 COPY ./apps/emby/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
-
-LABEL \
-    org.opencontainers.image.title="Emby (${STREAM})" \
-    org.opencontainers.image.version="${VERSION}"

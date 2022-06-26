@@ -28,18 +28,21 @@ USER root
 #hadolint ignore=DL3018
 RUN \
     apk add --no-cache \
-    ca-certificates \
-    bash \
-    bind-tools \
-    curl \
-    iputils \
-    jo \
-    jq \
-    nano \
-    tini \
-    tzdata \
-    util-linux \
-    wget
+        ca-certificates \
+        bash \
+        bind-tools \
+        curl \
+        iputils \
+        jo \
+        jq \
+        nano \
+        tini \
+        tzdata \
+        unzip \
+        util-linux \
+        wget \
+    && \
+    apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.14/main unrar
 #hadolint ignore=DL3018
 RUN \
     addgroup -S kah --gid 568 \

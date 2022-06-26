@@ -1,0 +1,14 @@
+{
+  "app": "tautulli",
+  "base": false,
+  "channels": [
+    {
+      "name": "master",
+      "platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "stable": true
+    }
+  ]
+}

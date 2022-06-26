@@ -3,11 +3,11 @@ FROM ghcr.io/onedr0p/alpine:rolling@sha256:c85683b371b07fc4cc5ddcd088268242dead3
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 ARG VERSION
-ARG STREAM
+ARG CHANNEL
 
 ENV \
     READARR__INSTANCE_NAME="Readarr" \
-    READARR__BRANCH="${STREAM}" \
+    READARR__BRANCH="${CHANNEL}" \
     READARR__PORT="8787"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -38,7 +38,4 @@ COPY ./apps/readarr/config.xml.tmpl /app/config.xml.tmpl
 COPY ./apps/readarr/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
-LABEL \
-    org.opencontainers.image.title="${READARR__INSTANCE_NAME} (${READARR__BRANCH})" \
-    org.opencontainers.image.source="https://github.com/Readarr/Readarr" \
-    org.opencontainers.image.version="${VERSION}"
+LABEL org.opencontainers.image.source="https://github.com/Readarr/Readarr"

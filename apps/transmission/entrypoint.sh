@@ -12,4 +12,10 @@ if [[ "${TRANSMISSION_DEBUG}" == "true" ]]; then
     cat /config/settings.json
 fi
 
-exec /app/transmission-daemon --foreground --config-dir /config --port "${WEBUI_PORT}" ${EXTRA_ARGS}
+#shellcheck disable=SC2086
+exec \
+    /app/transmission-daemon \
+        --foreground \
+        --config-dir /config \
+        --port "${WEBUI_PORT}" \
+        ${EXTRA_ARGS}

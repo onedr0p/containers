@@ -3,11 +3,11 @@ FROM ghcr.io/onedr0p/alpine:rolling@sha256:c85683b371b07fc4cc5ddcd088268242dead3
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 ARG VERSION
-ARG STREAM
+ARG CHANNEL
 
 ENV \
     PROWLARR__INSTANCE_NAME="Prowlarr" \
-    PROWLARR__BRANCH="${STREAM}" \
+    PROWLARR__BRANCH="${CHANNEL}" \
     PROWLARR__PORT="9696"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -38,7 +38,4 @@ COPY ./apps/prowlarr/config.xml.tmpl /app/config.xml.tmpl
 COPY ./apps/prowlarr/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
-LABEL \
-    org.opencontainers.image.title="${PROWLARR__INSTANCE_NAME} (${PROWLARR__BRANCH})" \
-    org.opencontainers.image.source="https://github.com/Prowlarr/Prowlarr" \
-    org.opencontainers.image.version="${VERSION}"
+LABEL org.opencontainers.image.source="https://github.com/Prowlarr/Prowlarr"

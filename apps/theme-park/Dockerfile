@@ -3,7 +3,7 @@ FROM nginxinc/nginx-unprivileged:1.23.0
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 ARG VERSION
-ARG STREAM
+ARG CHANNEL
 
 USER root
 ENV NGINX_WEB_ROOT "/usr/share/nginx/html"
@@ -38,7 +38,4 @@ USER nginx
 
 WORKDIR ${NGINX_WEB_ROOT}
 
-LABEL \
-    org.opencontainers.image.title="theme.park (${STREAM})" \
-    org.opencontainers.image.source="https://github.com/GilbN/theme.park" \
-    org.opencontainers.image.version="${VERSION}"
+LABEL org.opencontainers.image.source="https://github.com/GilbN/theme.park"

@@ -12,9 +12,12 @@ if [ -d "/lib/x86_64-linux-gnu" ]; then
 fi
 export SSL_CERT_FILE="${APP_DIR}/etc/ssl/certs/ca-certificates.crt"
 
-exec /app/emby/EmbyServer \
-	-programdata /config \
-	-ffdetect /app/emby/ffdetect \
-	-ffmpeg /app/emby/ffmpeg \
-	-ffprobe /app/emby/ffprobe \
-	-restartexitcode 3
+#shellcheck disable=SC2086
+exec \
+	/app/emby/EmbyServer \
+		-programdata /config \
+		-ffdetect /app/emby/ffdetect \
+		-ffmpeg /app/emby/ffmpeg \
+		-ffprobe /app/emby/ffprobe \
+		-restartexitcode 3 \
+        ${EXTRA_ARGS}

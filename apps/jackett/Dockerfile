@@ -3,7 +3,7 @@ FROM ghcr.io/onedr0p/ubuntu-focal:rolling@sha256:72de8714ed3958baa0843658d58e574
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 ARG VERSION
-ARG STREAM
+ARG CHANNEL
 
 ENV XDG_CONFIG_HOME=/config
 
@@ -45,7 +45,4 @@ USER kah
 COPY ./apps/jackett/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
-LABEL \
-  org.opencontainers.image.title="Jackett" \
-  org.opencontainers.image.source="https://github.com/Jackett/Jackett" \
-  org.opencontainers.image.version="${VERSION}"
+LABEL org.opencontainers.image.source="https://github.com/Jackett/Jackett"

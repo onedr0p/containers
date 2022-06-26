@@ -3,7 +3,7 @@ FROM ghcr.io/onedr0p/alpine:rolling@sha256:c85683b371b07fc4cc5ddcd088268242dead3
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 ARG VERSION
-ARG STREAM
+ARG CHANNEL
 
 ENV \
     RECYCLARR_APP_DATA=/config \
@@ -19,21 +19,15 @@ RUN \
         'linux/arm64') export ARCH='arm64' ;; \
     esac \
     && \
-    apk add --no-cache --virtual .build-deps unzip \
-    && \
     curl -fsSL -o /tmp/app.zip \
         "https://github.com/recyclarr/recyclarr/releases/download/v${VERSION}/recyclarr-linux-${ARCH}.zip" \
     && unzip -q /tmp/app.zip -d /app \
     && chown -R root:root /app \
     && chmod -R 755 /app \
-    && apk del .build-deps \
     && rm -rf /tmp/*
 
 USER kah
 
 CMD ["/app/recyclarr"]
 
-LABEL \
-    org.opencontainers.image.title="Recyclarr" \
-    org.opencontainers.image.source="https://github.com/recyclarr/recyclarr" \
-    org.opencontainers.image.version="${VERSION}"
+LABEL org.opencontainers.image.source="https://github.com/recyclarr/recyclarr"
