@@ -166,7 +166,7 @@ jobs:
         if: ${{ always() }}
         run: |-
           jq --arg c "${{ matrix.channel }}" '(.channels | .[] | select(.name == $c)).build.success = true' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
-          jq --arg c "${{ matrix.channel }}" --arg d "${{ steps.vars.outputs.container_build_date }}" '(.channels | .[] | select(.name == $c)).build.ts = $d' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
+          jq --arg c "${{ matrix.channel }}" --arg d "${{ steps.vars.outputs.container_build_date }}" '(.channels | .[] | select(.name == $c)).status.ts = $d' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
           echo "::set-output name=commit-message::🎉 ${{ matrix.app }}-${{ matrix.channel }} (${{ steps.vars.outputs.container_upstream_version }})"
 
       - name: Build failed
@@ -174,7 +174,7 @@ jobs:
         if: ${{ failure() && (steps.release.outcome == 'failure' || steps.dgoss.outcome != 'success') }}
         run: |-
           jq --arg c "${{ matrix.channel }}" '(.channels | .[] | select(.name == $c)).build.success = false' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
-          jq --arg c "${{ matrix.channel }}" --arg d "${{ steps.vars.outputs.container_build_date }}" '(.channels | .[] | select(.name == $c)).build.ts = $d' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
+          jq --arg c "${{ matrix.channel }}" --arg d "${{ steps.vars.outputs.container_build_date }}" '(.channels | .[] | select(.name == $c)).status.ts = $d' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
           echo "::set-output name=commit-message::💥 ${{ matrix.app }}-${{ matrix.channel }} (${{ steps.vars.outputs.container_upstream_version }})"
 
       - name: Commit statuses
@@ -187,6 +187,8 @@ jobs:
           pull: --rebase --autostash
           message: |-
             ${{ steps.build-failed.outputs.commit-message || steps.build-success.outputs.commit-message }}
+
+            View run at: https://github.com/onedr0p/containers/actions/runs/${{ env.GITHUB_RUN_ID }}
           add: "*.json5"
 
       # In the matrix it is possible for things to complete 
@@ -210,4 +212,6 @@ jobs:
           pull: --rebase --autostash
           message: |-
             ${{ steps.build-failed.outputs.commit-message || steps.build-success.outputs.commit-message }}
+
+            View run at: https://github.com/onedr0p/containers/actions/runs/${{ env.GITHUB_RUN_ID }}
           add: "*.json5"
