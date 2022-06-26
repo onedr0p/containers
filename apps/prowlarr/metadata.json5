@@ -4,6 +4,10 @@
   "channels": [
     {
       "name": "develop",
+      "build_status": {
+        "ts": "",
+        "success": true
+      },
       "platforms": [
         "linux/amd64",
         "linux/arm64"
@@ -12,6 +16,10 @@
     },
     {
       "name": "nightly",
+      "build_status": {
+        "ts": "",
+        "success": true
+      },
       "platforms": [
         "linux/amd64",
         "linux/arm64"

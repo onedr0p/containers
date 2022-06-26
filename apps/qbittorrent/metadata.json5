@@ -4,6 +4,10 @@
   "channels": [
     {
       "name": "stable",
+      "build_status": {
+        "ts": "",
+        "success": true
+      },
       "platforms": [
         "linux/amd64",
         "linux/arm64"

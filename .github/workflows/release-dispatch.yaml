@@ -105,6 +105,7 @@ jobs:
           version: ${{ env.GOSS_VERSION }}
 
       - name: Build Cache Container
+        id: release
         if: ${{ steps.vars.outputs.container_goss_enabled == 'true' }}
         uses: docker/build-push-action@v3
         with:
@@ -135,6 +136,32 @@ jobs:
             --retry-timeout 60s --sleep 2s --color --format documentation
         run: |-
           dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_rolling }} ${{ steps.vars.outputs.container_goss_args }}
+
+      - name: Build successful
+        id: build-success
+        if: ${{ always() }}
+        run: |-
+          jq --arg c "${{ matrix.channel }}" '(.channels | .[] | select(.name == $c)).build.success = true' | sponge ./apps/${{ matrix.app }}/metadata.json5
+          jq --arg c "${{ matrix.channel }}" --arg d "${{ steps.vars.outputs.container_build_date }}" '(.channels | .[] | select(.name == $c)).build.ts = $d' | sponge ./apps/${{ matrix.app }}/metadata.json5
+          echo "::set-output name=commit-message::🎉 Success building ${{ matrix.app }}-${{ matrix.channel }} (${{ steps.vars.outputs.container_upstream_version }})"
+
+      - name: Build failed
+        id: build-failed
+        if: ${{ failure() && (steps.release.outcome == 'failure' || steps.dgoss.outcome != 'success') }}
+        run: |-
+          jq --arg c "${{ matrix.channel }}" '(.channels | .[] | select(.name == $c)).build.success = false' | sponge ./apps/${{ matrix.app }}/metadata.json5
+          jq --arg c "${{ matrix.channel }}" --arg d "${{ steps.vars.outputs.container_build_date }}" '(.channels | .[] | select(.name == $c)).build.ts = $d' | sponge ./apps/${{ matrix.app }}/metadata.json5
+          echo "::set-output name=commit-message::💥 Error building ${{ matrix.app }}-${{ matrix.channel }} (${{ steps.vars.outputs.container_upstream_version }})"
+
+      - name: Commit and push to repo
+        if: ${{ always() }}
+        uses: EndBug/add-and-commit@issue-406
+        with:
+          default_author: github_actions
+          pull: --rebase --autostash
+          message: |-
+            ${{ steps.build-failed.outputs.commit-message || steps.build-success.outputs.commit-message }}
+          add: "*.json5"
 
       # - name: Build & Push
       #   id: release
