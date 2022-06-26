@@ -31,6 +31,7 @@ jobs:
         run: |-
           container_app=${{ matrix.app }}
           container_channel=${{ matrix.channel }}
+
           container_stable=$(jq --arg c "${container_channel}" '(.channels | .[] | select(.name == $c)).stable' ./apps/${container_app}/metadata.json5)
           container_platforms=$(jq --arg c "${container_channel}" '(.channels | .[] | select(.name == $c)).platforms | join(",")' ./apps/${container_app}/metadata.json5)
           container_published_version=$(bash ./.github/scripts/published_test.sh "${container_app}" "${container_channel}" "${container_stable}")
