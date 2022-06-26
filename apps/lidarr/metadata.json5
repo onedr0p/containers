@@ -1,6 +1,6 @@
 {
   "app": "lidarr",
-  "base": true,
+  "base": false,
   "channels": [
     {
       "name": "master",
