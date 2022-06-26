@@ -140,13 +140,35 @@ jobs:
         run: |-
           dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_rolling }} ${{ steps.vars.outputs.container_goss_args }}
 
+      - name: Build & Push
+        id: release
+        uses: docker/build-push-action@v3
+        with:
+          build-args: |-
+            VERSION=${{ steps.vars.outputs.container_upstream_version }}
+            CHANNEL=${{ matrix.channel }}
+          labels: |-
+            ${{ steps.vars.outputs.container_label_type }}.created="${{ steps.vars.outputs.container_build_date }}"
+            ${{ steps.vars.outputs.container_label_type }}.title="${{ matrix.app }} (${{ matrix.channel }})"
+            ${{ steps.vars.outputs.container_label_type }}.version="${{ steps.vars.outputs.container_upstream_version }}"
+            ${{ steps.vars.outputs.container_label_type }}.authors="Devin Buhl <devin.kray@gmail.com>, Bernd Schorgers <me@bjw-s.dev>"
+          context: .
+          platforms: ${{ steps.vars.outputs.container_platforms }}
+          file: ${{ steps.vars.outputs.container_dockerfile }}
+          push: ${{ steps.vars.outputs.container_push }}
+          tags: |-
+            ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_rolling }}
+            ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_version }}
+          cache-from: ${{ steps.vars.outputs.container_cache_from }}
+          cache-to: ${{ steps.vars.outputs.container_cache_to }}
+
       - name: Build successful
         id: build-success
         if: ${{ always() }}
         run: |-
           jq --arg c "${{ matrix.channel }}" '(.channels | .[] | select(.name == $c)).build.success = true' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
           jq --arg c "${{ matrix.channel }}" --arg d "${{ steps.vars.outputs.container_build_date }}" '(.channels | .[] | select(.name == $c)).build.ts = $d' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
-          echo "::set-output name=commit-message::🎉 Success building ${{ matrix.app }}-${{ matrix.channel }} (${{ steps.vars.outputs.container_upstream_version }})"
+          echo "::set-output name=commit-message::🎉 ${{ matrix.app }}-${{ matrix.channel }} (${{ steps.vars.outputs.container_upstream_version }})"
 
       - name: Build failed
         id: build-failed
@@ -154,10 +176,10 @@ jobs:
         run: |-
           jq --arg c "${{ matrix.channel }}" '(.channels | .[] | select(.name == $c)).build.success = false' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
           jq --arg c "${{ matrix.channel }}" --arg d "${{ steps.vars.outputs.container_build_date }}" '(.channels | .[] | select(.name == $c)).build.ts = $d' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
-          echo "::set-output name=commit-message::💥 Error building ${{ matrix.app }}-${{ matrix.channel }} (${{ steps.vars.outputs.container_upstream_version }})"
+          echo "::set-output name=commit-message::💥 ${{ matrix.app }}-${{ matrix.channel }} (${{ steps.vars.outputs.container_upstream_version }})"
 
       - name: Commit statuses
-        id: commit-statuses
+        id: commit-status
         if: ${{ always() }}
         continue-on-error: true
         uses: EndBug/add-and-commit@issue-406
@@ -172,13 +194,13 @@ jobs:
       # just at the right time to throw a conflict, in that 
       # case it will try to pull and commit one more time
       - name: Snoozing randomly (retry)
-        if: ${{ always() && steps.commit-statuses.outcome == 'failure' }}
+        if: ${{ always() && steps.commit-status.outcome == 'failure' }}
         run: |-
           perl -e 'sleep int(rand(15))'
           perl -e 'sleep int(rand(15))'
 
       - name: Git pull in changes (retry)
-        if: ${{ always() && steps.commit-statuses.outcome == 'failure' }}
+        if: ${{ always() && steps.commit-status.outcome == 'failure' }}
         run: git pull --rebase --autostash
 
       - name: Commit statuses (retry)
@@ -190,25 +212,3 @@ jobs:
           message: |-
             ${{ steps.build-failed.outputs.commit-message || steps.build-success.outputs.commit-message }}
           add: "*.json5"
-
-      # - name: Build & Push
-      #   id: release
-      #   uses: docker/build-push-action@v3
-      #   with:
-      #     build-args: |-
-      #       VERSION=${{ steps.vars.outputs.container_upstream_version }}
-      #       CHANNEL=${{ matrix.channel }}
-      #     labels: |-
-      #       ${{ steps.vars.outputs.container_label_type }}.created="${{ steps.vars.outputs.container_build_date }}"
-      #       ${{ steps.vars.outputs.container_label_type }}.title="${{ matrix.app }} (${{ matrix.channel }})"
-      #       ${{ steps.vars.outputs.container_label_type }}.version="${{ steps.vars.outputs.container_upstream_version }}"
-      #       ${{ steps.vars.outputs.container_label_type }}.authors="Devin Buhl <devin.kray@gmail.com>, Bernd Schorgers <me@bjw-s.dev>"
-      #     context: .
-      #     platforms: ${{ steps.vars.outputs.container_platforms }}
-      #     file: ${{ steps.vars.outputs.container_dockerfile }}
-      #     push: ${{ steps.vars.outputs.container_push }}
-      #     tags: |-
-      #       ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_rolling }}
-      #       ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_version }}
-      #     cache-from: ${{ steps.vars.outputs.container_cache_from }}
-      #     cache-to: ${{ steps.vars.outputs.container_cache_to }}
