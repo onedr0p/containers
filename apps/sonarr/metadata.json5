@@ -12,11 +12,7 @@
         "linux/amd64",
         "linux/arm64"
       ],
-      "stable": true,
-      "build": {
-        "success": true,
-        "ts": "2022-06-26 18:19:42+00:00"
-      }
+      "stable": true
     },
     {
       "name": "develop",
@@ -28,11 +24,7 @@
         "linux/amd64",
         "linux/arm64"
       ],
-      "stable": false,
-      "build": {
-        "success": true,
-        "ts": "2022-06-26 18:19:49+00:00"
-      }
+      "stable": false
     },
     {
       "name": "widowmaker",
@@ -44,11 +36,7 @@
         "linux/amd64",
         "linux/arm64"
       ],
-      "stable": false,
-      "build": {
-        "success": true,
-        "ts": "2022-06-26 18:19:38+00:00"
-      }
+      "stable": false
     }
   ]
 }

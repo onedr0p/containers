@@ -12,11 +12,7 @@
         "linux/amd64",
         "linux/arm64"
       ],
-      "stable": true,
-      "build": {
-        "success": false,
-        "ts": "2022-06-26 18:31:51+00:00"
-      }
+      "stable": true
     }
   ]
 }
