@@ -40,36 +40,22 @@ jobs:
           echo "::set-output name=container_build_date::$(date --rfc-3339=seconds --utc)"
           echo "::set-output name=container_stable::${container_stable}"
           echo "::set-output name=container_platforms::${container_platforms}"
-          
           echo "::set-output name=container_published_version::${container_published_version}"
           echo "::set-output name=container_upstream_version::${container_upstream_version}"
 
-          echo "::set-output name=container_push::true"
-          echo "::set-output name=container_cache_from::type=gha"
-          echo "::set-output name=container_cache_to::type=gha,mode=max"
-
-          container_gossfile="./apps/${{ matrix.app }}/${{ matrix.channel }}/goss.yaml"
-          if ! test -f "${container_gossfile}"; then
-              container_gossfile="./apps/${{ matrix.app }}/ci/goss.yaml"
-          fi
-          if test -f "${container_gossfile}"; then
-              echo "::set-output name=container_goss_enabled::true"
-              echo "::set-output name=container_goss_config::${container_gossfile}"
-              if [[ "${container_base}" == true ]]; then
-                  echo "::set-output name=container_goss_args::tail -f /dev/null"
-              fi
-          fi
-
           if [[ "${container_base}" == true ]]; then
               echo "::set-output name=container_label_type::org.opencontainers.image.base"
+              echo "::set-output name=container_goss_args::tail -f /dev/null"
           else
               echo "::set-output name=container_label_type::org.opencontainers.image"
           fi
 
           if test -f "./apps/${{ matrix.app }}/${{ matrix.channel }}/Dockerfile"; then
               echo "::set-output name=container_dockerfile::./apps/${{ matrix.app }}/${{ matrix.channel }}/Dockerfile"
+              echo "::set-output name=container_goss_config::./apps/${{ matrix.app }}/${{ matrix.channel }}/goss.yaml"
           else
               echo "::set-output name=container_dockerfile::./apps/${{ matrix.app }}/Dockerfile"
+              echo "::set-output name=container_goss_config::./apps/${{ matrix.app }}/ci/goss.yaml"
           fi
 
           if [[ "${container_stable}" == true ]]; then
@@ -86,7 +72,7 @@ jobs:
           platforms: ${{ steps.vars.outputs.container_platforms }}
 
       - name: Setup GHCR
-        if: ${{ github.event_name != 'pull_request' }}
+        if: ${{ github.event.client_payload.push || false }}
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
@@ -103,12 +89,10 @@ jobs:
 
       - name: Setup Goss
         uses: e1himself/goss-installation-action@v1.0.4
-        if: ${{ steps.vars.outputs.container_goss_enabled == 'true' }}
         with:
           version: ${{ env.GOSS_VERSION }}
 
       - name: Build Cache Container
-        if: ${{ steps.vars.outputs.container_goss_enabled == 'true' }}
         uses: docker/build-push-action@v3
         with:
           build-args: |-
@@ -125,12 +109,11 @@ jobs:
           tags: |-
             ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_rolling }}
             ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_version }}
-          cache-from: ${{ steps.vars.outputs.container_cache_from }}
-          cache-to: ${{ steps.vars.outputs.container_cache_to }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Run Goss Tests
         id: dgoss
-        if: ${{ steps.vars.outputs.container_goss_enabled == 'true' }}
         env:
           CONTAINER_RUNTIME: docker
           GOSS_FILE: ${{ steps.vars.outputs.container_goss_config }}
@@ -154,16 +137,16 @@ jobs:
           context: .
           platforms: ${{ steps.vars.outputs.container_platforms }}
           file: ${{ steps.vars.outputs.container_dockerfile }}
-          push: ${{ steps.vars.outputs.container_push }}
+          push: ${{ github.event.client_payload.push }}
           tags: |-
             ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_rolling }}
             ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_version }}
-          cache-from: ${{ steps.vars.outputs.container_cache_from }}
-          cache-to: ${{ steps.vars.outputs.container_cache_to }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Build successful
         id: build-success
-        if: ${{ always() }}
+        if: ${{ always() && github.event.client_payload.push == true }}
         run: |-
           jq --arg c "${{ matrix.channel }}" '(.channels | .[] | select(.name == $c)).build_status.success = true' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
           jq --arg c "${{ matrix.channel }}" --arg d "${{ steps.vars.outputs.container_build_date }}" '(.channels | .[] | select(.name == $c)).build_status.ts = $d' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
@@ -171,7 +154,7 @@ jobs:
 
       - name: Build failed
         id: build-failed
-        if: ${{ failure() && (steps.release.outcome == 'failure' || steps.dgoss.outcome != 'success') }}
+        if: ${{ failure() && github.event.client_payload.push == true && (steps.release.outcome == 'failure' || steps.dgoss.outcome != 'success') }}
         run: |-
           jq --arg c "${{ matrix.channel }}" '(.channels | .[] | select(.name == $c)).build_status.success = false' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
           jq --arg c "${{ matrix.channel }}" --arg d "${{ steps.vars.outputs.container_build_date }}" '(.channels | .[] | select(.name == $c)).build_status.ts = $d' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
@@ -179,7 +162,7 @@ jobs:
 
       - name: Commit statuses
         id: commit-status
-        if: ${{ always() }}
+        if: ${{ always() && github.event.client_payload.push == true }}
         continue-on-error: true
         uses: EndBug/add-and-commit@v9
         with:

@@ -5,11 +5,6 @@ on:
   workflow_dispatch:
   # schedule:
   #   - cron: "0 */4 * * *"
-  push:
-    paths:
-      - '.github/scripts/*.sh'
-      - '.github/workflows/fetch.yaml'
-      - '.github/workflows/release.yaml'
 
 env:
   TOKEN: ${{ secrets.TOKEN }}
