@@ -5,7 +5,7 @@
 # Builds a JSON string what images and their channels to process
 # Outputs:
 # {"changes":[
-#    {"app":"ubuntu","channels":["focal","jammy"]},
+#    {"app":"ubuntu","push"=true,"channels":["focal","jammy"]},
 #    {"app"...
 # ]}
 
