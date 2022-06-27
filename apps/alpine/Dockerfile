@@ -35,6 +35,8 @@ RUN \
         iputils \
         jo \
         jq \
+        # 200 kB \
+        moreutils \
         nano \
         tini \
         tzdata \
