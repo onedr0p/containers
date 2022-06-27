@@ -75,8 +75,6 @@ jobs:
 
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v2
-        with:
-          platforms: ${{ steps.vars.outputs.container_platforms }}
 
       - name: Setup GHCR
         uses: docker/login-action@v2
