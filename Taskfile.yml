@@ -1,15 +1,18 @@
 ---
 version: "3"
 
-tasks:
+includes:
+  base:
+    taskfile: .taskfiles/BuildTasks.yml
+    vars:
+      BASE: true
+  app:
+    taskfile: .taskfiles/BuildTasks.yml
+    vars:
+      BASE: false
 
-  force-update:
-    desc: Force rebuild on all containers
+tasks:
+  default:
+    silent: true
     cmds:
-      - |
-        find . -name metadata.json | while read -r metadata; do
-            if [[ "${metadata}" =~ .*ubuntu.* || "${metadata}" =~ .*alpine.* ]]; then
-                continue
-            fi
-            jq --arg v "$(date --rfc-3339=seconds --utc)" '.__build_status.__ts = $v' "${metadata}" | sponge "${metadata}"
-        done
+      - task -l
