@@ -27,6 +27,21 @@
       "matchPackagePatterns": [
         "renovatebot/github-action"
       ]
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["major"],
+      "commitMessagePrefix": "📣 "
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["minor"],
+      "commitMessagePrefix": "📣 "
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["digest", "patch"],
+      "commitMessagePrefix": "📣 "
     }
   ],
   "regexManagers": [
