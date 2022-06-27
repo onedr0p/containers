@@ -8,8 +8,12 @@ ENV GO111MODULE=on \
     GOOS=${TARGETOS} \
     GOARCH=${TARGETARCH} \
     GOARM=${TARGETVARIANT}
-#hadolint ignore=DL3018
+#hadolint ignore=DL3018,DL3059
 RUN go install github.com/drone/envsubst/cmd/envsubst@latest
+#hadolint ignore=DL3059
+RUN \
+    # 1.9M -> 1.0M
+    upx --ultra-brute /go/bin/envsubst
 
 FROM docker.io/library/alpine:${VERSION}
 ARG VERSION
@@ -28,23 +32,20 @@ USER root
 #hadolint ignore=DL3018
 RUN \
     apk add --no-cache \
-        ca-certificates \
-        bash \
-        bind-tools \
-        curl \
-        iputils \
-        jo \
-        jq \
-        # 200 kB \
-        moreutils \
-        nano \
-        tini \
-        tzdata \
-        unzip \
-        util-linux \
-        wget \
+        # 656 kB           # 1.28 MB     # 632 kB
+        ca-certificates    bash          bind-tools \
+        # 256 kB           # 156 kB      # 40 kB
+        curl               iputils       jo \
+        # 564 kB           # 200 kB      # 316 kB
+        jq                 moreutils     nano \
+        # 36 kB            # 3.3 MB      # 320 kB
+        tini               tzdata        unzip \
+        # 16 kB            # 480 kB
+        util-linux         wget \
     && \
+    # 264 kB
     apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.14/main unrar
+
 #hadolint ignore=DL3018
 RUN \
     addgroup -S kah --gid 568 \

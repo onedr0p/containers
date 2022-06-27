@@ -8,8 +8,12 @@ ENV GO111MODULE=on \
     GOOS=${TARGETOS} \
     GOARCH=${TARGETARCH} \
     GOARM=${TARGETVARIANT}
-#hadolint ignore=DL3018
+#hadolint ignore=DL3018,DL3059
 RUN go install github.com/drone/envsubst/cmd/envsubst@latest
+#hadolint ignore=DL3059
+RUN \
+    # 1.9M -> 1.0M
+    upx --ultra-brute /go/bin/envsubst
 
 FROM docker.io/library/ubuntu:${VERSION}
 
