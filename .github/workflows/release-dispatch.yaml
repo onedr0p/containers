@@ -68,6 +68,11 @@ jobs:
               echo "::set-output name=container_tag_version::${{ matrix.app }}-${{ matrix.channel }}:${container_upstream_version}"
           fi
 
+      - name: Setup Goss
+        uses: e1himself/goss-installation-action@v1.0.4
+        with:
+          version: ${{ env.GOSS_VERSION }}
+
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v2
         with:
@@ -80,15 +85,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Docker Buildx
+      - name: Set up Docker Buildx
+        id: buildx
         uses: docker/setup-buildx-action@v2
         with:
+          install: true
+          version: latest
+          driver-opts: image=moby/buildkit:latest
           buildkitd-flags: --debug
-
-      - name: Setup Goss
-        uses: e1himself/goss-installation-action@v1.0.4
-        with:
-          version: ${{ env.GOSS_VERSION }}
 
       - name: Build Cache Container
         uses: docker/build-push-action@v3
