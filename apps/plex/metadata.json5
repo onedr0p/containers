@@ -17,8 +17,8 @@
     {
       "name": "beta",
       "build_status": {
-        "ts": "2022-06-27 11:02:47+00:00",
-        "success": false
+        "ts": "2022-06-27 11:11:24+00:00",
+        "success": true
       },
       "platforms": [
         "linux/amd64",
