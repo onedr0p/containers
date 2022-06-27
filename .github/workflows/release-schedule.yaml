@@ -37,6 +37,7 @@ jobs:
       fail-fast: false
     steps:
       - name: Repository Dispatch
+        if: ${{ matrix.changes }}
         uses: peter-evans/repository-dispatch@v2
         with:
           token: ${{ env.TOKEN }}
