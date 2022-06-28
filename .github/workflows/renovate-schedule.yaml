@@ -23,7 +23,7 @@ on:
 env:
   LOG_LEVEL: debug
   DRY_RUN: false
-  RENOVATE_CONFIG_FILE: .github/renovate.json
+  RENOVATE_CONFIG_FILE: .github/renovate.json5
 
 jobs:
   main:
