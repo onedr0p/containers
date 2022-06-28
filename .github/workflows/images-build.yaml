@@ -40,7 +40,7 @@ jobs:
             do
               change="$(jo app="$app" channel="$channel")"
               changes_array+=($change)
-            done < <(jq -r '.channels[] | .name' "./apps/$app/metadata.json5")
+            done < <(jq -r '.channels[] | .name' "./apps/$app/metadata.json")
           done
 
           output="$(jo changes="$(jo -a ${changes_array[*]})")"

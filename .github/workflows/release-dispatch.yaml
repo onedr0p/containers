@@ -31,10 +31,10 @@ jobs:
       - name: Setup Workflow Variables
         id: vars
         run: |-
-          container_base=$(jq '.base' ./apps/${{ matrix.app }}/metadata.json5)
+          container_base=$(jq '.base' ./apps/${{ matrix.app }}/metadata.json)
           echo "::set-output name=chan_build_date::$(date --rfc-3339=seconds --utc)"
 
-          chan_config=$(jq --arg chan "${{ matrix.channel }}" '(.channels | .[] | select(.name == $chan))' ./apps/${{ matrix.app }}/metadata.json5)
+          chan_config=$(jq --arg chan "${{ matrix.channel }}" '(.channels | .[] | select(.name == $chan))' ./apps/${{ matrix.app }}/metadata.json)
           chan_stable=$(jq --raw-output '.stable' <<< "${chan_config}")
 
           chan_platforms=$(jq --raw-output '.platforms | join(",")' <<< "${chan_config}") && \
@@ -157,16 +157,16 @@ jobs:
         id: build-success
         if: ${{ always() && steps.release.outcome == 'success' }}
         run: |-
-          jq --arg c "${{ matrix.channel }}" '(.channels | .[] | select(.name == $c)).build_status.success = true' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
-          jq --arg c "${{ matrix.channel }}" --arg d "${{ steps.vars.outputs.chan_build_date }}" '(.channels | .[] | select(.name == $c)).build_status.ts = $d' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
+          jq --arg c "${{ matrix.channel }}" '(.channels | .[] | select(.name == $c)).build_status.success = true' ./apps/${{ matrix.app }}/metadata.json | sponge ./apps/${{ matrix.app }}/metadata.json
+          jq --arg c "${{ matrix.channel }}" --arg d "${{ steps.vars.outputs.chan_build_date }}" '(.channels | .[] | select(.name == $c)).build_status.ts = $d' ./apps/${{ matrix.app }}/metadata.json | sponge ./apps/${{ matrix.app }}/metadata.json
           echo "::set-output name=commit-message::🎉 ${{ matrix.app }}-${{ matrix.channel }} (${{ steps.vars.outputs.chan_upstream_version }})"
 
       - name: Build failed
         id: build-failed
         if: ${{ always() && (steps.release.outcome == 'failure' || steps.dgoss.outcome == 'failure') }}
         run: |-
-          jq --arg c "${{ matrix.channel }}" '(.channels | .[] | select(.name == $c)).build_status.success = false' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
-          jq --arg c "${{ matrix.channel }}" --arg d "${{ steps.vars.outputs.chan_build_date }}" '(.channels | .[] | select(.name == $c)).build_status.ts = $d' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
+          jq --arg c "${{ matrix.channel }}" '(.channels | .[] | select(.name == $c)).build_status.success = false' ./apps/${{ matrix.app }}/metadata.json | sponge ./apps/${{ matrix.app }}/metadata.json
+          jq --arg c "${{ matrix.channel }}" --arg d "${{ steps.vars.outputs.chan_build_date }}" '(.channels | .[] | select(.name == $c)).build_status.ts = $d' ./apps/${{ matrix.app }}/metadata.json | sponge ./apps/${{ matrix.app }}/metadata.json
           echo "::set-output name=commit-message::💥 ${{ matrix.app }}-${{ matrix.channel }} (${{ steps.vars.outputs.chan_upstream_version }})"
 
       - name: Commit Release Status
@@ -181,7 +181,7 @@ jobs:
             ${{ steps.build-failed.outputs.commit-message || steps.build-success.outputs.commit-message }}
 
             View run at: https://github.com/onedr0p/containers/actions/runs/${{ github.run_id }}
-          add: "*.json5"
+          add: "*.json"
 
       # In the matrix it is possible for things to complete
       # just at the right time to throw a conflict, in that
@@ -201,4 +201,4 @@ jobs:
             ${{ steps.build-failed.outputs.commit-message || steps.build-success.outputs.commit-message }}
 
             View run at: https://github.com/onedr0p/containers/actions/runs/${{ github.run_id }}
-          add: "*.json5"
+          add: "*.json"

@@ -30,10 +30,10 @@ runs:
         id: vars
         shell: bash
         run: |-
-          container_base=$(jq '.base' ./apps/${{ inputs.app }}/metadata.json5)
+          container_base=$(jq '.base' ./apps/${{ inputs.app }}/metadata.json)
           echo "::set-output name=chan_build_date::$(date --rfc-3339=seconds --utc)"
 
-          chan_config=$(jq --arg chan "${{ inputs.channel }}" '(.channels | .[] | select(.name == $chan))' ./apps/${{ inputs.app }}/metadata.json5)
+          chan_config=$(jq --arg chan "${{ inputs.channel }}" '(.channels | .[] | select(.name == $chan))' ./apps/${{ inputs.app }}/metadata.json)
           chan_stable=$(jq --raw-output '.stable' <<< "${chan_config}")
 
           chan_platforms=$(jq --raw-output '.platforms | join(",")' <<< "${chan_config}") && \
