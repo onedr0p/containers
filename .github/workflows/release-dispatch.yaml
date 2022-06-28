@@ -32,43 +32,51 @@ jobs:
         id: vars
         run: |-
           container_base=$(jq '.base' ./apps/${{ matrix.app }}/metadata.json5)
-          container_stable=$(jq --arg c "${{ matrix.channel }}" '(.channels | .[] | select(.name == $c)).stable' ./apps/${{ matrix.app }}/metadata.json5)
-          container_platforms=$(jq --arg c "${{ matrix.channel }}" '(.channels | .[] | select(.name == $c)).platforms | join(",")' ./apps/${{ matrix.app }}/metadata.json5)
-          container_published_version=$(bash ./.github/scripts/published.sh "${{ matrix.app }}" "${{ matrix.channel }}" "${container_stable}")
-          container_upstream_version=$(bash ./.github/scripts/upstream.sh "${{ matrix.app }}" "${{ matrix.channel }}")
+          echo "::set-output name=chan_build_date::$(date --rfc-3339=seconds --utc)"
+          
+          chan_config=$(jq --arg chan "${{ matrix.channel }}" '(.channels | .[] | select(.name == $chan))' ./apps/${{ matrix.app }}/metadata.json5)
+          chan_stable=$(jq --raw-output '.stable' <<< "${chan_config}")
 
-          echo "::set-output name=container_build_date::$(date --rfc-3339=seconds --utc)"
-          echo "::set-output name=container_stable::${container_stable}"
-          echo "::set-output name=container_platforms::${container_platforms}"
-          echo "::set-output name=container_published_version::${container_published_version}"
-          echo "::set-output name=container_upstream_version::${container_upstream_version}"
+          chan_platforms=$(jq --raw-output '.platforms | join(",")' <<< "${chan_config}") && \
+              echo "::set-output name=chan_platforms::${chan_platforms}"
+          chan_tests_enabled=$(jq --raw-output '.tests.enabled' <<< "${chan_config}") && \
+              echo "::set-output name=chan_tests_enabled::${chan_tests_enabled}"
+          chan_tests_type=$(jq --raw-output '.tests.type' <<< "${chan_config}") && \
+              echo "::set-output name=chan_tests_type::${chan_tests_type}"
+
+          chan_upstream_version=$(bash ./.github/scripts/upstream.sh "${{ matrix.app }}" "${{ matrix.channel }}") && \
+              echo "::set-output name=chan_upstream_version::${chan_upstream_version}"
+
+          if [[ "${chan_tests_enabled}" == true && "${chan_tests_type}" == "cli" ]]; then
+              echo "::set-output name=chan_goss_args::tail -f /dev/null"
+          fi
 
           if [[ "${container_base}" == true ]]; then
-              echo "::set-output name=container_label_type::org.opencontainers.image.base"
-              echo "::set-output name=container_goss_args::tail -f /dev/null"
+              echo "::set-output name=chan_label_type::org.opencontainers.image.base"
           else
-              echo "::set-output name=container_label_type::org.opencontainers.image"
+              echo "::set-output name=chan_label_type::org.opencontainers.image"
           fi
 
           if test -f "./apps/${{ matrix.app }}/${{ matrix.channel }}/Dockerfile"; then
-              echo "::set-output name=container_dockerfile::./apps/${{ matrix.app }}/${{ matrix.channel }}/Dockerfile"
-              echo "::set-output name=container_goss_config::./apps/${{ matrix.app }}/${{ matrix.channel }}/goss.yaml"
+              echo "::set-output name=chan_dockerfile::./apps/${{ matrix.app }}/${{ matrix.channel }}/Dockerfile"
+              echo "::set-output name=chan_goss_config::./apps/${{ matrix.app }}/${{ matrix.channel }}/goss.yaml"
           else
-              echo "::set-output name=container_dockerfile::./apps/${{ matrix.app }}/Dockerfile"
-              echo "::set-output name=container_goss_config::./apps/${{ matrix.app }}/ci/goss.yaml"
+              echo "::set-output name=chan_dockerfile::./apps/${{ matrix.app }}/Dockerfile"
+              echo "::set-output name=chan_goss_config::./apps/${{ matrix.app }}/ci/goss.yaml"
           fi
 
-          if [[ "${container_stable}" == true ]]; then
-              echo "::set-output name=container_tag_cache::${{ matrix.app }}:cachez"
-              echo "::set-output name=container_tag_rolling::${{ matrix.app }}:rolling"
-              echo "::set-output name=container_tag_version::${{ matrix.app }}:${container_upstream_version}"
+          if [[ "${chan_stable}" == true ]]; then
+              echo "::set-output name=chan_tag_cache::${{ matrix.app }}:cachez"
+              echo "::set-output name=chan_tag_rolling::${{ matrix.app }}:rolling"
+              echo "::set-output name=chan_tag_version::${{ matrix.app }}:${chan_upstream_version}"
           else
-              echo "::set-output name=container_tag_cache::${{ matrix.app }}-${{ matrix.channel }}:cachez"
-              echo "::set-output name=container_tag_rolling::${{ matrix.app }}-${{ matrix.channel }}:rolling"
-              echo "::set-output name=container_tag_version::${{ matrix.app }}-${{ matrix.channel }}:${container_upstream_version}"
+              echo "::set-output name=chan_tag_cache::${{ matrix.app }}-${{ matrix.channel }}:cachez"
+              echo "::set-output name=chan_tag_rolling::${{ matrix.app }}-${{ matrix.channel }}:rolling"
+              echo "::set-output name=chan_tag_version::${{ matrix.app }}-${{ matrix.channel }}:${chan_upstream_version}"
           fi
 
       - name: Setup Goss
+        if: ${{ steps.vars.outputs.chan_tests_enabled == 'true' }}
         uses: e1himself/goss-installation-action@v1.0.4
         with:
           version: ${{ env.GOSS_VERSION }}
@@ -96,30 +104,31 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           build-args: |-
-            VERSION=${{ steps.vars.outputs.container_upstream_version }}
+            VERSION=${{ steps.vars.outputs.chan_upstream_version }}
             CHANNEL=${{ matrix.channel }}
           labels: |-
-            ${{ steps.vars.outputs.container_label_type }}.created="${{ steps.vars.outputs.container_build_date }}"
-            ${{ steps.vars.outputs.container_label_type }}.title="${{ matrix.app }} (${{ matrix.channel }})"
-            ${{ steps.vars.outputs.container_label_type }}.version="${{ steps.vars.outputs.container_upstream_version }}"
-            ${{ steps.vars.outputs.container_label_type }}.authors="Devin Buhl <devin.kray@gmail.com>, Bernd Schorgers <me@bjw-s.dev>"
+            ${{ steps.vars.outputs.chan_label_type }}.created="${{ steps.vars.outputs.chan_build_date }}"
+            ${{ steps.vars.outputs.chan_label_type }}.title="${{ matrix.app }} (${{ matrix.channel }})"
+            ${{ steps.vars.outputs.chan_label_type }}.version="${{ steps.vars.outputs.chan_upstream_version }}"
+            ${{ steps.vars.outputs.chan_label_type }}.authors="Devin Buhl <devin.kray@gmail.com>, Bernd Schorgers <me@bjw-s.dev>"
           context: .
-          file: ${{ steps.vars.outputs.container_dockerfile }}
+          file: ${{ steps.vars.outputs.chan_dockerfile }}
           load: true
           tags: |-
-            ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_cache }}
+            ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_cache }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Run Goss Tests
         id: dgoss
+        if: ${{ steps.vars.outputs.chan_tests_enabled == 'true' }}
         env:
           CONTAINER_RUNTIME: docker
-          GOSS_FILE: ${{ steps.vars.outputs.container_goss_config }}
+          GOSS_FILE: ${{ steps.vars.outputs.chan_goss_config }}
           GOSS_OPTS: |-
             --retry-timeout 60s --sleep 2s --color --format documentation
         run: |-
-          dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_cache }} ${{ steps.vars.outputs.container_goss_args }}
+          dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_cache }} ${{ steps.vars.outputs.chan_goss_args }}
 
       - name: Build & Push
         if: ${{ github.event.client_payload.push == true }}
@@ -127,20 +136,20 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           build-args: |-
-            VERSION=${{ steps.vars.outputs.container_upstream_version }}
+            VERSION=${{ steps.vars.outputs.chan_upstream_version }}
             CHANNEL=${{ matrix.channel }}
           labels: |-
-            ${{ steps.vars.outputs.container_label_type }}.created="${{ steps.vars.outputs.container_build_date }}"
-            ${{ steps.vars.outputs.container_label_type }}.title="${{ matrix.app }} (${{ matrix.channel }})"
-            ${{ steps.vars.outputs.container_label_type }}.version="${{ steps.vars.outputs.container_upstream_version }}"
-            ${{ steps.vars.outputs.container_label_type }}.authors="Devin Buhl <devin.kray@gmail.com>, Bernd Schorgers <me@bjw-s.dev>"
+            ${{ steps.vars.outputs.chan_label_type }}.created="${{ steps.vars.outputs.chan_build_date }}"
+            ${{ steps.vars.outputs.chan_label_type }}.title="${{ matrix.app }} (${{ matrix.channel }})"
+            ${{ steps.vars.outputs.chan_label_type }}.version="${{ steps.vars.outputs.chan_upstream_version }}"
+            ${{ steps.vars.outputs.chan_label_type }}.authors="Devin Buhl <devin.kray@gmail.com>, Bernd Schorgers <me@bjw-s.dev>"
           context: .
-          platforms: ${{ steps.vars.outputs.container_platforms }}
-          file: ${{ steps.vars.outputs.container_dockerfile }}
+          platforms: ${{ steps.vars.outputs.chan_platforms }}
+          file: ${{ steps.vars.outputs.chan_dockerfile }}
           push: true
           tags: |-
-            ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_rolling }}
-            ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.container_tag_version }}
+            ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_rolling }}
+            ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -149,16 +158,16 @@ jobs:
         if: ${{ always() && steps.release.outcome == 'success' }}
         run: |-
           jq --arg c "${{ matrix.channel }}" '(.channels | .[] | select(.name == $c)).build_status.success = true' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
-          jq --arg c "${{ matrix.channel }}" --arg d "${{ steps.vars.outputs.container_build_date }}" '(.channels | .[] | select(.name == $c)).build_status.ts = $d' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
-          echo "::set-output name=commit-message::🎉 ${{ matrix.app }}-${{ matrix.channel }} (${{ steps.vars.outputs.container_upstream_version }})"
+          jq --arg c "${{ matrix.channel }}" --arg d "${{ steps.vars.outputs.chan_build_date }}" '(.channels | .[] | select(.name == $c)).build_status.ts = $d' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
+          echo "::set-output name=commit-message::🎉 ${{ matrix.app }}-${{ matrix.channel }} (${{ steps.vars.outputs.chan_upstream_version }})"
 
       - name: Build failed
         id: build-failed
         if: ${{ always() && (steps.release.outcome == 'failure' || steps.dgoss.outcome == 'failure') }}
         run: |-
           jq --arg c "${{ matrix.channel }}" '(.channels | .[] | select(.name == $c)).build_status.success = false' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
-          jq --arg c "${{ matrix.channel }}" --arg d "${{ steps.vars.outputs.container_build_date }}" '(.channels | .[] | select(.name == $c)).build_status.ts = $d' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
-          echo "::set-output name=commit-message::💥 ${{ matrix.app }}-${{ matrix.channel }} (${{ steps.vars.outputs.container_upstream_version }})"
+          jq --arg c "${{ matrix.channel }}" --arg d "${{ steps.vars.outputs.chan_build_date }}" '(.channels | .[] | select(.name == $c)).build_status.ts = $d' ./apps/${{ matrix.app }}/metadata.json5 | sponge ./apps/${{ matrix.app }}/metadata.json5
+          echo "::set-output name=commit-message::💥 ${{ matrix.app }}-${{ matrix.channel }} (${{ steps.vars.outputs.chan_upstream_version }})"
 
       - name: Commit Release Status
         id: commit-status

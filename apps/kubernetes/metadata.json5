@@ -12,7 +12,11 @@
         "linux/amd64",
         "linux/arm64"
       ],
-      "stable": false
+      "stable": false,
+      "tests": {
+        "enabled": true,
+        "type": "cli"
+      }
     }
   ]
 }
