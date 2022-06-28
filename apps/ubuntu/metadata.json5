@@ -5,8 +5,8 @@
     {
       "name": "focal",
       "build_status": {
-        "ts": "2022-06-27 11:11:25+00:00",
-        "success": true
+        "ts": "2022-06-28 04:00:12+00:00",
+        "success": false
       },
       "platforms": [
         "linux/amd64",
