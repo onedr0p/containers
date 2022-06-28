@@ -24,7 +24,7 @@ jobs:
         with:
           token: ${{ secrets.TOKEN }}
           fetch-depth: 1
-      
+
       - name: Install Tools
         run: sudo apt-get install moreutils jo
 
@@ -33,7 +33,7 @@ jobs:
         run: |-
           container_base=$(jq '.base' ./apps/${{ matrix.app }}/metadata.json5)
           echo "::set-output name=chan_build_date::$(date --rfc-3339=seconds --utc)"
-          
+
           chan_config=$(jq --arg chan "${{ matrix.channel }}" '(.channels | .[] | select(.name == $chan))' ./apps/${{ matrix.app }}/metadata.json5)
           chan_stable=$(jq --raw-output '.stable' <<< "${chan_config}")
 
