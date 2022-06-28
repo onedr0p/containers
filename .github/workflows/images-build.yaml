@@ -61,6 +61,12 @@ jobs:
         with:
           fetch-depth: 1
 
+      - uses: cue-lang/setup-cue@v1
+      - name: Validate Metadata
+        shell: bash
+        run: |-
+          cue vet --schema '#Spec' ./apps/${{ matrix.image.app }}/metadata.json ./metadata.rules.cue
+
       - name: Build and test image
         id: build-and-test
         uses: ./.github/actions/build-image

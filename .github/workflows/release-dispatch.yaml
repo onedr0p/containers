@@ -25,6 +25,12 @@ jobs:
           token: ${{ secrets.TOKEN }}
           fetch-depth: 1
 
+      - uses: cue-lang/setup-cue@v1
+      - name: Validate Metadata
+        shell: bash
+        run: |-
+          cue vet --schema '#Spec' ./apps/${{ matrix.image.app }}/metadata.json ./metadata.rules.cue
+
       - name: Install Tools
         run: sudo apt-get install moreutils jo
 
