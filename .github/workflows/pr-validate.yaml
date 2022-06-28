@@ -11,7 +11,7 @@ concurrency:
 
 jobs:
   pr-metadata:
-    uses: onedr0p/containers/.github/workflows/pr-metadata.yaml@master
+    uses: onedr0p/containers/.github/workflows/pr-metadata.yaml@main
 
   debug:
     runs-on: ubuntu-latest
