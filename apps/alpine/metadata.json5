@@ -5,8 +5,8 @@
     {
       "name": "3.16",
       "build_status": {
-        "ts": "2022-06-28 03:59:53+00:00",
-        "success": false
+        "ts": "2022-06-28 04:07:00+00:00",
+        "success": true
       },
       "platforms": [
         "linux/amd64",
