@@ -1,4 +1,4 @@
-FROM ghcr.io/onedr0p/ubuntu:rolling@sha256:72b05c8a42c155fee2bed918b6db3b0c49e5fb446da7333aea3e50bdf87be0ea as builder
+FROM ghcr.io/onedr0p/ubuntu:rolling@sha256:31a267ac520df7f36e04be9a761d5c14eec9731127a6457d21522f957c4c2e0a as builder
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
