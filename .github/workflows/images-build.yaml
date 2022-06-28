@@ -36,9 +36,11 @@ jobs:
 
           declare -a changes_array=()
           for app in "${images[@]}"; do
-            channels="$(jq --raw-output '(.channels[] | .name)' "./apps/$app/metadata.json5")"
-            change="$(jo app="$app" channels="$(jo -a $channels)")"
-            changes_array+=($change)
+            while read -r channel
+            do
+              change="$(jo app="$app" channel="$channel")"
+              changes_array+=($change)
+            done < <(jq -r '.channels[] | .name' "./apps/$app/metadata.json5")
           done
 
           output="$(jo changes="$(jo -a ${changes_array[*]})")"
@@ -52,17 +54,12 @@ jobs:
     if: inputs.imagesToBuild != ''
     strategy:
       matrix:
-        app: ["${{ fromJson(needs.generate-build-matrix.outputs.matrix.changes).app }}"]
-        # channel: ${{ fromJson(needs.generate-build-matrix.outputs.matrix.changes).channels }}
+        image: ["${{ fromJson(needs.generate-build-matrix.outputs.matrix).changes }}"]
       fail-fast: false
     steps:
-      # - name: Build and test image
-      #   id: build-and-test
-      #   uses: ./.github/actions/build-image
-      #   with:
-      #     app: ${{ matrix.app }}
-      #     channel: ${{ matrix.channel }}
-      - name: Debug
-        run: |
-          echo "App: ${{ matrix.app }}"
-          # echo "Channel: ${{ matrix.channel }}"
+      - name: Build and test image
+        id: build-and-test
+        uses: ./.github/actions/build-image
+        with:
+          app: ${{ matrix.image.app }}
+          channel: ${{ matrix.image.channel }}
