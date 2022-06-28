@@ -21,5 +21,5 @@ jobs:
       - name: Setup Workflow Variables
         id: vars
         run: |-
-          echo ${{ needs.pr-metadata.outputs.addedOrModifiedFiles }}
-          echo ${{ needs.pr-metadata.outputs.addedOrModifiedContainers }}
+          echo "Files: ${{ needs.pr-metadata.outputs.addedOrModifiedFiles }}"
+          echo "Containers: ${{ needs.pr-metadata.outputs.addedOrModifiedContainers }}"

@@ -36,7 +36,7 @@ runs:
         for CONTAINERPATH in "${PATHS[@]}"
         do
           IFS='/' read -r -a path_parts <<< "${CONTAINERPATH}"
-          CONTAINERS+=("${path_parts[1]}/${path_parts[2]}")
+          CONTAINERS+=("${path_parts[1]}")
         done
 
         # Remove duplicates
