@@ -1,7 +1,7 @@
 #Spec: {
   app: #NonEmptyString
   base: bool
-  channels:     [#Channels]
+  channels: [...#Channels]
 }
 
 #Channels: {
