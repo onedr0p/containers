@@ -8,8 +8,9 @@ ENV GO111MODULE=on \
     GOOS=${TARGETOS} \
     GOARCH=${TARGETARCH} \
     GOARM=${TARGETVARIANT}
-#hadolint ignore=DL3018,DL3059
 RUN go install github.com/drone/envsubst/cmd/envsubst@latest
+#hadolint ignore=DL3018,DL3059
+RUN apk add --no-cache upx
 #hadolint ignore=DL3059
 RUN \
     # 1.9M -> 1.0M
@@ -50,9 +51,6 @@ RUN \
 RUN \
     addgroup -S kah --gid 568 \
         && adduser -S kah -G kah --uid 568 \
-        && mkdir -p /config \
-        && chown -R kah:kah /config \
-        && chmod -R 775 /config \
     && printf "/bin/bash /scripts/greeting.sh\n" > /etc/profile.d/greeting.sh \
     && printf "umask %d" "${UMASK}" > /etc/profile.d/umask.sh \
     && ln -s /usr/bin/nano /usr/local/bin/vi \

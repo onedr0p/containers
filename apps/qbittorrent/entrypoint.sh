@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-set -e
-
 #shellcheck disable=SC1091
 test -f "/scripts/umask.sh" && source "/scripts/umask.sh"
 test -f "/scripts/vpn.sh" && source "/scripts/vpn.sh"
+
+mkdir /config
 
 downloadsPath="/downloads"
 

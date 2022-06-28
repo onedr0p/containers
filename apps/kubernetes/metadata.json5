@@ -1,0 +1,18 @@
+{
+  "app": "kubernetes",
+  "base": false,
+  "channels": [
+    {
+      "name": "kubectl",
+      "build_status": {
+        "ts": "2022-06-27 00:45:27+00:00",
+        "success": false
+      },
+      "platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "stable": false
+    }
+  ]
+}

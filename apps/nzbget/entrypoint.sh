@@ -4,6 +4,8 @@
 test -f "/scripts/umask.sh" && source "/scripts/umask.sh"
 test -f "/scripts/vpn.sh" && source "/scripts/vpn.sh"
 
+mkdir /config
+
 if [[ ! -f "/config/nzbget.conf" ]]; then
     cp /app/nzbget.conf /config/nzbget.conf
     sed -i \

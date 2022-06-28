@@ -5,6 +5,8 @@ test -f "/scripts/umask.sh" && source "/scripts/umask.sh"
 test -f "/scripts/vpn.sh" && source "/scripts/vpn.sh"
 test -f "/scripts/plex-preferences.sh" && source "/scripts/plex-preferences.sh"
 
+mkdir /config
+
 #shellcheck disable=SC2155
 export PLEX_MEDIA_SERVER_INFO_MODEL=$(uname -m)
 #shellcheck disable=SC2155

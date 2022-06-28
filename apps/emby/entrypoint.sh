@@ -4,6 +4,8 @@
 test -f "/scripts/umask.sh" && source "/scripts/umask.sh"
 test -f "/scripts/vpn.sh" && source "/scripts/vpn.sh"
 
+mkdir /config
+
 APP_DIR="/app/emby"
 export LD_LIBRARY_PATH="${APP_DIR}"
 export FONTCONFIG_PATH="${APP_DIR}/etc/fonts"

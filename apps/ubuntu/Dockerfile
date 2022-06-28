@@ -8,8 +8,9 @@ ENV GO111MODULE=on \
     GOOS=${TARGETOS} \
     GOARCH=${TARGETARCH} \
     GOARM=${TARGETVARIANT}
-#hadolint ignore=DL3018,DL3059
 RUN go install github.com/drone/envsubst/cmd/envsubst@latest
+#hadolint ignore=DL3018,DL3059
+RUN apk add --no-cache upx
 #hadolint ignore=DL3059
 RUN \
     # 1.9M -> 1.0M
@@ -40,10 +41,7 @@ RUN \
         --group \
         --system \
         --disabled-password \
-        --no-create-home \
-    && mkdir -p /config \
-    && chown -R kah:kah /config \
-    && chmod -R 775 /config
+        --no-create-home
 
 WORKDIR /app
 
@@ -62,13 +60,17 @@ RUN \
         ca-certificates \
         curl \
         dnsutils \
+        iputils-ping \
+        jo \
         jq \
         locales \
+        moreutils \
         tini \
         tzdata \
         vim-tiny \
         unrar \
         unzip \
+        wget \
     && \
     localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
     && ln -s /usr/bin/vim.tiny /usr/local/bin/vi \

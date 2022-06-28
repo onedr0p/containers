@@ -24,23 +24,11 @@
       "automergeType": "branch",
       "requiredStatusChecks": null,
       "matchUpdateTypes": ["minor", "patch"],
-      "matchPackagePatterns": [
-        "renovatebot/github-action"
-      ]
+      "matchPackagePatterns": ["renovatebot/github-action"]
     },
     {
       "matchDatasources": ["docker"],
-      "matchUpdateTypes": ["major"],
-      "commitMessagePrefix": "📣 "
-    },
-    {
-      "matchDatasources": ["docker"],
-      "matchUpdateTypes": ["minor"],
-      "commitMessagePrefix": "📣 "
-    },
-    {
-      "matchDatasources": ["docker"],
-      "matchUpdateTypes": ["digest", "patch"],
+      "matchUpdateTypes": ["digest"],
       "commitMessagePrefix": "📣 "
     }
   ],
