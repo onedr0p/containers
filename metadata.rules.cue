@@ -6,8 +6,8 @@
 
 #Channels: {
   name: #NonEmptyString
-  build_status: {
-    ts: #NonEmptyString
+  build_status?: {
+    ts: string
     success: bool
   }
   platforms: [...#Platforms]
