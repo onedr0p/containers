@@ -10,7 +10,7 @@
     ts: #NonEmptyString
     success: bool
   }
-  platforms: [...#NonEmptyString]
+  platforms: [...#Platforms]
   stable: bool
   tests: {
     enabled: bool
@@ -19,3 +19,4 @@
 }
 
 #NonEmptyString: string & !=""
+#Platforms: string & =~"^(linux/(amd64|arm64))$"
