@@ -5,8 +5,8 @@
     {
       "name": "develop",
       "build_status": {
-        "ts": "2022-06-27 00:45:15+00:00",
-        "success": true
+        "ts": "2022-06-28 04:19:21+00:00",
+        "success": false
       },
       "platforms": [
         "linux/amd64",
