@@ -127,9 +127,8 @@ jobs:
           GOSS_FILE: ${{ steps.vars.outputs.chan_goss_config }}
           GOSS_OPTS: |-
             --retry-timeout 60s --sleep 2s --color --format documentation
-        run: >-
-          dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_cache }}
-          -v ./config:/config ${{ steps.vars.outputs.chan_goss_args }}
+        run: >
+          dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_cache }} ${{ steps.vars.outputs.chan_goss_args }}
 
       - name: Build & Push
         if: ${{ github.event.client_payload.push == true }}
@@ -184,8 +183,8 @@ jobs:
             View run at: https://github.com/onedr0p/containers/actions/runs/${{ github.run_id }}
           add: "*.json5"
 
-      # In the matrix it is possible for things to complete 
-      # just at the right time to throw a conflict, in that 
+      # In the matrix it is possible for things to complete
+      # just at the right time to throw a conflict, in that
       # case it will try to pull and commit one more time
       - name: Snoozing randomly (retry)
         if: ${{ always()  && github.event.client_payload.push == true && steps.commit-status.outcome == 'failure' }}

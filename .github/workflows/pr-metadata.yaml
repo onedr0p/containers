@@ -12,9 +12,9 @@ on:
       addedOrModifiedFiles:
         description: "A list of the files changed in this PR"
         value: ${{ jobs.pr-changes.outputs.addedOrModifiedFiles }}
-      addedOrModifiedContainers:
+      addedOrModifiedImages:
         description: "A list of the containers changed in this PR"
-        value: ${{ jobs.pr-changes.outputs.addedOrModifiedContainers }}
+        value: ${{ jobs.pr-changes.outputs.addedOrModifiedImages }}
 
 jobs:
   pr-metadata:
@@ -47,7 +47,7 @@ jobs:
     outputs:
       addedOrModified: ${{ steps.collect-changes.outputs.changesDetected }}
       addedOrModifiedFiles: ${{ steps.collect-changes.outputs.addedOrModifiedFiles }}
-      addedOrModifiedContainers: ${{ steps.collect-changes.outputs.addedOrModifiedContainers }}
+      addedOrModifiedImages: ${{ steps.collect-changes.outputs.addedOrModifiedImages }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3

@@ -13,13 +13,9 @@ jobs:
   pr-metadata:
     uses: onedr0p/containers/.github/workflows/pr-metadata.yaml@main
 
-  debug:
-    runs-on: ubuntu-latest
+  images-build:
+    uses: onedr0p/containers/.github/workflows/images-build.yaml@main
     needs:
       - pr-metadata
-    steps:
-      - name: Setup Workflow Variables
-        id: vars
-        run: |-
-          echo "Files: ${{ needs.pr-metadata.outputs.addedOrModifiedFiles }}"
-          echo "Containers: ${{ needs.pr-metadata.outputs.addedOrModifiedContainers }}"
+    with:
+      imagesToBuild: ${{ needs.pr-metadata.outputs.addedOrModifiedImages }}

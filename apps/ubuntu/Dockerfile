@@ -43,7 +43,11 @@ RUN \
         --group \
         --system \
         --disabled-password \
-        --no-create-home
+        --no-create-home \
+    && \
+    mkdir -p /config \
+    && chown -R kah:kah /config \
+    && chmod -R 775 /config
 
 WORKDIR /app
 
