@@ -23,24 +23,46 @@ jobs:
       - name: Install tools
         run: sudo apt-get install moreutils jo
 
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
       - name: Fetch modified images
         id: get-changed
         shell: bash
         run: |
           IFS=' ' read -a images <<< "${{ inputs.imagesToBuild }}"
-          output="$(jo changes="$(jo -a "${images[@]}")")"
+
+          declare -a changes_array=()
+          for app in "${images[@]}"; do
+            channels="$(jq --raw-output '(.channels[] | .name)' "./apps/$app/metadata.json5")"
+            change="$(jo app="$app" channels="$(jo -a $channels)")"
+            changes_array+=($change)
+          done
+
+          output="$(jo changes="$(jo -a ${changes_array[*]})")"
           echo "::set-output name=changes::${output}"
 
-  debug:
-    name: Debug
+  build-and-test:
+    name: Build and test
     runs-on: ubuntu-latest
     needs:
       - generate-build-matrix
     if: inputs.imagesToBuild != ''
     strategy:
-      matrix: ${{ fromJson(needs.generate-build-matrix.outputs.matrix) }}
+      matrix:
+        app: ["${{ fromJson(needs.generate-build-matrix.outputs.matrix.changes).app }}"]
+        # channel: ${{ fromJson(needs.generate-build-matrix.outputs.matrix.changes).channels }}
       fail-fast: false
     steps:
+      # - name: Build and test image
+      #   id: build-and-test
+      #   uses: ./.github/actions/build-image
+      #   with:
+      #     app: ${{ matrix.app }}
+      #     channel: ${{ matrix.channel }}
       - name: Debug
         run: |
-          echo "${{ toJson(matrix.changes) }}"
+          echo "App: ${{ matrix.app }}"
+          # echo "Channel: ${{ matrix.channel }}"
