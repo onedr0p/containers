@@ -1,0 +1,25 @@
+name: "Pull Request validation"
+
+on:
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.head_ref }}-pr-validate
+  cancel-in-progress: true
+
+jobs:
+  pr-metadata:
+    uses: onedr0p/containers/.github/workflows/pr-metadata.yaml@main
+
+  debug:
+    runs-on: ubuntu-latest
+    needs:
+      - pr-metadata
+    steps:
+      - name: Setup Workflow Variables
+        id: vars
+        run: |-
+          echo ${{ needs.pr-metadata.outputs.addedOrModifiedFiles }}
+          echo ${{ needs.pr-metadata.outputs.addedOrModifiedContainers }}
