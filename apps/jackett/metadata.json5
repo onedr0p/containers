@@ -5,8 +5,8 @@
     {
       "name": "stable",
       "build_status": {
-        "ts": "2022-06-27 11:55:29+00:00",
-        "success": true
+        "ts": "2022-06-28 06:02:43+00:00",
+        "success": false
       },
       "platforms": [
         "linux/amd64",
