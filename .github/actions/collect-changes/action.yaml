@@ -1,0 +1,45 @@
+name: "Collect changes"
+description: "Collects and stores changed files/containers"
+
+outputs:
+  changesDetected:
+    description: "Whether or not changes to containers have been detected"
+    value: ${{ steps.filter.outputs.addedOrModified }}
+  addedOrModifiedFiles:
+    description: "A list of the files changed"
+    value: ${{ steps.filter.outputs.addedOrModified_files }}
+  addedOrModifiedContainers:
+    description: "A list of the containers changed"
+    value: ${{ steps.filter-containers.outputs.addedOrModified }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Collect changed files
+      uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        list-files: shell
+        filters: |
+          addedOrModified:
+            - added|modified: 'apps/*/**'
+
+    - name: Collect changed containers
+      if: |
+        steps.filter.outputs.addedOrModified == 'true'
+      id: filter-containers
+      shell: bash
+      run: |
+        CONTAINERS=()
+        PATHS=(${{ steps.filter.outputs.addedOrModified_files }})
+        # Get only the container paths
+        for CONTAINERPATH in "${PATHS[@]}"
+        do
+          IFS='/' read -r -a path_parts <<< "${CONTAINERPATH}"
+          CONTAINERS+=("${path_parts[1]}/${path_parts[2]}")
+        done
+
+        # Remove duplicates
+        CONTAINERS=( `printf "%s\n" "${CONTAINERS[@]}" | sort -u` )
+        # Set output to changed containers
+        printf "::set-output name=addedOrModified::%s\n" "${CONTAINERS[*]}"
