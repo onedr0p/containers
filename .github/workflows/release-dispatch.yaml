@@ -127,8 +127,9 @@ jobs:
           GOSS_FILE: ${{ steps.vars.outputs.chan_goss_config }}
           GOSS_OPTS: |-
             --retry-timeout 60s --sleep 2s --color --format documentation
-        run: |-
-          dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_cache }} ${{ steps.vars.outputs.chan_goss_args }}
+        run: >-
+          dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_cache }}
+          -v ./config:/config ${{ steps.vars.outputs.chan_goss_args }}
 
       - name: Build & Push
         if: ${{ github.event.client_payload.push == true }}

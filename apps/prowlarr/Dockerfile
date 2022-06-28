@@ -33,7 +33,6 @@ RUN \
     && rm -rf /tmp/*
 
 USER kah
-
 COPY ./apps/prowlarr/config.xml.tmpl /app/config.xml.tmpl
 COPY ./apps/prowlarr/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
