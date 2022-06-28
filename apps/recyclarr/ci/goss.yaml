@@ -1,0 +1,4 @@
+---
+file:
+  /app/recyclarr:
+    exists: true
