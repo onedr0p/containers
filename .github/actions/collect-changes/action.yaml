@@ -8,7 +8,7 @@ outputs:
   addedOrModifiedFiles:
     description: "A list of the files changed"
     value: ${{ steps.filter.outputs.addedOrModified_files }}
-  addedOrModifiedContainers:
+  addedOrModifiedImages:
     description: "A list of the containers changed"
     value: ${{ steps.filter-containers.outputs.addedOrModified }}
 

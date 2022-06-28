@@ -57,6 +57,10 @@ jobs:
         image: ["${{ fromJson(needs.generate-build-matrix.outputs.matrix).changes }}"]
       fail-fast: false
     steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
       - name: Build and test image
         id: build-and-test
         uses: ./.github/actions/build-image

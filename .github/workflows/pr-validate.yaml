@@ -18,4 +18,4 @@ jobs:
     needs:
       - pr-metadata
     with:
-      imagesToBuild: ${{ needs.pr-metadata.outputs.addedOrModifiedContainers }}
+      imagesToBuild: ${{ needs.pr-metadata.outputs.addedOrModifiedImages }}
