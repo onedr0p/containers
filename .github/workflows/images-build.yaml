@@ -61,7 +61,7 @@ jobs:
         with:
           fetch-depth: 1
 
-      - uses: cue-lang/setup-cue@v1
+      - uses: cue-lang/setup-cue@v1.0.0-alpha.2
       - name: Validate Metadata
         shell: bash
         run: |-
