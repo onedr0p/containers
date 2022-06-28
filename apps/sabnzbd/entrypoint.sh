@@ -4,8 +4,6 @@
 test -f "/scripts/umask.sh" && source "/scripts/umask.sh"
 test -f "/scripts/vpn.sh" && source "/scripts/vpn.sh"
 
-mkdir /config
-
 if [[ ! -f "/config/sabnzbd.ini" ]]; then
     printf "Copying over default configuration ... "
     mkdir -p /config/sabnzbd
