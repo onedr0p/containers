@@ -15,7 +15,7 @@ on:
       push:
         description: "Push"
         default: "false"
-        required: false
+        required: true
 
 env:
   TOKEN: ${{ secrets.TOKEN }}
