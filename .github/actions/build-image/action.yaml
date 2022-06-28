@@ -1,0 +1,148 @@
+---
+name: "Build image"
+description: "Builds Docker image"
+
+inputs:
+  app:
+    description: 'Application to be built'
+    required: true
+  channel:
+    description: 'Channel of the application to be built'
+    required: true
+  gossVersion:
+    description: 'Version of GOSS to use during testing'
+    required: false
+    # renovate: datasource=github-releases depName=aelsabbahy/goss
+    default: v0.3.18
+  pushImage:
+    description: 'Push the container image to the registry'
+    required: true
+    default: 'false'
+
+runs:
+  using: "composite"
+  steps:
+      - name: Install Tools
+        shell: bash
+        run: sudo apt-get install moreutils jo
+
+      - name: Setup action Variables
+        id: vars
+        shell: bash
+        run: |-
+          container_base=$(jq '.base' ./apps/${{ inputs.app }}/metadata.json5)
+          echo "::set-output name=chan_build_date::$(date --rfc-3339=seconds --utc)"
+
+          chan_config=$(jq --arg chan "${{ inputs.channel }}" '(.channels | .[] | select(.name == $chan))' ./apps/${{ inputs.app }}/metadata.json5)
+          chan_stable=$(jq --raw-output '.stable' <<< "${chan_config}")
+
+          chan_platforms=$(jq --raw-output '.platforms | join(",")' <<< "${chan_config}") && \
+              echo "::set-output name=chan_platforms::${chan_platforms}"
+          chan_tests_enabled=$(jq --raw-output '.tests.enabled' <<< "${chan_config}") && \
+              echo "::set-output name=chan_tests_enabled::${chan_tests_enabled}"
+          chan_tests_type=$(jq --raw-output '.tests.type' <<< "${chan_config}") && \
+              echo "::set-output name=chan_tests_type::${chan_tests_type}"
+
+          chan_upstream_version=$(bash ./.github/scripts/upstream.sh "${{ inputs.app }}" "${{ inputs.channel }}") && \
+              echo "::set-output name=chan_upstream_version::${chan_upstream_version}"
+
+          if [[ "${chan_tests_enabled}" == true && "${chan_tests_type}" == "cli" ]]; then
+              echo "::set-output name=chan_goss_args::tail -f /dev/null"
+          fi
+
+          if [[ "${container_base}" == true ]]; then
+              echo "::set-output name=chan_label_type::org.opencontainers.image.base"
+          else
+              echo "::set-output name=chan_label_type::org.opencontainers.image"
+          fi
+
+          if test -f "./apps/${{ inputs.app }}/${{ inputs.channel }}/Dockerfile"; then
+              echo "::set-output name=chan_dockerfile::./apps/${{ inputs.app }}/${{ inputs.channel }}/Dockerfile"
+              echo "::set-output name=chan_goss_config::./apps/${{ inputs.app }}/${{ inputs.channel }}/goss.yaml"
+          else
+              echo "::set-output name=chan_dockerfile::./apps/${{ inputs.app }}/Dockerfile"
+              echo "::set-output name=chan_goss_config::./apps/${{ inputs.app }}/ci/goss.yaml"
+          fi
+
+          if [[ "${chan_stable}" == true ]]; then
+              echo "::set-output name=chan_tag_cache::${{ inputs.app }}:cachez"
+              echo "::set-output name=chan_tag_rolling::${{ inputs.app }}:rolling"
+              echo "::set-output name=chan_tag_version::${{ inputs.app }}:${chan_upstream_version}"
+          else
+              echo "::set-output name=chan_tag_cache::${{ inputs.app }}-${{ inputs.channel }}:cachez"
+              echo "::set-output name=chan_tag_rolling::${{ inputs.app }}-${{ inputs.channel }}:rolling"
+              echo "::set-output name=chan_tag_version::${{ inputs.app }}-${{ inputs.channel }}:${chan_upstream_version}"
+          fi
+
+      - name: Setup Goss
+        if: ${{ steps.vars.outputs.chan_tests_enabled == 'true' }}
+        uses: e1himself/goss-installation-action@v1.0.4
+        with:
+          version: ${{ inputs.gossVersion }}
+
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v2
+        with:
+          install: true
+          version: latest
+          driver-opts: image=moby/buildkit:latest
+          buildkitd-flags: --debug
+
+      - name: Build Cache Container
+        uses: docker/build-push-action@v3
+        with:
+          build-args: |-
+            VERSION=${{ steps.vars.outputs.chan_upstream_version }}
+            CHANNEL=${{ inputs.channel }}
+          labels: |-
+            ${{ steps.vars.outputs.chan_label_type }}.created="${{ steps.vars.outputs.chan_build_date }}"
+            ${{ steps.vars.outputs.chan_label_type }}.title="${{ inputs.app }} (${{ inputs.channel }})"
+            ${{ steps.vars.outputs.chan_label_type }}.version="${{ steps.vars.outputs.chan_upstream_version }}"
+            ${{ steps.vars.outputs.chan_label_type }}.authors="Devin Buhl <devin.kray@gmail.com>, Bernd Schorgers <me@bjw-s.dev>"
+          context: .
+          file: ${{ steps.vars.outputs.chan_dockerfile }}
+          load: true
+          tags: |-
+            ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_cache }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Run Goss Tests
+        id: dgoss
+        if: ${{ steps.vars.outputs.chan_tests_enabled == 'true' }}
+        shell: bash
+        env:
+          CONTAINER_RUNTIME: docker
+          GOSS_FILE: ${{ steps.vars.outputs.chan_goss_config }}
+          GOSS_OPTS: |-
+            --retry-timeout 60s --sleep 2s --color --format documentation
+        run: >-
+          dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_cache }}
+          -v ./config:/config ${{ steps.vars.outputs.chan_goss_args }}
+
+      - name: Build & Push
+        if: ${{ inputs.pushImage == 'true' }}
+        id: release
+        uses: docker/build-push-action@v3
+        with:
+          build-args: |-
+            VERSION=${{ steps.vars.outputs.chan_upstream_version }}
+            CHANNEL=${{ inputs.channel }}
+          labels: |-
+            ${{ steps.vars.outputs.chan_label_type }}.created="${{ steps.vars.outputs.chan_build_date }}"
+            ${{ steps.vars.outputs.chan_label_type }}.title="${{ inputs.app }} (${{ inputs.channel }})"
+            ${{ steps.vars.outputs.chan_label_type }}.version="${{ steps.vars.outputs.chan_upstream_version }}"
+            ${{ steps.vars.outputs.chan_label_type }}.authors="Devin Buhl <devin.kray@gmail.com>, Bernd Schorgers <me@bjw-s.dev>"
+          context: .
+          platforms: ${{ steps.vars.outputs.chan_platforms }}
+          file: ${{ steps.vars.outputs.chan_dockerfile }}
+          push: true
+          tags: |-
+            ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_rolling }}
+            ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_version }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
