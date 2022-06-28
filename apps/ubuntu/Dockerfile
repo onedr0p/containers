@@ -9,12 +9,14 @@ ENV GO111MODULE=on \
     GOARCH=${TARGETARCH} \
     GOARM=${TARGETVARIANT}
 RUN go install github.com/drone/envsubst/cmd/envsubst@latest
-#hadolint ignore=DL3018,DL3059
-RUN apk add --no-cache upx
-#hadolint ignore=DL3059
-RUN \
-    # 1.9M -> 1.0M
-    upx --ultra-brute /go/bin/envsubst
+
+# TODO: upx for arm64 not in alpine 3.16
+# #hadolint ignore=DL3018,DL3059
+# RUN apk add --no-cache upx
+# #hadolint ignore=DL3059
+# RUN \
+#     # 1.9M -> 1.0M
+#     upx --ultra-brute /go/bin/envsubst
 
 FROM docker.io/library/ubuntu:${VERSION}
 
