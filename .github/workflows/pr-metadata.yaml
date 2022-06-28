@@ -47,7 +47,7 @@ jobs:
     outputs:
       addedOrModified: ${{ steps.collect-changes.outputs.changesDetected }}
       addedOrModifiedFiles: ${{ steps.collect-changes.outputs.addedOrModifiedFiles }}
-      addedOrModifiedContainers: ${{ steps.collect-changes.outputs.addedOrModifiedCharts }}
+      addedOrModifiedContainers: ${{ steps.collect-changes.outputs.addedOrModifiedContainers }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
