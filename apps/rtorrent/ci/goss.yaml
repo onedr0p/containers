@@ -7,5 +7,5 @@ process:
 # https://github.com/aelsabbahy/goss/blob/master/docs/manual.md#port
 port:
   # https://github.com/aelsabbahy/goss/issues/149
-  tcp:50415:
+  tcp6:50415:
     listening: true

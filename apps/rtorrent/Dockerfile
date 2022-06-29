@@ -7,7 +7,8 @@ ARG CHANNEL
 ARG TARGETARCH
 
 ENV TARGETARCH=${TARGETARCH:-amd64} \
-    RTORRENT_BITTORRENT_PORT="50415"
+    RTORRENT_BITTORRENT_PORT="50415" \
+    HOME=/config
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
