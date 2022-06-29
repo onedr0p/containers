@@ -45,7 +45,7 @@ jobs:
             done < <(jq -r '.channels[] | .name' "./apps/$app/metadata.json")
           done
 
-          output="$(jo changes="$(jo -a ${changes_array[*]})")"
+          output="$(jo -a ${changes_array[*]})"
           echo "::set-output name=changes::${output}"
 
   images-build:
@@ -53,4 +53,4 @@ jobs:
     needs:
       - generate-build-matrix
     with:
-      imagesToBuild: ${{ fromJson(needs.generate-build-matrix.outputs.matrix).changes }}
+      imagesToBuild: "${{ needs.generate-build-matrix.outputs.matrix }}"

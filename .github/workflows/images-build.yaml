@@ -29,8 +29,6 @@ jobs:
   build-and-test:
     name: Build and test
     runs-on: ubuntu-latest
-    needs:
-      - generate-build-matrix
     if: inputs.imagesToBuild != ''
     strategy:
       matrix:
