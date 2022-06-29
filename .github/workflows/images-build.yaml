@@ -89,11 +89,12 @@ jobs:
           fi
 
       # Install tools
-      - name: Install Tools
+      - name: Setup cli tools
         shell: bash
         run: sudo apt-get install moreutils jo
 
-      - uses: cue-lang/setup-cue@v1.0.0-alpha.2
+      - name: Setup CUE
+        uses: cue-lang/setup-cue@v1.0.0-alpha.2
 
       - name: Setup Goss
         if: ${{ steps.vars.outputs.chan_tests_enabled == 'true' }}
@@ -105,7 +106,7 @@ jobs:
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v2
 
-      - name: Set up Docker Buildx
+      - name: Setup Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v2
         with:
@@ -115,12 +116,12 @@ jobs:
           buildkitd-flags: --debug
 
       # Validate image
-      - name: Validate Metadata
+      - name: Validate image metadata
         shell: bash
         run: |-
           cue vet --schema '#Spec' ./apps/${{ matrix.image.app }}/metadata.json ./metadata.rules.cue
 
-      - name: Build Cache Container
+      - name: Build cache container
         uses: docker/build-push-action@v3
         with:
           build-args: |-
@@ -139,7 +140,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Run Goss Tests
+      - name: Run Goss tests
         id: dgoss
         if: ${{ steps.vars.outputs.chan_tests_enabled == 'true' }}
         shell: bash
@@ -152,7 +153,7 @@ jobs:
           dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_cache }} ${{ steps.vars.outputs.chan_goss_args }}
 
       # Push image
-      - name: Build & Push
+      - name: Build and push
         if: ${{ inputs.pushImages == 'true' }}
         id: release
         uses: docker/build-push-action@v3
@@ -181,7 +182,7 @@ jobs:
       - build-and-test
     if: |
       always()
-    name: Build successful
+    name: Build matrix success
     runs-on: ubuntu-latest
     steps:
       - name: Check build matrix status
