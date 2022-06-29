@@ -11,6 +11,5 @@ exec \
         --allowedpath /config \
         --allowedpath /dev/shm \
         --host 0.0.0.0 \
-        --port 3001 \
-        --rtsocket /dev/shm/rtorrent.sock \
+        --port 3001
         ${EXTRA_ARGS}
