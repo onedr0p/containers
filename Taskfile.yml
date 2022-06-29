@@ -1,18 +1,40 @@
 ---
 version: "3"
 
-includes:
-  base:
-    taskfile: .taskfiles/BuildTasks.yml
-    vars:
-      BASE: true
-  app:
-    taskfile: .taskfiles/BuildTasks.yml
-    vars:
-      BASE: false
-
 tasks:
   default:
     silent: true
     cmds:
       - task -l
+
+  test:
+    desc: |-
+      task APP=<app> CHANNEL=<channel> test
+    cmds:
+      - task: download-goss
+      - >-
+        cue vet --schema '#Spec' ./apps/{{.APP}}/metadata.json metadata.rules.cue
+      - >-
+        docker buildx build --progress=plain --load 
+        -t {{.APP}}:{{.CHANNEL}}
+        --build-arg CHANNEL={{.CHANNEL}}
+        --build-arg VERSION=$(bash ./.github/scripts/upstream.sh "{{.APP}}" "{{.CHANNEL}}")
+        -f ./apps/{{.APP}}/Dockerfile .
+      - >-
+        ./.goss/dgoss run {{.APP}}:{{.CHANNEL}}
+    env:
+      CONTAINER_RUNTIME: docker
+      GOSS_PATH: ./.goss/goss
+      GOSS_OPTS: --retry-timeout 60s --sleep 2s --color --format documentation
+      GOSS_FILE: ./apps/{{.APP}}/ci/goss.yaml
+
+  download-goss:
+    silent: true
+    cmds:
+      - curl -fsSL -o ./.goss/goss https://github.com/aelsabbahy/goss/releases/download/v0.3.18/goss-linux-amd64
+      - chmod +x ./.goss/goss
+      - curl -fsSL -o ./.goss/dgoss https://raw.githubusercontent.com/aelsabbahy/goss/v0.3.18/extras/dgoss/dgoss
+      - chmod +x ./.goss/dgoss
+    status:
+      - test -f ./.goss/goss
+      - test -f ./.goss/dgoss
