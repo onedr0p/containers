@@ -1,0 +1,22 @@
+{
+  "app": "readarr",
+  "base": false,
+  "channels": [
+    {
+      "name": "stable",
+      "build_status": {
+        "ts": "2022-06-27 00:46:05+00:00",
+        "success": true
+      },
+      "platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "stable": true,
+      "tests": {
+        "enabled": true,
+        "type": "web"
+      }
+    }
+  ]
+}
