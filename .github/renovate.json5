@@ -14,7 +14,6 @@
   "gitAuthor": "rosey-bot <98030736+rosey-bot[bot]@users.noreply.github.com>",
   "dependencyDashboardTitle": "Renovate Dashboard 🤖",
   "suppressNotifications": ["prIgnoreNotification"],
-  "rebaseWhen": "conflicted",
   "commitBodyTable": true,
   "packageRules": [
     {

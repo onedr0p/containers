@@ -13,9 +13,44 @@ jobs:
   pr-metadata:
     uses: onedr0p/containers/.github/workflows/pr-metadata.yaml@main
 
+  generate-build-matrix:
+    name: Generate matrix for building images
+    runs-on: ubuntu-latest
+    needs:
+      - pr-metadata
+    outputs:
+      matrix: ${{ steps.get-changed.outputs.changes }}
+    if: ${{ needs.pr-metadata.outputs.addedOrModifiedImages }} != ''
+    steps:
+      - name: Install tools
+        run: sudo apt-get install moreutils jo
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Fetch modified images
+        id: get-changed
+        shell: bash
+        run: |
+          IFS=' ' read -a images <<< "${{ needs.pr-metadata.outputs.addedOrModifiedImages }}"
+
+          declare -a changes_array=()
+          for app in "${images[@]}"; do
+            while read -r channel
+            do
+              change="$(jo app="$app" channel="$channel")"
+              changes_array+=($change)
+            done < <(jq -r '.channels[] | .name' "./apps/$app/metadata.json")
+          done
+
+          output="$(jo changes="$(jo -a ${changes_array[*]})")"
+          echo "::set-output name=changes::${output}"
+
   images-build:
     uses: onedr0p/containers/.github/workflows/images-build.yaml@main
     needs:
-      - pr-metadata
+      - generate-build-matrix
     with:
-      imagesToBuild: ${{ needs.pr-metadata.outputs.addedOrModifiedImages }}
+      imagesToBuild: ${{ fromJson(needs.generate-build-matrix.outputs.matrix).changes }}

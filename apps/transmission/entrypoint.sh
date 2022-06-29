@@ -4,8 +4,6 @@
 test -f "/scripts/umask.sh" && source "/scripts/umask.sh"
 test -f "/scripts/vpn.sh" && source "/scripts/vpn.sh"
 
-mkdir /config
-
 # Update settings.json with environment variables
 envsubst < /app/settings.json.tmpl > /config/settings.json
 
