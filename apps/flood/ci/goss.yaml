@@ -1,0 +1,16 @@
+---
+# https://github.com/aelsabbahy/goss/blob/master/docs/manual.md#process
+process:
+  flood:
+    running: true
+
+# https://github.com/aelsabbahy/goss/blob/master/docs/manual.md#port
+port:
+  # https://github.com/aelsabbahy/goss/issues/149
+  tcp:3001:
+    listening: true
+
+# https://github.com/aelsabbahy/goss/blob/master/docs/manual.md#http
+http:
+  http://localhost:3001:
+    status: 200
