@@ -7,8 +7,7 @@ ARG CHANNEL
 ARG TARGETARCH
 
 ENV TARGETARCH=${TARGETARCH:-amd64} \
-    RTORRENT_BITTORRENT_PORT="50415" \
-    HOME=/config
+    RTORRENT_BITTORRENT_PORT="50415"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -22,6 +21,7 @@ RUN curl -fsSL -o /app/rtorrent \
     && rm -rf /tmp/*
 
 USER kah
+COPY ./apps/rtorrent/rtorrent.rc /app/rtorrent.rc
 COPY ./apps/rtorrent/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
