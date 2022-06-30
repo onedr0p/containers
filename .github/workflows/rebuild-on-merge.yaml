@@ -1,0 +1,69 @@
+name: "Rebuild images on merge"
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/**"
+      - "!apps/**/metadata.json"
+
+jobs:
+  get-merge-changes:
+    name: Collect merge changes
+    runs-on: ubuntu-22.04
+    outputs:
+      addedOrModifiedImages: ${{ steps.collect-changes.outputs.addedOrModifiedImages }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Collect changes
+        id: collect-changes
+        uses: ./.github/actions/collect-changes
+
+  generate-build-matrix:
+    name: Generate matrix for building images
+    runs-on: ubuntu-22.04
+    needs:
+      - get-merge-changes
+    outputs:
+      matrix: ${{ steps.get-changed.outputs.changes }}
+    if: ${{ needs.get-merge-changes.outputs.addedOrModifiedImages }} != ''
+    steps:
+      - name: Install tools
+        run: sudo apt-get install moreutils jo
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Fetch modified images
+        id: get-changed
+        shell: bash
+        run: |
+          IFS=' ' read -a images <<< "${{ needs.get-merge-changes.outputs.addedOrModifiedImages }}"
+
+          declare -a changes_array=()
+          for app in "${images[@]}"; do
+            while read -r channel
+            do
+              change="$(jo app="$app" channel="$channel")"
+              changes_array+=($change)
+            done < <(jq -r '.channels[] | .name' "./apps/$app/metadata.json")
+          done
+
+          output="$(jo -a ${changes_array[*]})"
+          echo "::set-output name=changes::${output}"
+
+  images-build:
+    uses: onedr0p/containers/.github/workflows/images-build.yaml@main
+    needs:
+      - generate-build-matrix
+    with:
+      imagesToBuild: "${{ needs.generate-build-matrix.outputs.matrix }}"
+      pushImages: "true"
+      updateMetadata: "true"
+      sendNotification: "true"
+    secrets: inherit
