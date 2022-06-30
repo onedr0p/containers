@@ -29,6 +29,7 @@ jobs:
 
   images-build:
     uses: onedr0p/containers/.github/workflows/images-build.yaml@main
+    if: needs.generate-build-matrix.outputs.matrix != '[]'
     needs:
       - generate-build-matrix
     with:

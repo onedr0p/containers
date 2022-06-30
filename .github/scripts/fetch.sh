@@ -31,7 +31,7 @@ find ./apps -name metadata.json | while read -r metadata; do
     fi
 done
 
-output="$(jo changes=[])"
+output="[]"
 if [[ "${#app_channel_array[@]}" -gt 0 ]]; then
     declare -a changes_array=()
     for app in "${!app_channel_array[@]}"; do
