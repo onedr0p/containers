@@ -21,7 +21,7 @@
     {
       "name": "nightly",
       "build_status": {
-        "ts": "2022-06-29 00:05:21+00:00",
+        "ts": "2022-06-30 14:45:09+00:00",
         "success": true
       },
       "platforms": [
