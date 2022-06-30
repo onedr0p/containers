@@ -19,7 +19,7 @@ runs:
       uses: dorny/paths-filter@v2
       id: filter
       with:
-        list-files: shell
+        list-files: json
         filters: |
           addedOrModified:
             - added|modified: 'apps/*/**'
@@ -30,16 +30,8 @@ runs:
       id: filter-containers
       shell: bash
       run: |
-        CONTAINERS=()
         PATHS=(${{ steps.filter.outputs.addedOrModified_files }})
-        # Get only the container paths
-        for CONTAINERPATH in "${PATHS[@]}"
-        do
-          IFS='/' read -r -a path_parts <<< "${CONTAINERPATH}"
-          CONTAINERS+=("${path_parts[1]}")
-        done
+        CONTAINERS=$(jq --raw-output 'map(. |= split("/")[1]) | unique')
 
-        # Remove duplicates
-        CONTAINERS=( `printf "%s\n" "${CONTAINERS[@]}" | sort -u` )
         # Set output to changed containers
         printf "::set-output name=addedOrModified::%s\n" "${CONTAINERS[*]}"
