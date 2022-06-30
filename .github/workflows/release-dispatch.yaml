@@ -183,7 +183,8 @@ jobs:
         continue-on-error: true
         uses: EndBug/add-and-commit@v9
         with:
-          default_author: github_actions
+          default_author: |-
+            rosey-bot <98030736+rosey-bot[bot]@users.noreply.github.com>
           pull: --rebase --autostash
           message: |-
             ${{ steps.build-failed.outputs.message || steps.build-success.outputs.message }}
@@ -203,7 +204,8 @@ jobs:
         if: ${{ always() && github.event.client_payload.push == true && steps.commit-status.outcome == 'failure' }}
         uses: EndBug/add-and-commit@v9
         with:
-          default_author: github_actions
+          default_author: |-
+            rosey-bot <98030736+rosey-bot[bot]@users.noreply.github.com>
           pull: --rebase --autostash
           message: |-
             ${{ steps.build-failed.outputs.message || steps.build-success.outputs.message }}
