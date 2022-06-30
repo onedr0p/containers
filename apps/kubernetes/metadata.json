@@ -5,7 +5,7 @@
     {
       "name": "kubectl",
       "build_status": {
-        "ts": "2022-06-28 03:55:39+00:00",
+        "ts": "2022-06-30 12:38:03+00:00",
         "success": true
       },
       "platforms": [
