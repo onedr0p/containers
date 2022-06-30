@@ -12,7 +12,7 @@ ENV GO111MODULE=on \
 #hadolint ignore=DL3018
 RUN apk add --no-cache git
 #hadolint ignore=DL3059
-RUN go install github.com/davidnewhall/unpackerr@v${VERSION}
+RUN go install -ldflags="-s -w" github.com/davidnewhall/unpackerr@v${VERSION}
 
 FROM ghcr.io/onedr0p/alpine:rolling@sha256:8a86a86f11d3666eb534c5c79e2af4a804ebffa5602b280325a1ae03ffa73011
 
