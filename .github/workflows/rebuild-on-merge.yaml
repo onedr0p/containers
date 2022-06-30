@@ -29,7 +29,7 @@ jobs:
       - get-changes
     outputs:
       matrix: ${{ steps.get-changed.outputs.changes }}
-    if: ${{ needs.get-changes.outputs.addedOrModifiedImages }} != ''
+    if: ${{ needs.get-changes.outputs.addedOrModifiedImages }} != '[]'
     steps:
       - name: Install tools
         run: sudo apt-get install moreutils jo
@@ -43,16 +43,15 @@ jobs:
         id: get-changed
         shell: bash
         run: |
-          IFS=' ' read -a images <<< "${{ needs.get-changes.outputs.addedOrModifiedImages }}"
-
           declare -a changes_array=()
-          for app in "${images[@]}"; do
+          while read -r app
+          do
             while read -r channel
             do
               change="$(jo app="$app" channel="$channel")"
               changes_array+=($change)
             done < <(jq -r '.channels[] | .name' "./apps/$app/metadata.json")
-          done
+          done < <(echo '${{ needs.get-changes.outputs.addedOrModifiedImages }}' | jq --raw-output -c '.[]')
 
           output="$(jo -a ${changes_array[*]})"
           echo "::set-output name=changes::${output}"
