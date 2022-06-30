@@ -9,8 +9,8 @@ on:
       - "!apps/**/metadata.json"
 
 jobs:
-  get-merge-changes:
-    name: Collect merge changes
+  get-changes:
+    name: Collect changes
     runs-on: ubuntu-22.04
     outputs:
       addedOrModifiedImages: ${{ steps.collect-changes.outputs.addedOrModifiedImages }}
@@ -26,10 +26,10 @@ jobs:
     name: Generate matrix for building images
     runs-on: ubuntu-22.04
     needs:
-      - get-merge-changes
+      - get-changes
     outputs:
       matrix: ${{ steps.get-changed.outputs.changes }}
-    if: ${{ needs.get-merge-changes.outputs.addedOrModifiedImages }} != ''
+    if: ${{ needs.get-changes.outputs.addedOrModifiedImages }} != ''
     steps:
       - name: Install tools
         run: sudo apt-get install moreutils jo
@@ -43,7 +43,7 @@ jobs:
         id: get-changed
         shell: bash
         run: |
-          IFS=' ' read -a images <<< "${{ needs.get-merge-changes.outputs.addedOrModifiedImages }}"
+          IFS=' ' read -a images <<< "${{ needs.get-changes.outputs.addedOrModifiedImages }}"
 
           declare -a changes_array=()
           for app in "${images[@]}"; do
