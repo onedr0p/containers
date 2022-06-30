@@ -4,10 +4,6 @@
   "channels": [
     {
       "name": "master",
-      "build_status": {
-        "ts": "2022-06-30 14:46:26+00:00",
-        "success": true
-      },
       "platforms": [
         "linux/amd64",
         "linux/arm64"

@@ -164,7 +164,6 @@ jobs:
         run: >
           dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_testing }} ${{ steps.vars.outputs.chan_goss_args }}
 
-      # Build all image platforms
       - name: Build all platforms
         id: release
         uses: docker/build-push-action@v3
@@ -177,6 +176,11 @@ jobs:
             ${{ steps.vars.outputs.chan_label_type }}.title="${{ matrix.image.app }} (${{ matrix.image.channel }})"
             ${{ steps.vars.outputs.chan_label_type }}.version="${{ steps.vars.outputs.chan_upstream_version }}"
             ${{ steps.vars.outputs.chan_label_type }}.authors="Devin Buhl <devin.kray@gmail.com>, Bernd Schorgers <me@bjw-s.dev>"
+            ${{ steps.vars.outputs.chan_label_type }}.url="https://github.com/onedr0p/containers/apps/${{ matrix.image.app }}"
+            ${{ steps.vars.outputs.chan_label_type }}.build.url="https://github.com/onedr0p/containers/actions/runs/${{ github.run_id }}"
+            ${{ steps.vars.outputs.chan_label_type }}.documentation="https://github.com/onedr0p/containers/apps/${{ matrix.image.app }}/README.md"
+            ${{ steps.vars.outputs.chan_label_type }}.revision="${{ github.sha }}"
+
           context: .
           platforms: ${{ steps.vars.outputs.chan_platforms }}
           file: ${{ steps.vars.outputs.chan_dockerfile }}
@@ -191,8 +195,6 @@ jobs:
         id: build-success
         if: ${{ always() && steps.release.outcome == 'success' }}
         run: |-
-          jq --arg c "${{ matrix.image.channel }}" '(.channels | .[] | select(.name == $c)).build_status.success = true' ./apps/${{ matrix.image.app }}/metadata.json | sponge ./apps/${{ matrix.image.app }}/metadata.json
-          jq --arg c "${{ matrix.image.channel }}" --arg d "${{ steps.vars.outputs.chan_build_date }}" '(.channels | .[] | select(.name == $c)).build_status.ts = $d' ./apps/${{ matrix.image.app }}/metadata.json | sponge ./apps/${{ matrix.image.app }}/metadata.json
           echo "::set-output name=message::🎉 ${{ matrix.image.app }}-${{ matrix.image.channel }} (${{ steps.vars.outputs.chan_upstream_version }})"
           echo "::set-output name=color::0x00FF00"
 
@@ -200,50 +202,8 @@ jobs:
         id: build-failed
         if: ${{ always() && (steps.release.outcome == 'failure' || steps.dgoss.outcome == 'failure') }}
         run: |-
-          jq --arg c "${{ matrix.image.channel }}" '(.channels | .[] | select(.name == $c)).build_status.success = false' ./apps/${{ matrix.image.app }}/metadata.json | sponge ./apps/${{ matrix.image.app }}/metadata.json
-          jq --arg c "${{ matrix.image.channel }}" --arg d "${{ steps.vars.outputs.chan_build_date }}" '(.channels | .[] | select(.name == $c)).build_status.ts = $d' ./apps/${{ matrix.image.app }}/metadata.json | sponge ./apps/${{ matrix.image.app }}/metadata.json
           echo "::set-output name=message::💥 ${{ matrix.image.app }}-${{ matrix.image.channel }} (${{ steps.vars.outputs.chan_upstream_version }})"
           echo "::set-output name=color::0xFF0000"
-
-      - name: Commit release status
-        id: commit-status
-        if: ${{ always() && inputs.updateMetadata == 'true' }}
-        continue-on-error: true
-        uses: EndBug/add-and-commit@v9
-        with:
-          author_name: rosey-bot
-          committer_name: rosey-bot
-          author_email: 98030736+rosey-bot[bot]@users.noreply.github.com
-          committer_email: 98030736+rosey-bot[bot]@users.noreply.github.com
-          pull: --rebase --autostash
-          message: |-
-            ${{ steps.build-failed.outputs.message || steps.build-success.outputs.message }}
-
-            View run at: https://github.com/onedr0p/containers/actions/runs/${{ github.run_id }}
-          add: "*.json"
-
-      # In the matrix it is possible for things to complete
-      # just at the right time to throw a conflict, in that
-      # case it will try to pull and commit one more time
-      - name: Snoozing randomly (retry)
-        if: ${{ always()  && inputs.updateMetadata == 'true' && steps.commit-status.outcome == 'failure' }}
-        run: |-
-          perl -e 'sleep int(rand(30))'
-
-      - name: Commit statuses (retry)
-        if: ${{ always() && inputs.updateMetadata == 'true' && steps.commit-status.outcome == 'failure' }}
-        uses: EndBug/add-and-commit@v9
-        with:
-          author_name: rosey-bot
-          committer_name: rosey-bot
-          author_email: 98030736+rosey-bot[bot]@users.noreply.github.com
-          committer_email: 98030736+rosey-bot[bot]@users.noreply.github.com
-          pull: --rebase --autostash
-          message: |-
-            ${{ steps.build-failed.outputs.message || steps.build-success.outputs.message }}
-
-            View run at: https://github.com/onedr0p/containers/actions/runs/${{ github.run_id }}
-          add: "*.json"
 
       - name: Send Discord Webhook
         uses: sarisia/actions-status-discord@v1
