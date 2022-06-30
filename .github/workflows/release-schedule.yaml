@@ -37,3 +37,4 @@ jobs:
       pushImages: "true"
       updateMetadata: "true"
       sendNotification: "true"
+    secrets: inherit
