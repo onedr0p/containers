@@ -165,7 +165,8 @@ jobs:
         run: |-
           jq --arg c "${{ matrix.channel }}" '(.channels | .[] | select(.name == $c)).build_status.success = true' ./apps/${{ matrix.app }}/metadata.json | sponge ./apps/${{ matrix.app }}/metadata.json
           jq --arg c "${{ matrix.channel }}" --arg d "${{ steps.vars.outputs.chan_build_date }}" '(.channels | .[] | select(.name == $c)).build_status.ts = $d' ./apps/${{ matrix.app }}/metadata.json | sponge ./apps/${{ matrix.app }}/metadata.json
-          echo "::set-output name=commit-message::🎉 ${{ matrix.app }}-${{ matrix.channel }} (${{ steps.vars.outputs.chan_upstream_version }})"
+          echo "::set-output name=message::🎉 ${{ matrix.app }}-${{ matrix.channel }} (${{ steps.vars.outputs.chan_upstream_version }})"
+          echo "::set-output name=color::0x00FF00"
 
       - name: Build failed
         id: build-failed
@@ -173,7 +174,8 @@ jobs:
         run: |-
           jq --arg c "${{ matrix.channel }}" '(.channels | .[] | select(.name == $c)).build_status.success = false' ./apps/${{ matrix.app }}/metadata.json | sponge ./apps/${{ matrix.app }}/metadata.json
           jq --arg c "${{ matrix.channel }}" --arg d "${{ steps.vars.outputs.chan_build_date }}" '(.channels | .[] | select(.name == $c)).build_status.ts = $d' ./apps/${{ matrix.app }}/metadata.json | sponge ./apps/${{ matrix.app }}/metadata.json
-          echo "::set-output name=commit-message::💥 ${{ matrix.app }}-${{ matrix.channel }} (${{ steps.vars.outputs.chan_upstream_version }})"
+          echo "::set-output name=message::💥 ${{ matrix.app }}-${{ matrix.channel }} (${{ steps.vars.outputs.chan_upstream_version }})"
+          echo "::set-output name=color::0xFF0000"
 
       - name: Commit Release Status
         id: commit-status
@@ -184,7 +186,7 @@ jobs:
           default_author: github_actions
           pull: --rebase --autostash
           message: |-
-            ${{ steps.build-failed.outputs.commit-message || steps.build-success.outputs.commit-message }}
+            ${{ steps.build-failed.outputs.message || steps.build-success.outputs.message }}
 
             View run at: https://github.com/onedr0p/containers/actions/runs/${{ github.run_id }}
           add: "*.json"
@@ -204,7 +206,19 @@ jobs:
           default_author: github_actions
           pull: --rebase --autostash
           message: |-
-            ${{ steps.build-failed.outputs.commit-message || steps.build-success.outputs.commit-message }}
+            ${{ steps.build-failed.outputs.message || steps.build-success.outputs.message }}
 
             View run at: https://github.com/onedr0p/containers/actions/runs/${{ github.run_id }}
           add: "*.json"
+
+      - name: Send Discord Webhook
+        uses: sarisia/actions-status-discord@v1
+        if: ${{ always() && github.event.client_payload.push == true }}
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          title: ${{ steps.build-failed.outputs.message || steps.build-success.outputs.message }}
+          # description: "Build and deploy to GitHub Pages"
+          # image: ${{ secrets.EMBED_IMAGE }}
+          color: ${{ steps.build-failed.outputs.color }}
+          username: GitHub Actions
+          # avatar_url: ${{ secrets.AVATAR_URL }}
