@@ -12,6 +12,10 @@
       "tests": {
         "enabled": true,
         "type": "web"
+      },
+      "build_status": {
+        "success": true,
+        "ts": "2022-06-30 00:22:22+00:00"
       }
     }
   ]
