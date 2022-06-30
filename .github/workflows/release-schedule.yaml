@@ -35,3 +35,5 @@ jobs:
     with:
       imagesToBuild: "${{ needs.generate-build-matrix.outputs.matrix }}"
       pushImages: "true"
+      updateMetadata: "true"
+      sendNotification: "true"

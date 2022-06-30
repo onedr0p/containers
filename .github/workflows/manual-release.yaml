@@ -54,3 +54,4 @@ jobs:
       imagesToBuild: "${{ needs.generate-build-matrix.outputs.matrix }}"
       pushImages: "${{ github.event.inputs.push }}"
       updateMetadata: "${{ github.event.inputs.push }}"
+      sendNotification: "${{ github.event.inputs.push }}"
