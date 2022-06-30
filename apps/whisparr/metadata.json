@@ -1,0 +1,22 @@
+{
+  "app": "whisparr",
+  "base": false,
+  "channels": [
+    {
+      "name": "nightly",
+      "build_status": {
+        "ts": "2022-06-29 00:05:21+00:00",
+        "success": true
+      },
+      "platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "stable": false,
+      "tests": {
+        "enabled": true,
+        "type": "web"
+      }
+    }
+  ]
+}
