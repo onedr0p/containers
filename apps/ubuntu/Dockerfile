@@ -8,7 +8,7 @@ ENV GO111MODULE=on \
     GOOS=${TARGETOS} \
     GOARCH=${TARGETARCH} \
     GOARM=${TARGETVARIANT}
-RUN go install github.com/drone/envsubst/cmd/envsubst@latest
+RUN go install -ldflags="-s -w" github.com/drone/envsubst/cmd/envsubst@latest
 
 # TODO: upx for arm64 not in alpine 3.16
 # #hadolint ignore=DL3018,DL3059
