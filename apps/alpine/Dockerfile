@@ -3,6 +3,7 @@ FROM docker.io/library/golang:1.18-alpine3.16 as builder
 ARG TARGETOS
 ARG TARGETARCH
 ARG TARGETVARIANT=""
+ARG TARGETPLATFORM
 ENV GO111MODULE=on \
     CGO_ENABLED=0 \
     GOOS=${TARGETOS} \
@@ -11,12 +12,15 @@ ENV GO111MODULE=on \
 RUN go install -ldflags="-s -w" github.com/drone/envsubst/cmd/envsubst@latest
 
 # TODO: upx for arm64 not in alpine 3.16
-# #hadolint ignore=DL3018,DL3059
-# RUN apk add --no-cache upx
-# #hadolint ignore=DL3059
-# RUN \
-#     # 1.9M -> 1.0M
-#     upx --ultra-brute /go/bin/envsubst
+#hadolint ignore=DL3018,DL3059
+RUN \
+    case "${TARGETPLATFORM}" in \
+        'linux/amd64') \
+            # 1.9M -> 1.0M
+            apk add --no-cache upx \
+            && upx --ultra-brute /go/bin/envsubst \
+        ;; \
+    esac
 
 FROM docker.io/library/alpine:${VERSION}
 ARG VERSION
