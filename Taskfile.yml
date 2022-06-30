@@ -15,7 +15,7 @@ tasks:
       - >-
         cue vet --schema '#Spec' ./apps/{{.APP}}/metadata.json metadata.rules.cue
       - >-
-        docker buildx build --progress=plain --load 
+        docker buildx build --progress=plain --load
         -t {{.APP}}:{{.CHANNEL}}
         --build-arg CHANNEL={{.CHANNEL}}
         --build-arg VERSION=$(bash ./.github/scripts/upstream.sh "{{.APP}}" "{{.CHANNEL}}")
@@ -30,10 +30,14 @@ tasks:
 
   download-goss:
     silent: true
+    vars:
+      # renovate: datasource=github-releases depName=aelsabbahy/goss
+      GOSS_VERSION: v0.3.18
     cmds:
-      - curl -fsSL -o ./.goss/goss https://github.com/aelsabbahy/goss/releases/download/v0.3.18/goss-linux-amd64
+      - mkdir -p ./.goss
+      - curl -fsSL -o ./.goss/goss https://github.com/aelsabbahy/goss/releases/download/{{.GOSS_VERSION}}/goss-linux-amd64
       - chmod +x ./.goss/goss
-      - curl -fsSL -o ./.goss/dgoss https://raw.githubusercontent.com/aelsabbahy/goss/v0.3.18/extras/dgoss/dgoss
+      - curl -fsSL -o ./.goss/dgoss https://raw.githubusercontent.com/aelsabbahy/goss/{{.GOSS_VERSION}}/extras/dgoss/dgoss
       - chmod +x ./.goss/dgoss
     status:
       - test -f ./.goss/goss
