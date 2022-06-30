@@ -247,8 +247,9 @@ jobs:
       - name: Send Discord Webhook
         uses: sarisia/actions-status-discord@v1
         if: ${{ always() && inputs.sendNotification == 'true' }}
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
           title: ${{ steps.build-failed.outputs.message || steps.build-success.outputs.message }}
           # description: "Build and deploy to GitHub Pages"
           # image: ${{ secrets.EMBED_IMAGE }}
