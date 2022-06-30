@@ -42,7 +42,7 @@ jobs:
               change="$(jo app="$app" channel="$channel")"
               changes_array+=($change)
             done < <(jq --raw-output -c '.channels[] | .name' "./apps/$app/metadata.json")
-          done < <(echo '${{ needs.get-changes.outputs.addedOrModifiedImages }}' | jq --raw-output -c '.[]')
+          done < <(echo '${{ needs.pr-metadata.outputs.addedOrModifiedImages }}' | jq --raw-output -c '.[]')
 
           output="$(jo -a ${changes_array[*]})"
           echo "::set-output name=changes::${output}"
