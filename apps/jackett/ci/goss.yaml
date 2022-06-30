@@ -2,7 +2,7 @@
 # https://github.com/aelsabbahy/goss/blob/master/docs/manual.md#process
 process:
   jackett:
-    running: true
+    running: false
 
 # https://github.com/aelsabbahy/goss/blob/master/docs/manual.md#port
 port:
