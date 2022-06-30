@@ -1,4 +1,5 @@
-name: Renovate Schedule
+---
+name: "Renovate: Schedule"
 
 on:
   workflow_dispatch:

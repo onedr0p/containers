@@ -1,5 +1,5 @@
 ---
-name: Release Schedule
+name: "Release: Schedule"
 
 on:
   workflow_dispatch:
@@ -28,7 +28,7 @@ jobs:
         run: ./.github/scripts/fetch.sh
 
   images-build:
-    uses: onedr0p/containers/.github/workflows/images-build.yaml@main
+    uses: onedr0p/containers/.github/workflows/action-image-build.yaml@main
     if: needs.generate-build-matrix.outputs.matrix != '[]'
     needs:
       - generate-build-matrix

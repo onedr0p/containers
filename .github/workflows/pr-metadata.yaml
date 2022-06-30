@@ -1,4 +1,5 @@
-name: "Pull Request metadata"
+---
+name: "Pull Request: Metadata"
 
 on:
   workflow_call:

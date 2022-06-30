@@ -1,5 +1,5 @@
 ---
-name: Manual Release
+name: "Release: Manual"
 
 on:
   workflow_dispatch:
@@ -46,7 +46,7 @@ jobs:
           echo "::set-output name=images::${output}"
 
   images-build:
-    uses: onedr0p/containers/.github/workflows/images-build.yaml@main
+    uses: onedr0p/containers/.github/workflows/action-image-build.yaml@main
     if: needs.generate-build-matrix.outputs.matrix != '[]'
     needs:
       - generate-build-matrix

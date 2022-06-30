@@ -1,4 +1,5 @@
-name: "Rebuild images on merge"
+---
+name: "Image: Rebuild"
 
 on:
   push:
@@ -57,7 +58,7 @@ jobs:
           echo "::set-output name=changes::${output}"
 
   images-build:
-    uses: onedr0p/containers/.github/workflows/images-build.yaml@main
+    uses: onedr0p/containers/.github/workflows/action-image-build.yaml@main
     needs:
       - generate-build-matrix
     with:
