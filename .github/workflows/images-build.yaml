@@ -38,14 +38,13 @@ on:
 jobs:
   build-and-test:
     name: Build and test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     if: inputs.imagesToBuild != '' && inputs.imagesToBuild != '[]'
     strategy:
       matrix:
         image: ["${{ fromJson(inputs.imagesToBuild) }}"]
       fail-fast: false
     steps:
-      # Set up workflow
       - uses: actions/checkout@v3
         with:
           fetch-depth: 1
@@ -89,18 +88,15 @@ jobs:
           fi
 
           if [[ "${chan_stable}" == true ]]; then
-              echo "::set-output name=chan_tag_cache::${{ matrix.image.app }}:cachez"
-              echo "::set-output name=chan_tag_testing::${{ matrix.image.app }}:testing"
+              echo "::set-output name=chan_tag_testing::${{ matrix.image.app }}:testingz"
               echo "::set-output name=chan_tag_rolling::${{ matrix.image.app }}:rolling"
               echo "::set-output name=chan_tag_version::${{ matrix.image.app }}:${chan_upstream_version}"
           else
-              echo "::set-output name=chan_tag_cache::${{ matrix.image.app }}-${{ matrix.image.channel }}:cachez"
-              echo "::set-output name=chan_tag_testing::${{ matrix.image.app }}-${{ matrix.image.channel }}:testing"
+              echo "::set-output name=chan_tag_testing::${{ matrix.image.app }}-${{ matrix.image.channel }}:testingz"
               echo "::set-output name=chan_tag_rolling::${{ matrix.image.app }}-${{ matrix.image.channel }}:rolling"
               echo "::set-output name=chan_tag_version::${{ matrix.image.app }}-${{ matrix.image.channel }}:${chan_upstream_version}"
           fi
 
-      # Install tools
       - name: Setup cli tools
         shell: bash
         run: sudo apt-get install moreutils jo
@@ -125,7 +121,7 @@ jobs:
           install: true
           version: latest
           driver-opts: image=moby/buildkit:latest
-          buildkitd-flags: --debug
+          # buildkitd-flags: --debug
 
       - name: Setup GHCR
         if: ${{ inputs.pushImages == 'true' }}
@@ -135,7 +131,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Validate image
       - name: Validate image metadata
         shell: bash
         run: |-
@@ -148,7 +143,7 @@ jobs:
             VERSION=${{ steps.vars.outputs.chan_upstream_version }}
             CHANNEL=${{ matrix.image.channel }}
           context: .
-          platforms: linux/amd64  # load does not support muti-arch https://github.com/docker/buildx/issues/290
+          platforms: linux/amd64 # load does not support muti-arch https://github.com/docker/buildx/issues/290
           file: ${{ steps.vars.outputs.chan_dockerfile }}
           load: true
           tags: |-
@@ -263,12 +258,11 @@ jobs:
 
   # Summarize matrix https://github.community/t/status-check-for-a-matrix-jobs/127354/7
   build_success:
+    name: Build matrix success
+    runs-on: ubuntu-22.04
     needs:
       - build-and-test
-    if: |
-      always()
-    name: Build matrix success
-    runs-on: ubuntu-latest
+    if: ${{ always() }}
     steps:
       - name: Check build matrix status
         if: ${{ (inputs.imagesToBuild != '' && inputs.imagesToBuild != '[]') && (needs.build-and-test.result != 'success') }}

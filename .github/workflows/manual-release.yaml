@@ -23,7 +23,7 @@ env:
 jobs:
   generate-build-matrix:
     name: Generate matrix for building images
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       matrix: ${{ steps.determine-images.outputs.images }}
     steps:

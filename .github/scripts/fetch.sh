@@ -37,7 +37,7 @@ if [[ "${#app_channel_array[@]}" -gt 0 ]]; then
     for app in "${!app_channel_array[@]}"; do
         #shellcheck disable=SC2086
         if [[ -n "${app}" ]]; then
-            for channel in "${app_channel_array[$app]}"; do
+            for channel in ${app_channel_array[$app]}; do
                 changes_array+=("$(jo app="$app" channel="$channel")")
             done
         fi
