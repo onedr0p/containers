@@ -25,17 +25,26 @@ on:
         default: 'false'
         type: string
 
+      updateMetadata:
+        required: false
+        default: 'false'
+        type: string
+
+      sendNotification:
+        required: false
+        default: 'false'
+        type: string
+
 jobs:
   build-and-test:
     name: Build and test
-    runs-on: ubuntu-latest
-    if: inputs.imagesToBuild != ''
+    runs-on: ubuntu-22.04
+    if: inputs.imagesToBuild != '' && inputs.imagesToBuild != '[]'
     strategy:
       matrix:
         image: ["${{ fromJson(inputs.imagesToBuild) }}"]
       fail-fast: false
     steps:
-      # Set up workflow
       - uses: actions/checkout@v3
         with:
           fetch-depth: 1
@@ -79,16 +88,15 @@ jobs:
           fi
 
           if [[ "${chan_stable}" == true ]]; then
-              echo "::set-output name=chan_tag_cache::${{ matrix.image.app }}:cachez"
+              echo "::set-output name=chan_tag_testing::${{ matrix.image.app }}:testingz"
               echo "::set-output name=chan_tag_rolling::${{ matrix.image.app }}:rolling"
               echo "::set-output name=chan_tag_version::${{ matrix.image.app }}:${chan_upstream_version}"
           else
-              echo "::set-output name=chan_tag_cache::${{ matrix.image.app }}-${{ matrix.image.channel }}:cachez"
+              echo "::set-output name=chan_tag_testing::${{ matrix.image.app }}-${{ matrix.image.channel }}:testingz"
               echo "::set-output name=chan_tag_rolling::${{ matrix.image.app }}-${{ matrix.image.channel }}:rolling"
               echo "::set-output name=chan_tag_version::${{ matrix.image.app }}-${{ matrix.image.channel }}:${chan_upstream_version}"
           fi
 
-      # Install tools
       - name: Setup cli tools
         shell: bash
         run: sudo apt-get install moreutils jo
@@ -113,30 +121,33 @@ jobs:
           install: true
           version: latest
           driver-opts: image=moby/buildkit:latest
-          buildkitd-flags: --debug
+          # buildkitd-flags: --debug
 
-      # Validate image
+      - name: Setup GHCR
+        if: ${{ inputs.pushImages == 'true' }}
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Validate image metadata
         shell: bash
         run: |-
           cue vet --schema '#Spec' ./apps/${{ matrix.image.app }}/metadata.json ./metadata.rules.cue
 
-      - name: Build cache container
+      - name: Build container image for testing
         uses: docker/build-push-action@v3
         with:
           build-args: |-
             VERSION=${{ steps.vars.outputs.chan_upstream_version }}
             CHANNEL=${{ matrix.image.channel }}
-          labels: |-
-            ${{ steps.vars.outputs.chan_label_type }}.created="${{ steps.vars.outputs.chan_build_date }}"
-            ${{ steps.vars.outputs.chan_label_type }}.title="${{ matrix.image.app }} (${{ matrix.image.channel }})"
-            ${{ steps.vars.outputs.chan_label_type }}.version="${{ steps.vars.outputs.chan_upstream_version }}"
-            ${{ steps.vars.outputs.chan_label_type }}.authors="Devin Buhl <devin.kray@gmail.com>, Bernd Schorgers <me@bjw-s.dev>"
           context: .
+          platforms: linux/amd64 # load does not support muti-arch https://github.com/docker/buildx/issues/290
           file: ${{ steps.vars.outputs.chan_dockerfile }}
           load: true
           tags: |-
-            ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_cache }}
+            ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_testing }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -150,11 +161,10 @@ jobs:
           GOSS_OPTS: |-
             --retry-timeout 60s --sleep 2s --color --format documentation
         run: >
-          dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_cache }} ${{ steps.vars.outputs.chan_goss_args }}
+          dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_testing }} ${{ steps.vars.outputs.chan_goss_args }}
 
-      # Push image
-      - name: Build and push
-        if: ${{ inputs.pushImages == 'true' }}
+      # Build all image platforms
+      - name: Build all platforms
         id: release
         uses: docker/build-push-action@v3
         with:
@@ -169,22 +179,91 @@ jobs:
           context: .
           platforms: ${{ steps.vars.outputs.chan_platforms }}
           file: ${{ steps.vars.outputs.chan_dockerfile }}
-          push: true
+          push: ${{ inputs.pushImages == 'true' }}
           tags: |-
             ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_rolling }}
             ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Build successful
+        id: build-success
+        if: ${{ always() && steps.release.outcome == 'success' }}
+        run: |-
+          jq --arg c "${{ matrix.image.channel }}" '(.channels | .[] | select(.name == $c)).build_status.success = true' ./apps/${{ matrix.image.app }}/metadata.json | sponge ./apps/${{ matrix.image.app }}/metadata.json
+          jq --arg c "${{ matrix.image.channel }}" --arg d "${{ steps.vars.outputs.chan_build_date }}" '(.channels | .[] | select(.name == $c)).build_status.ts = $d' ./apps/${{ matrix.image.app }}/metadata.json | sponge ./apps/${{ matrix.image.app }}/metadata.json
+          echo "::set-output name=message::🎉 ${{ matrix.image.app }}-${{ matrix.image.channel }} (${{ steps.vars.outputs.chan_upstream_version }})"
+          echo "::set-output name=color::0x00FF00"
+
+      - name: Build failed
+        id: build-failed
+        if: ${{ always() && (steps.release.outcome == 'failure' || steps.dgoss.outcome == 'failure') }}
+        run: |-
+          jq --arg c "${{ matrix.image.channel }}" '(.channels | .[] | select(.name == $c)).build_status.success = false' ./apps/${{ matrix.image.app }}/metadata.json | sponge ./apps/${{ matrix.image.app }}/metadata.json
+          jq --arg c "${{ matrix.image.channel }}" --arg d "${{ steps.vars.outputs.chan_build_date }}" '(.channels | .[] | select(.name == $c)).build_status.ts = $d' ./apps/${{ matrix.image.app }}/metadata.json | sponge ./apps/${{ matrix.image.app }}/metadata.json
+          echo "::set-output name=message::💥 ${{ matrix.image.app }}-${{ matrix.image.channel }} (${{ steps.vars.outputs.chan_upstream_version }})"
+          echo "::set-output name=color::0xFF0000"
+
+      - name: Commit release status
+        id: commit-status
+        if: ${{ always() && inputs.updateMetadata == 'true' }}
+        continue-on-error: true
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: rosey-bot
+          committer_name: rosey-bot
+          author_email: 98030736+rosey-bot[bot]@users.noreply.github.com
+          committer_email: 98030736+rosey-bot[bot]@users.noreply.github.com
+          pull: --rebase --autostash
+          message: |-
+            ${{ steps.build-failed.outputs.message || steps.build-success.outputs.message }}
+
+            View run at: https://github.com/onedr0p/containers/actions/runs/${{ github.run_id }}
+          add: "*.json"
+
+      # In the matrix it is possible for things to complete
+      # just at the right time to throw a conflict, in that
+      # case it will try to pull and commit one more time
+      - name: Snoozing randomly (retry)
+        if: ${{ always()  && inputs.updateMetadata == 'true' && steps.commit-status.outcome == 'failure' }}
+        run: |-
+          perl -e 'sleep int(rand(30))'
+
+      - name: Commit statuses (retry)
+        if: ${{ always() && inputs.updateMetadata == 'true' && steps.commit-status.outcome == 'failure' }}
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: rosey-bot
+          committer_name: rosey-bot
+          author_email: 98030736+rosey-bot[bot]@users.noreply.github.com
+          committer_email: 98030736+rosey-bot[bot]@users.noreply.github.com
+          pull: --rebase --autostash
+          message: |-
+            ${{ steps.build-failed.outputs.message || steps.build-success.outputs.message }}
+
+            View run at: https://github.com/onedr0p/containers/actions/runs/${{ github.run_id }}
+          add: "*.json"
+
+      - name: Send Discord Webhook
+        uses: sarisia/actions-status-discord@v1
+        if: ${{ always() && inputs.sendNotification == 'true' }}
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          title: ${{ steps.build-failed.outputs.message || steps.build-success.outputs.message }}
+          # description: "Build and deploy to GitHub Pages"
+          # image: ${{ secrets.EMBED_IMAGE }}
+          color: ${{ steps.build-failed.outputs.color }}
+          username: GitHub Actions
+          # avatar_url: ${{ secrets.AVATAR_URL }}
+
   # Summarize matrix https://github.community/t/status-check-for-a-matrix-jobs/127354/7
   build_success:
+    name: Build matrix success
+    runs-on: ubuntu-22.04
     needs:
       - build-and-test
-    if: |
-      always()
-    name: Build matrix success
-    runs-on: ubuntu-latest
+    if: ${{ always() }}
     steps:
       - name: Check build matrix status
-        if: ${{ (inputs.imagesToBuild != '') && (needs.build-and-test.result != 'success') }}
+        if: ${{ (inputs.imagesToBuild != '' && inputs.imagesToBuild != '[]') && (needs.build-and-test.result != 'success') }}
         run: exit 1

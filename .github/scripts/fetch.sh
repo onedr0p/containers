@@ -4,10 +4,11 @@
 # Overview:
 # Builds a JSON string what images and their channels to process
 # Outputs:
-# {"changes":[
-#    {"app":"ubuntu","push"=true,"channels":["focal","jammy"]},
+# [
+#    {"app":"ubuntu", "channel": "focal"},
+#    {"app":"ubuntu", "channel": "jammy"},
 #    {"app"...
-# ]}
+# ]
 
 shopt -s lastpipe
 
@@ -30,17 +31,19 @@ find ./apps -name metadata.json | while read -r metadata; do
     fi
 done
 
-output="$(jo changes=[])"
+output="[]"
 if [[ "${#app_channel_array[@]}" -gt 0 ]]; then
     declare -a changes_array=()
     for app in "${!app_channel_array[@]}"; do
         #shellcheck disable=SC2086
         if [[ -n "${app}" ]]; then
-            changes_array+=("$(jo app="$app" push=true channels="$(jo -a ${app_channel_array[$app]})")")
+            for channel in ${app_channel_array[$app]}; do
+                changes_array+=("$(jo app="$app" channel="$channel")")
+            done
         fi
     done
     #shellcheck disable=SC2048,SC2086
-    output="$(jo changes="$(jo -a ${changes_array[*]})")"
+    output="$(jo -a ${changes_array[*]})"
 fi
 
 echo "::set-output name=changes::${output}"

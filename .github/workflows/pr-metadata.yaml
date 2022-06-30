@@ -19,14 +19,14 @@ on:
 jobs:
   pr-metadata:
     name: Collect PR metadata
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       isRenovatePR: ${{ startsWith(steps.branch-name.outputs.current_branch, 'renovate/') }}
       isFork: ${{ github.event.pull_request.head.repo.full_name != github.repository }}
     steps:
       - name: Get branch name
         id: branch-name
-        uses: tj-actions/branch-names@v5.2
+        uses: tj-actions/branch-names@v5.3
 
       - name: Save PR data to file
         env:
@@ -43,7 +43,7 @@ jobs:
 
   pr-changes:
     name: Collect PR changes
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       addedOrModified: ${{ steps.collect-changes.outputs.changesDetected }}
       addedOrModifiedFiles: ${{ steps.collect-changes.outputs.addedOrModifiedFiles }}

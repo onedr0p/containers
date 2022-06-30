@@ -10,9 +10,9 @@ env:
   TOKEN: ${{ secrets.TOKEN }}
 
 jobs:
-  setup:
-    name: Setup
-    runs-on: ubuntu-latest
+  generate-build-matrix:
+    name: Generate matrix for building images
+    runs-on: ubuntu-22.04
     outputs:
       matrix: ${{ steps.fetch.outputs.changes }}
     steps:
@@ -27,20 +27,13 @@ jobs:
         id: fetch
         run: ./.github/scripts/fetch.sh
 
-  dispatch:
-    name: Dispatch
-    runs-on: ubuntu-latest
+  images-build:
+    uses: onedr0p/containers/.github/workflows/images-build.yaml@main
+    if: needs.generate-build-matrix.outputs.matrix != '[]'
     needs:
-      - setup
-    if: ${{ needs.setup.outputs.matrix != '{"changes":[]}' }}
-    strategy:
-      matrix: ${{ fromJson(needs.setup.outputs.matrix) }}
-      fail-fast: false
-    steps:
-      - name: Repository Dispatch
-        uses: peter-evans/repository-dispatch@v2
-        with:
-          token: ${{ env.TOKEN }}
-          repository: onedr0p/containers
-          event-type: release-dispatch
-          client-payload: ${{ toJson(matrix.changes) }}
+      - generate-build-matrix
+    with:
+      imagesToBuild: "${{ needs.generate-build-matrix.outputs.matrix }}"
+      pushImages: "true"
+      updateMetadata: "true"
+      sendNotification: "true"
