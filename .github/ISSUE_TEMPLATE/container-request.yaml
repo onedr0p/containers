@@ -1,7 +1,7 @@
 ---
-name: New container
+name: Container Request
 description: Request a new application to be containerized
-labels: ["new-container"]
+labels: ["container-request"]
 
 body:
   - type: markdown
