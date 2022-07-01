@@ -5,8 +5,6 @@ ARG BUILDPLATFORM
 ARG VERSION
 ARG CHANNEL
 
-ENV XDG_CONFIG_HOME=/config
-
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # hadolint ignore=DL3008,DL3015,SC2039,SC2086
@@ -18,15 +16,12 @@ RUN \
         libssl1.1 \
     && \
     case "${TARGETPLATFORM}" in \
-        'linux/amd64') export ARCH='AMDx64' ;; \
-        'linux/arm64') export ARCH='ARM64' ;; \
+        'linux/amd64') export ARCH='x64' ;; \
+        'linux/arm64') export ARCH='arm64' ;; \
     esac \
     && \
-    curl -fsSL "https://github.com/Jackett/Jackett/releases/download/v${VERSION}/Jackett.Binaries.Linux${ARCH}.tar.gz" \
-        | tar ixzf - -C /app --strip-components 1 \
-    && \
-    rm -rf \
-        /app/JackettUpdater* \
+    curl -fsSL "https://github.com/Ombi-app/Ombi/releases/download/v${VERSION}/linux-${ARCH}.tar.gz" \
+        | tar xzf - -C /app \
     && \
     apt-get autoremove -y \
     && apt-get clean \
@@ -40,7 +35,7 @@ RUN \
     && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
 
 USER kah
-COPY ./apps/jackett/entrypoint.sh /entrypoint.sh
+COPY ./apps/ombi/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
-LABEL org.opencontainers.image.source="https://github.com/Jackett/Jackett"
+LABEL org.opencontainers.image.source="https://github.com/Ombi-app/Ombi"
