@@ -1,0 +1,20 @@
+---
+name: "Meta: Invalid Issue"
+
+on:
+  issues:
+    types: [labeled, unlabeled, reopened]
+
+jobs:
+  support:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: dessant/support-requests@v2
+        with:
+          github-token: ${{ secrets.TOKEN }}
+          support-label: invalid
+          issue-comment: >
+            :wave: @{issue-author}, please follow the template provided when new creating issues.
+          close-issue: true
+          lock-issue: true
+          issue-lock-reason: resolved
