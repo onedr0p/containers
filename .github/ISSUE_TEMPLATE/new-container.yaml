@@ -64,14 +64,12 @@ body:
       description: Mention anything to give further context to this container request
 
   - type: checkboxes
-    id: self-attempt
+    id: self-assign
     attributes:
-      label: Self attempt
-      description: Test
+      label: Assign to self
       options:
-        - label: I will attempt to create a PR myself
+        - label: I will create a PR to containerize this application
           required: false
-
 
   - type: checkboxes
     id: terms
