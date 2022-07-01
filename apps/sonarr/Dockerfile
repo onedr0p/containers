@@ -1,4 +1,4 @@
-FROM ghcr.io/onedr0p/alpine:rolling@sha256:d7f6c7fb07ad7b70a54ee1a1aef8f74b62f9a7959821ae103593224624f09c07
+FROM ghcr.io/onedr0p/ubuntu:rolling@sha256:a0c4a4b02ef13de4c7a83b21ce1ad0f73b43f0c913c1566a39d510360156a4fd as builder
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
@@ -12,30 +12,41 @@ ENV \
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-#hadolint ignore=DL3018
+# hadolint ignore=DL3008,DL3015,SC2086
 RUN \
-    apk add --no-cache ca-certificates sqlite-libs xmlstarlet \
-    && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/main tinyxml2 \
-    && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community libmediainfo \
-    && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing mono \
-    && cert-sync /etc/ssl/certs/ca-certificates.crt
-#hadolint ignore=DL3059
-RUN \
-    case "${TARGETPLATFORM}" in \
-        'linux/amd64') export ARCH='x64' ;; \
-        'linux/arm64') export ARCH='arm64' ;; \
-    esac \
+    apt-get -qq update \
+    && apt-get -qq install -y gnupg \
+    && \
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF \
+    && echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" | tee /etc/apt/sources.list.d/mono-official.list \
+    && apt-get -qq update \
+    && \
+    apt-get -qq install -y \
+        ca-certificates \
+        mono-complete \
+        ca-certificates-mono \
+        libmediainfo0v5 \
+        xmlstarlet \
     && \
     curl -fsSL "https://download.sonarr.tv/v3/${SONARR__BRANCH}/${VERSION}/Sonarr.${SONARR__BRANCH}.${VERSION}.linux.tar.gz" \
         | tar xzf - -C /app --strip-components=1 \
     && \
+    printf "UpdateMethod=docker\nBranch=%s\nPackageVersion=%s\nPackageAuthor=[Team k8s-at-home](https://github.com/k8s-at-home)" "${SONARR__BRANCH}" "${VERSION}" > /app/package_info \
+    && \
+    gpgconf --kill all \
+    && apt-get remove -y gnupg \
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+    && apt-get autoremove -y \
+    && apt-get clean \
+    && \
     rm -rf \
         /app/Sonarr.Update \
-    && \
-    printf "UpdateMethod=docker\nBranch=%s\nPackageVersion=%s\nPackageAuthor=[Team k8s-at-home](https://github.com/k8s-at-home)" "${SONARR__BRANCH}" "${VERSION}" > /app/package_info \
+        /tmp/* \
+        /var/lib/apt/lists/* \
+        /var/tmp/ \
     && chown -R root:root /app \
     && chmod -R 755 /app \
-    && rm -rf /tmp/*
+    && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
 
 USER kah
 
