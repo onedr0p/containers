@@ -2,11 +2,11 @@
 
 Welcome to our container images, if looking for a container start by [browsing the container packages](https://github.com/onedr0p?tab=packages&repo_name=containers).
 
-## Tags
+## Tag Immutability
 
 The containers built here do not use immutable tags, as least not in the more common way you have seen from [linuxserver.io](https://fleet.linuxserver.io/) or [Bitnami](https://bitnami.com/stacks/containers). 
 
-We take do take a similar approach but instead of appending a `-ls69` or `-r420` prefix to the tag we instead rely on pinning to the sha256 digest of the image, while this is not as pretty it is just as functional in making the images immutable.
+We take do take a similar approach but instead of appending a `-ls69` or `-r420` prefix to the tag we instead insist on pinning to the sha256 digest of the image, while this is not as pretty it is just as functional in making the images immutable.
 
 | Example Tag                                        | Immutable |
 |----------------------------------------------------|-----------|
