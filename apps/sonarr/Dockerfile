@@ -17,7 +17,8 @@ RUN \
     apk add --no-cache ca-certificates sqlite-libs xmlstarlet \
     && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/main tinyxml2 \
     && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community libmediainfo \
-    && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing mono
+    && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing mono \
+    && cert-sync /etc/ssl/certs/ca-certificates.crt
 #hadolint ignore=DL3059
 RUN \
     case "${TARGETPLATFORM}" in \
