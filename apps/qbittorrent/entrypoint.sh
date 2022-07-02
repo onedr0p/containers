@@ -26,7 +26,7 @@ if [[ ! -f "$qbtConfigFile" ]]; then
     cat << EOF > "$qbtConfigFile"
 [BitTorrent]
 Session\DefaultSavePath=$downloadsPath
-Session\Port=$BITTORRENT_PORT
+Session\Port=$QBITTORRENT__BT_PORT
 Session\TempPath=$downloadsPath/temp
 [Preferences]
 WebUI\HostHeaderValidation=false
@@ -48,5 +48,5 @@ fi
 exec \
     /app/qbittorrent-nox \
         ${PROFILE_ARGS} \
-        --webui-port="${WEBUI_PORT}" \
+        --webui-port="${QBITTORRENT__PORT}" \
         ${EXTRA_ARGS}

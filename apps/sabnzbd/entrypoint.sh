@@ -16,9 +16,9 @@ if [[ ! -f "/config/sabnzbd.ini" ]]; then
     sed -i -e "s/^nzb_key *=.*$/nzb_key = ${nzb_key}/g" /config/sabnzbd.ini
 fi
 
-if [[ -n ${HOST_WHITELIST_ENTRIES} ]]; then
+if [[ -n ${SABNZBD__HOST_WHITELIST_ENTRIES} ]]; then
     printf "Updating host_whitelist setting ... "
-    sed -i -e "s/^host_whitelist *=.*$/host_whitelist = ${HOSTNAME}, ${HOST_WHITELIST_ENTRIES}/g" /config/sabnzbd.ini
+    sed -i -e "s/^host_whitelist *=.*$/host_whitelist = ${HOSTNAME:-sabnzbd}, ${SABNZBD__HOST_WHITELIST_ENTRIES}/g" /config/sabnzbd.ini
 fi
 
 #shellcheck disable=SC2086
@@ -26,6 +26,6 @@ exec \
     /usr/bin/python3 \
         /app/SABnzbd.py \
         --browser 0 \
-        --server 0.0.0.0:${PORT} \
+        --server 0.0.0.0:${SABNZBD__PORT} \
         --config-file /config/sabnzbd.ini \
         ${EXTRA_ARGS}
