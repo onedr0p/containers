@@ -7,8 +7,11 @@ ARG CHANNEL
 ARG TARGETARCH
 ENV TARGETARCH=${TARGETARCH:-amd64}
 
-ENV RTORRENT__BT_PORT_MIN=50415 \
-    RTORRENT__BT_PORT_MAX=50415
+ENV RTORRENT__DEFAULT_CONFIG="true" \
+    RTORRENT__CONFIG_FILE="/config/rtorrent.rc" \
+    RTORRENT__SOCK_FILE="/rtorrent/rtorrent.sock" \
+    RTORRENT__BT_PORT_MIN="50415" \
+    RTORRENT__BT_PORT_MAX="50415"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -19,9 +22,9 @@ RUN curl -fsSL -o /app/rtorrent \
         "https://github.com/jesec/rtorrent/releases/download/v${VERSION}/rtorrent-linux-${TARGETARCH}" \
     && chown -R root:root /app \
     && chmod -R 755 /app \
-    && mkdir -p /rtorrent \
-    && chown -R kah:kah /rtorrent \
-    && chmod -R 775 /rtorrent \
+    && mkdir -p "$(dirname ${RTORRENT__SOCK_FILE})" \
+    && chown -R kah:kah "$(dirname ${RTORRENT__SOCK_FILE})" \
+    && chmod -R 775 "$(dirname ${RTORRENT__SOCK_FILE})" \
     && rm -rf /tmp/*
 
 USER kah

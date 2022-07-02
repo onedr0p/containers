@@ -10,8 +10,7 @@
 ## Instance layout (base paths)
 method.insert = cfg.basedir,  private|const|string, (cat,"/config/")
 method.insert = cfg.download, private|const|string, (cat,(cfg.basedir),"download/")
-method.insert = cfg.logs,     private|const|string, (cat,(cfg.basedir),"log/")
-method.insert = cfg.logfile,  private|const|string, (cat,(cfg.logs),"rtorrent-",(system.time),".log")
+method.insert = cfg.logfile,  private|const|string, (cat, "/dev/stdout")
 method.insert = cfg.session,  private|const|string, (cat,(cfg.basedir),"session/")
 method.insert = cfg.watch,    private|const|string, (cat,(cfg.basedir),"watch/")
 
@@ -19,22 +18,14 @@ method.insert = cfg.watch,    private|const|string, (cat,(cfg.basedir),"watch/")
 ## Create instance directories
 execute.throw = sh, -c, (cat,\
     "mkdir -p \"",(cfg.download),"\" ",\
-    "\"",(cfg.logs),"\" ",\
     "\"",(cfg.session),"\" ",\
     "\"",(cfg.watch),"/load\" ",\
     "\"",(cfg.watch),"/start\" ")
-
-
-## Listening port for incoming peer traffic (fixed; you can also randomize it)
-# network.port_range.set = 50415-50415
-# network.port_random.set = no
-
 
 ## Tracker-less torrent and UDP tracker support
 ## (conservative settings for 'private' trackers, change for 'public')
 dht.mode.set = disable
 protocol.pex.set = no
-
 trackers.use_udp.set = no
 
 
@@ -68,8 +59,6 @@ network.xmlrpc.size_limit.set = 4M
 ## Basic operational settings (no need to change these)
 session.path.set = (cat, (cfg.session))
 directory.default.set = (cat, (cfg.download))
-log.execute = (cat, (cfg.logs), "execute.log")
-#log.xmlrpc = (cat, (cfg.logs), "xmlrpc.log")
 execute.nothrow = sh, -c, (cat, "echo >",\
     (session.path), "rtorrent.pid", " ",(system.pid))
 
@@ -113,10 +102,8 @@ schedule2 = watch_start, 10, 10, ((load.start_verbose, (cat, (cfg.watch), "start
 
 ## Logging:
 ##   Levels = critical error warn notice info debug
-##   Groups = connection_* dht_* peer_* rpc_* storage_* thread_* tracker_* torrent_*
-print = (cat, "Logging to ", (cfg.logfile))
 log.open_file = "log", (cfg.logfile)
 log.add_output = "info", "log"
-#log.add_output = "tracker_debug", "log"
+log.add_output = "torrent_info", "log"
 
 ### END of rtorrent.rc ###

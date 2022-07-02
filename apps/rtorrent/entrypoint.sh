@@ -4,12 +4,18 @@
 test -f "/scripts/umask.sh" && source "/scripts/umask.sh"
 test -f "/scripts/vpn.sh" && source "/scripts/vpn.sh"
 
-if [[ ! -f "/config/rtorrent.rc" ]]; then
-    cp /app/rtorrent.rc /config/rtorrent.rc
+if [[ "${RTORRENT__DEFAULT_CONFIG}" == "true" && ! -f "${RTORRENT__CONFIG_FILE}" ]]; then
+    cp /app/rtorrent.rc "${RTORRENT__CONFIG_FILE}"
 fi
+
+oargs+=("try_import=${RTORRENT__CONFIG_FILE}")
+oargs+=("network.port_range.set=${RTORRENT__BT_PORT_MIN}-${RTORRENT__BT_PORT_MAX}")
+oargs+=("network.scgi.open_local=${RTORRENT__SOCK_FILE}")
+oargs+=("system.daemon.set=true")
 
 #shellcheck disable=SC2086
 exec \
     /app/rtorrent \
-        -n -o "try_import=/config/rtorrent.rc,network.port_range.set=${RTORRENT__BT_PORT_MIN:-50415}-${RTORRENT__BT_PORT_MAX:-50415},network.scgi.open_local=/rtorrent/rtorrent.sock,system.daemon.set=true" \
+        -n \
+        -o "$(printf "%s," "${oargs[@]}")" \
         ${EXTRA_ARGS}
