@@ -8,10 +8,21 @@ if [[ ! -f "/config/sabnzbd.ini" ]]; then
     printf "Copying over default configuration ... "
     mkdir -p /config/sabnzbd
     cp /app/sabnzbd.ini /config/sabnzbd.ini
-    
-    printf "Creating api keys ... "
-    api_key=$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 32 | head -n 1)
-    nzb_key=$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 32 | head -n 1)
+
+    if [[ -n "${SABNZBD__API_KEY}" ]]; then
+        api_key="${SABNZBD__API_KEY}"
+    else
+        printf "Creating api key ..."
+        api_key=$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 32 | head -n 1)
+    fi
+
+    if [[ -n "${SABNZBD__NZB_KEY}" ]]; then
+        nzb_key="${SABNZBD__NZB_KEY}"
+    else
+        printf "Creating nzb key ..."
+        nzb_key=$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 32 | head -n 1)
+    fi
+
     sed -i -e "s/^api_key *=.*$/api_key = ${api_key}/g" /config/sabnzbd.ini
     sed -i -e "s/^nzb_key *=.*$/nzb_key = ${nzb_key}/g" /config/sabnzbd.ini
 fi
