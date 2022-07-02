@@ -19,6 +19,9 @@ RUN curl -fsSL -o /app/rtorrent \
         "https://github.com/jesec/rtorrent/releases/download/v${VERSION}/rtorrent-linux-${TARGETARCH}" \
     && chown -R root:root /app \
     && chmod -R 755 /app \
+    && mkdir -p /rtorrent \
+    && chown -R kah:kah /rtorrent \
+    && chmod -R 775 /rtorrent \
     && rm -rf /tmp/*
 
 USER kah

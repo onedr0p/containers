@@ -11,5 +11,5 @@ fi
 #shellcheck disable=SC2086
 exec \
     /app/rtorrent \
-        -n -o "try_import=/config/rtorrent.rc,network.port_range.set=${RTORRENT__BT_PORT_MIN:-50415}-${RTORRENT__BT_PORT_MAX:-50415},network.scgi.open_local=/dev/shm/rtorrent.sock,system.daemon.set=true" \
+        -n -o "try_import=/config/rtorrent.rc,network.port_range.set=${RTORRENT__BT_PORT_MIN:-50415}-${RTORRENT__BT_PORT_MAX:-50415},network.scgi.open_local=/rtorrent/rtorrent.sock,system.daemon.set=true" \
         ${EXTRA_ARGS}

@@ -9,7 +9,7 @@ exec \
     /app/flood \
         --rundir /config \
         --allowedpath /config \
-        --allowedpath /dev/shm \
+        --allowedpath /rtorrent \
         --host 0.0.0.0 \
         --port ${FLOOD_OPTION_port:-3000}
         ${EXTRA_ARGS}
