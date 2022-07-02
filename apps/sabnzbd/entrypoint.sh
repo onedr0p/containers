@@ -26,6 +26,6 @@ exec \
     /usr/bin/python3 \
         /app/SABnzbd.py \
         --browser 0 \
-        --server 0.0.0.0:8080 \
+        --server 0.0.0.0:${PORT} \
         --config-file /config/sabnzbd.ini \
         ${EXTRA_ARGS}

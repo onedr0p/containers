@@ -5,6 +5,8 @@ ARG BUILDPLATFORM
 ARG VERSION
 ARG CHANNEL
 
+ENV PORT=8080
+
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN \
