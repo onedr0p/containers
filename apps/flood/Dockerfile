@@ -5,6 +5,8 @@ ARG BUILDPLATFORM
 ARG VERSION
 ARG CHANNEL
 
+ENV FLOOD_OPTION_port=3000
+
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 #hadolint ignore=DL3018

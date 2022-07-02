@@ -17,5 +17,5 @@ exec \
     /app/transmission-daemon \
         --foreground \
         --config-dir /config \
-        --port "${TRANSMISSION__RPC_PORT}" \
+        --port "${TRANSMISSION__RPC_PORT:-9091}" \
         ${EXTRA_ARGS}

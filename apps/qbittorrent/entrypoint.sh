@@ -48,5 +48,5 @@ fi
 exec \
     /app/qbittorrent-nox \
         ${PROFILE_ARGS} \
-        --webui-port="${QBITTORRENT__PORT}" \
+        --webui-port="${QBITTORRENT__PORT:-8080}" \
         ${EXTRA_ARGS}

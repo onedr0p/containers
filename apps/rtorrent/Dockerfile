@@ -7,6 +7,9 @@ ARG CHANNEL
 ARG TARGETARCH
 ENV TARGETARCH=${TARGETARCH:-amd64}
 
+ENV RTORRENT__BT_PORT_MIN=50415 \
+    RTORRENT__BT_PORT_MAX=50415
+
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 #hadolint ignore=DL3018
