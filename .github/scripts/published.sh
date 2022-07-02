@@ -3,7 +3,7 @@
 APP="${1}"
 CHANNEL="${2}"
 STABLE="${3}"
-TOKEN="${TOKEN:-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}"
+# TOKEN="${TOKEN}"
 
 if [[ -z "${STABLE}" || "${STABLE}" == false ]]; then
     APP="${APP}-${CHANNEL}"
