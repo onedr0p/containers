@@ -8,7 +8,7 @@ ARG CHANNEL
 ENV HOME=/config \
     XDG_CONFIG_HOME=/config \
     XDG_DATA_HOME=/config \
-    WEBUI_PORT=9091 \
+    TRANSMISSION__RPC_PORT=9091 \
     TRANSMISSION_WEB_HOME=/app/web
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
