@@ -13,11 +13,11 @@ oargs+=("network.port_range.set=${RTORRENT__BT_PORT}-${RTORRENT__BT_PORT}")
 oargs+=("network.scgi.open_local=/sock/rtorrent.sock")
 oargs+=("system.daemon.set=true")
 
-printf -v joined_oargs '%s,' "${oargs[@]}"
+printf -v joined_oargs "%s," "${oargs[@]}"
 
 #shellcheck disable=SC2086
 exec \
     /app/rtorrent \
         -n \
-        -o "$(printf "%s," "${joined_oargs%,}")" \
+        -o "${joined_oargs%,}" \
         ${EXTRA_ARGS}
