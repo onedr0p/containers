@@ -8,16 +8,16 @@ if [[ "${RTORRENT__DEFAULT_CONFIG}" == "true" && ! -f "${RTORRENT__CONFIG_FILE}"
     cp /app/rtorrent.rc "${RTORRENT__CONFIG_FILE}"
 fi
 
-oargs+=("try_import=${RTORRENT__CONFIG_FILE}")
-oargs+=("network.port_range.set=${RTORRENT__BT_PORT}-${RTORRENT__BT_PORT}")
-oargs+=("network.scgi.open_local=/sock/rtorrent.sock")
-oargs+=("system.daemon.set=true")
+args+=("try_import=${RTORRENT__CONFIG_FILE}")
+args+=("system.daemon.set=true")
+args+=("network.scgi.open_local=/sock/rtorrent.sock")
+args+=("network.port_range.set=${RTORRENT__BT_PORT}-${RTORRENT__BT_PORT}")
 
-printf -v joined_oargs "%s," "${oargs[@]}"
+printf -v joined_args "%s," "${args[@]}"
 
 #shellcheck disable=SC2086
 exec \
     /app/rtorrent \
         -n \
-        -o "\"${joined_oargs%,}\"" \
+        -o "${joined_args%,}" \
         ${EXTRA_ARGS}
