@@ -5,7 +5,13 @@ ARG BUILDPLATFORM
 ARG VERSION
 ARG CHANNEL
 
-ENV FLOOD_OPTION_port=3000
+ENV FLOOD_OPTION_rundir="/config" \
+    FLOOD_OPTION_host="0.0.0.0" \
+    FLOOD_OPTION_port="3000"
+    # For use with rtorrent
+    # FLOOD_OPTION_allowedpath="/config,/sock" \
+    # FLOOD_OPTION_rtsocket="/sock/rtorrent.sock" \
+    # FLOOD_OPTION_rtconfig="/rc/rtorrent.rc"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 

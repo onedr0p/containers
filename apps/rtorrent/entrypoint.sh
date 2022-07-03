@@ -9,8 +9,8 @@ if [[ "${RTORRENT__DEFAULT_CONFIG}" == "true" && ! -f "${RTORRENT__CONFIG_FILE}"
 fi
 
 oargs+=("try_import=${RTORRENT__CONFIG_FILE}")
-oargs+=("network.port_range.set=${RTORRENT__BT_PORT_MIN}-${RTORRENT__BT_PORT_MAX}")
-oargs+=("network.scgi.open_local=${RTORRENT__SOCK_FILE}")
+oargs+=("network.port_range.set=${RTORRENT__BT_PORT}-${RTORRENT__BT_PORT}")
+oargs+=("network.scgi.open_local=/sock/rtorrent.sock")
 oargs+=("system.daemon.set=true")
 
 #shellcheck disable=SC2086
