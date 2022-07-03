@@ -19,5 +19,5 @@ printf -v joined_oargs "%s," "${oargs[@]}"
 exec \
     /app/rtorrent \
         -n \
-        -o ""${joined_oargs%,}"" \
+        -o "\"${joined_oargs%,}\"" \
         ${EXTRA_ARGS}
