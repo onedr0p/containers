@@ -9,7 +9,7 @@ tasks:
 
   test:
     desc: |-
-      task APP=<app> CHANNEL=<channel> test
+      task APP=<app> CHANNEL=<channel> BASE=<true/false> test
     cmds:
       - task: download-goss
       - >-
@@ -21,7 +21,7 @@ tasks:
         --build-arg VERSION=$(bash ./.github/scripts/upstream.sh "{{.APP}}" "{{.CHANNEL}}")
         -f ./apps/{{.APP}}/Dockerfile .
       - >-
-        ./.goss/dgoss run {{.APP}}:{{.CHANNEL}}
+        ./.goss/dgoss run {{.APP}}:{{.CHANNEL}} {{if eq .BASE "true"}}tail -f /dev/null{{end}}
     env:
       CONTAINER_RUNTIME: docker
       GOSS_PATH: ./.goss/goss

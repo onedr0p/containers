@@ -60,13 +60,13 @@ For applications that need to have persistent configuration data the config volu
 
 Here's an example of how tags are created in the GitHub workflows, be careful with `metadata.json` as it does affect the outcome of how the tags will be created when the application is built.
 
-| Application    | Tag            | Stable  | Base    |
-|----------------|----------------|---------|---------|
-| ubuntu         | focal-rolling  | `true`  | `true`  |
-| ubuntu         | focal-19880312 | `true`  | `true`  |
-| alpine         | rolling        | `true`  | `true`  |
-| alpine         | 3.16.0         | `true`  | `true`  |
-| sonarr-develop | 3.0.8.1538     | `false` | `false` |
-| sonarr-develop | rolling        | `false` | `false` |
-| sonarr         | 3.0.8.1507     | `true`  | `false` |
-| sonarr         | rolling        | `true`  | `false` |
+| Application    | Tag            | Channel   | Stable  | Base    |
+|----------------|----------------|-----------|---------|---------|
+| ubuntu         | focal-rolling  | `focal`   | `true`  | `true`  |
+| ubuntu         | focal-19880312 | `focal`   | `true`  | `true`  |
+| alpine         | rolling        | `3.16`    | `true`  | `true`  |
+| alpine         | 3.16.0         | `3.16`    | `true`  | `true`  |
+| sonarr-develop | 3.0.8.1538     | `develop` | `false` | `false` |
+| sonarr-develop | rolling        | `develop` | `false` | `false` |
+| sonarr         | 3.0.8.1507     | `main`    | `true`  | `false` |
+| sonarr         | rolling        | `main`    | `true`  | `false` |
