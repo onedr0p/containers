@@ -8,6 +8,7 @@ on:
     paths:
       - "apps/**"
       - "!apps/**/metadata.json"
+      - "!apps/**/README.md"
 
 jobs:
   get-changes:

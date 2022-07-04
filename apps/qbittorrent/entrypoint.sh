@@ -6,7 +6,7 @@ test -f "/scripts/vpn.sh" && source "/scripts/vpn.sh"
 
 downloadsPath="/downloads"
 
-if [[ -z "$USE_PROFILE" ]]; then
+if [[ -z "$QBITTORRENT__USE_PROFILE" ]]; then
     configFolder="/config"
     export HOME="${configFolder}"
     export XDG_CONFIG_HOME="${configFolder}"

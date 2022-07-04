@@ -1,8 +1,16 @@
 # qbittorrent
 
-Non-root Docker image running [qBittorrent](https://www.qbittorrent.org/).
+## Custom environment configuration
 
-## Configuration
+This container support setting certain custom enviroment variables with the use of [drone/envsubst](https://github.com/drone/envsubst).
+
+| Name                     | Default |
+|--------------------------|---------|
+| QBITTORRENT__BT_PORT     | `50413` |
+| QBITTORRENT__PORT        | `8080`  |
+| QBITTORRENT__USE_PROFILE | `false` |
+
+## Dynamic custom environment configuration
 
 > **WARNING:** Environment variable configuration is an *advanced* feature. YMMV
 
