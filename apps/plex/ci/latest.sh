@@ -2,11 +2,12 @@
 channel=$1
 
 if [[ "${channel}" == "beta" ]]; then
-    rm -rf plex-media-server-plexpass
-    git clone --quiet --depth=1 https://aur.archlinux.org/plex-media-server-plexpass.git
-    version="$(grep -oP "(?<=pkgver=).*" ./plex-media-server-plexpass/PKGBUILD)"
-    version="${version}-$(grep -oP "(?<=_pkgsum=).*" ./plex-media-server-plexpass/PKGBUILD)"
-    rm -rf plex-media-server-plexpass
+    git clone --quiet --depth=1 https://aur.archlinux.org/plex-media-server-plexpass.git /tmp/plex-media-server-plexpass
+    pushd /tmp/plex-media-server-plexpass > /dev/null || exit
+    version="$(grep -oP "(?<=pkgver=).*" PKGBUILD)"
+    version="${version}-$(grep -oP "(?<=_pkgsum=).*" PKGBUILD)"
+    popd > /dev/null || exit
+    rm -rf /tmp/plex-media-server-plexpass
 fi
 
 if [[ "${channel}" == "stable" ]]; then
