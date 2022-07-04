@@ -31,7 +31,7 @@ RUN apk add --no-cache \
     pip3 install --no-cache-dir --upgrade pip \
     && git clone https://github.com/blacktwin/JBOPS.git . \
     && if [ -n "${VERSION}" ]; then \
-        NUMBER_COMMITS_TO_REVERT=$(( $(git rev-list --count --first-parent HEAD) - $(echo "${VERSION}" | cut -d "." -f2) )); \
+        NUMBER_COMMITS_TO_REVERT=$(( $(git rev-list --count --first-parent HEAD) - $(echo "${VERSION}" | cut -d "." -f3) )); \
         git checkout "master~${NUMBER_COMMITS_TO_REVERT}"; \
     fi \
     && \
