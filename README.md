@@ -1,14 +1,14 @@
-# Container Images
+# Container images
 
 Welcome to our container images, if looking for a container start by [browsing the container packages](https://github.com/onedr0p?tab=packages&repo_name=containers).
 
-## Mission Statement
+## Mission statement
 
 The goal of this project is to support [semantically versioned](https://semver.org/), [rootless](https://rootlesscontaine.rs/), and [multiple architecture](https://www.docker.com/blog/multi-arch-build-and-images-the-simple-way/) containers for various applications.
 
 We also try to adhere to a [KISS principle](https://en.wikipedia.org/wiki/KISS_principle), logging to stdout, [one process per container](https://testdriven.io/tips/59de3279-4a2d-4556-9cd0-b444249ed31e/), no [s6-overlay](https://github.com/just-containers/s6-overlay) and all images are built on top of [Alpine](https://hub.docker.com/_/alpine) or [Ubuntu](https://hub.docker.com/_/ubuntu).
 
-## Tag Immutability
+## Tag immutability
 
 The containers built here do not use immutable tags, as least not in the more common way you have seen from [linuxserver.io](https://fleet.linuxserver.io/) or [Bitnami](https://bitnami.com/stacks/containers). 
 
@@ -37,7 +37,19 @@ _If pinning an image to the sha256 digest, tools like [Renovate](https://github.
     task APP=sonarr CHANNEL=main test
     ```
 
-## Automated Tags
+## Passing arguments to a application
+
+1. First read the Kubernetes docs on [defining command and arguments for a Container](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
+2. To pass arguments to a application see the example below, be sure to include `entrypoint.sh` as the first arg and any application specific arguments after.
+   
+    ```
+    args:
+    - /entrypoint.sh
+    - --port
+    - "8080"
+    ```
+
+## Automated tags
 
 Here's an example of how tags are created in the GitHub workflows, be careful with `metadata.json` as it does affect the outcome of how the tags will be created when the application is built.
 
