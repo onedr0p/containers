@@ -23,20 +23,6 @@ We take do take a similar approach but instead of appending a `-ls69` or `-r420`
 
 _If pinning an image to the sha256 digest, tools like [Renovate](https://github.com/renovatebot/renovate) support updating the container on a digest or application version change._
 
-## Contributing
-
-1. Install [Docker](https://docs.docker.com/get-docker/), [Taskfile](https://taskfile.dev/) & [Cuelang](https://cuelang.org/)
-2. Get familiar with the structure of the repositroy
-3. Find a similar application in the apps directory
-4. Copy & Paste an application and update the directory name
-5. Update `metadata.json`, `Dockerfile`, `ci/latest.sh`, `ci/goss.yaml` and make it suit the application build
-6. Include any additional files if required
-7. Use Taskfile to build and test your image
-
-    ```ruby
-    task APP=sonarr CHANNEL=main test
-    ```
-
 ## Passing arguments to a application
 
 1. First read the Kubernetes docs on [defining command and arguments for a Container](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
@@ -63,3 +49,17 @@ sonarr-develop:rolling      # stable=false      # base=false
 sonarr:3.0.8.1507           # stable=true       # base=false
 sonarr:rolling              # stable=true       # base=false
 ```
+
+## Contributing
+
+1. Install [Docker](https://docs.docker.com/get-docker/), [Taskfile](https://taskfile.dev/) & [Cuelang](https://cuelang.org/)
+2. Get familiar with the structure of the repositroy
+3. Find a similar application in the apps directory
+4. Copy & Paste an application and update the directory name
+5. Update `metadata.json`, `Dockerfile`, `ci/latest.sh`, `ci/goss.yaml` and make it suit the application build
+6. Include any additional files if required
+7. Use Taskfile to build and test your image
+
+    ```ruby
+    task APP=sonarr CHANNEL=main test
+    ```
