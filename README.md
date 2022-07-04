@@ -42,11 +42,11 @@ _If pinning an image to the sha256 digest, tools like [Renovate](https://github.
 1. First read the Kubernetes docs on [defining command and arguments for a Container](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
 2. To pass arguments to a application see the example below, be sure to include `entrypoint.sh` as the first arg and any application specific arguments after.
    
-    ```
+    ```yaml
     args:
-    - /entrypoint.sh
-    - --port
-    - "8080"
+      - /entrypoint.sh
+      - --port
+      - "8080"
     ```
 
 ## Automated tags
