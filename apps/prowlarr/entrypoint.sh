@@ -52,4 +52,4 @@ exec \
     /app/Prowlarr \
         --nobrowser \
         --data=/config \
-        ${EXTRA_ARGS}
+        "$@"

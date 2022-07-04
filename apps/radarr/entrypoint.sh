@@ -52,4 +52,4 @@ exec \
     /app/Radarr \
         --nobrowser \
         --data=/config \
-        ${EXTRA_ARGS}
+        "$@"

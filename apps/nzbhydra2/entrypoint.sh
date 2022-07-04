@@ -10,4 +10,4 @@ exec \
         /app/nzbhydra2wrapperPy3.py \
             --nobrowser \
             --datafolder /config \
-            ${EXTRA_ARGS}
+            "$@"

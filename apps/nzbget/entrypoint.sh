@@ -21,4 +21,4 @@ exec \
         --server \
         --option "OutputMode=log" \
         --configfile /config/nzbget.conf \
-        ${EXTRA_ARGS}
+        "$@"

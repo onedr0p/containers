@@ -52,4 +52,4 @@ exec \
     /app/Whisparr \
         --nobrowser \
         --data=/config \
-        ${EXTRA_ARGS}
+        "$@"

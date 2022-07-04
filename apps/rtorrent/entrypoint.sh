@@ -23,4 +23,4 @@ exec \
     /app/rtorrent \
         -n \
         -o "${joined_args%,}" \
-        ${EXTRA_ARGS}
+        "$@"

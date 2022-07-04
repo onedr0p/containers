@@ -9,4 +9,4 @@ exec \
     /app/Ombi \
         --host http://0.0.0.0:5000 \
         --storage /config \
-        ${EXTRA_ARGS}
+        "$@"

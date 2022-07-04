@@ -20,4 +20,4 @@ exec \
 		-ffmpeg /app/emby/ffmpeg \
 		-ffprobe /app/emby/ffprobe \
 		-restartexitcode 3 \
-        ${EXTRA_ARGS}
+        "$@"

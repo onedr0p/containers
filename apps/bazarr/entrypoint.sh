@@ -10,4 +10,4 @@ exec \
         /app/bazarr.py \
             --no-update \
             --config /config \
-            ${EXTRA_ARGS}
+            "$@"

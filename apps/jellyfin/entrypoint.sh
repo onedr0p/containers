@@ -11,4 +11,4 @@ exec \
         --webdir="/usr/share/jellyfin/web" \
         --datadir="/config" \
         --cachedir="/config/cache" \
-        ${EXTRA_ARGS}
+        "$@"

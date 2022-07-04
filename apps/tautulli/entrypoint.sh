@@ -11,4 +11,4 @@ exec \
         --nolaunch \
         --config /config/config.ini \
         --datadir /config \
-        ${EXTRA_ARGS}
+        "$@"

@@ -52,4 +52,4 @@ exec \
     /app/Sonarr \
         --nobrowser \
         --data=/config \
-        ${EXTRA_ARGS}
+        "$@"

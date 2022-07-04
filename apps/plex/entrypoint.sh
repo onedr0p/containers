@@ -16,4 +16,4 @@ export PLEX_MEDIA_SERVER_INFO_PLATFORM_VERSION=$(uname -r)
 #shellcheck disable=SC2086
 exec \
     /usr/lib/plexmediaserver/Plex\ Media\ Server \
-    ${EXTRA_ARGS}
+    "$@"

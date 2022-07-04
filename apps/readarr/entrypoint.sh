@@ -52,4 +52,4 @@ exec \
     /app/Readarr \
         --nobrowser \
         --data=/config \
-        ${EXTRA_ARGS}
+        "$@"

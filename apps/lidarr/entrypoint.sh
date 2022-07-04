@@ -52,4 +52,4 @@ exec \
     /app/Lidarr \
         --nobrowser \
         --data=/config \
-        ${EXTRA_ARGS}
+        "$@"

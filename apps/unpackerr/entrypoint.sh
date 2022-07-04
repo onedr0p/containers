@@ -8,4 +8,4 @@ test -f "/scripts/vpn.sh" && source "/scripts/vpn.sh"
 exec \
     /app/unpackerr \
         -c /config/unpackerr.conf \
-        ${EXTRA_ARGS}
+        "$@"

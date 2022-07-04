@@ -8,4 +8,4 @@ test -f "/scripts/vpn.sh" && source "/scripts/vpn.sh"
 exec \
     /app/jackett \
         --NoUpdates \
-        ${EXTRA_ARGS}
+        "$@"
