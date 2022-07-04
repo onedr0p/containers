@@ -14,7 +14,7 @@ The containers built here do not use immutable tags, as least not in the more co
 
 We take do take a similar approach but instead of appending a `-ls69` or `-r420` prefix to the tag we instead insist on pinning to the sha256 digest of the image, while this is not as pretty it is just as functional in making the images immutable.
 
-| Example Tag                                        | Immutable |
+| Container                                          | Immutable |
 |----------------------------------------------------|-----------|
 | `ghcr.io/onedr0p/sonarr:rolling`                   | ❌         |
 | `ghcr.io/onedr0p/sonarr:3.0.8.1507`                | ❌         |
@@ -25,9 +25,12 @@ _If pinning an image to the sha256 digest, tools like [Renovate](https://github.
 
 ## Passing arguments to a application
 
+Some applications do not support defining configuration via environment variables and instead only allow certain config to be set in the command line arguments for the app. To circumvent this, for applications that have an `entrypoint.sh` read below.
+
 1. First read the Kubernetes docs on [defining command and arguments for a Container](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
-2. To pass arguments to a application see the example below, be sure to include `entrypoint.sh` as the first arg and any application specific arguments after.
-   
+2. Look up the documentation for the application and find a argument you would like to set.
+3. Set the argument in the `args` section, be sure to include `entrypoint.sh` as the first arg and any application specific arguments thereafter.
+
     ```yaml
     args:
       - /entrypoint.sh
@@ -35,20 +38,9 @@ _If pinning an image to the sha256 digest, tools like [Renovate](https://github.
       - "8080"
     ```
 
-## Automated tags
+## Configuration volume
 
-Here's an example of how tags are created in the GitHub workflows, be careful with `metadata.json` as it does affect the outcome of how the tags will be created when the application is built.
-
-```bash
-ubuntu:focal-rolling        # stable=true       # base=true
-ubuntu:focal-19880312       # stable=true       # base=true
-alpine:rolling              # stable=true       # base=true
-alpine:3.16.0               # stable=true       # base=true
-sonarr-develop:3.0.8.1538   # stable=false      # base=false
-sonarr-develop:rolling      # stable=false      # base=false
-sonarr:3.0.8.1507           # stable=true       # base=false
-sonarr:rolling              # stable=true       # base=false
-```
+For applications that need to have persistent configuration data the config volume is hardcoded to `/config` inside the container. This is not able to be changed in most cases.
 
 ## Contributing
 
@@ -63,3 +55,18 @@ sonarr:rolling              # stable=true       # base=false
     ```ruby
     task APP=sonarr CHANNEL=main test
     ```
+
+### Automated tags
+
+Here's an example of how tags are created in the GitHub workflows, be careful with `metadata.json` as it does affect the outcome of how the tags will be created when the application is built.
+
+| Application    | Tag            | Stable  | Base    |
+|----------------|----------------|---------|---------|
+| ubuntu         | focal-rolling  | `true`  | `true`  |
+| ubuntu         | focal-19880312 | `true`  | `true`  |
+| alpine         | rolling        | `true`  | `true`  |
+| alpine         | 3.16.0         | `true`  | `true`  |
+| sonarr-develop | 3.0.8.1538     | `false` | `false` |
+| sonarr-develop | rolling        | `false` | `false` |
+| sonarr         | 3.0.8.1507     | `true`  | `false` |
+| sonarr         | rolling        | `true`  | `false` |
