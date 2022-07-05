@@ -35,7 +35,7 @@ RUN apk add --no-cache \
         openssl-dev \
         python3-dev \
     && \
-    pip3 install --no-cache-dir --upgrade pip \
+    pip3 install --no-cache-dir --upgrade pip wheel \
     && \
     pip3 install --no-cache-dir --requirement /app/requirements.txt \
     && apk del --purge build-dependencies \
