@@ -5,6 +5,11 @@ ARG BUILDPLATFORM
 ARG VERSION
 ARG CHANNEL
 
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    CRYPTOGRAPHY_DONT_BUILD_RUST=1 \
+    PIP_NO_CACHE_DIR=1
+
 ENV TAUTULLI_DOCKER="True"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -25,13 +30,16 @@ RUN \
     && \
     apk add --no-cache --virtual .build-deps py3-pip make gcc g++ python3-dev \
     && \
-    pip3 install --no-cache-dir --upgrade pip \
+    pip install --upgrade pip \
     && \
-    pip3 install --no-cache-dir --upgrade \
+    pip install --upgrade \
         plexapi \
         pycryptodomex \
     && apk del --purge .build-deps \
-    && rm -rf /tmp/*
+    && rm -rf \
+        /root/.cache \
+        /root/.cargo \
+        /tmp/*
 
 USER kah
 COPY ./apps/tautulli/entrypoint.sh /entrypoint.sh

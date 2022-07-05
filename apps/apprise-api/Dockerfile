@@ -8,7 +8,9 @@ ARG CHANNEL
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     CRYPTOGRAPHY_DONT_BUILD_RUST=1 \
-    APPRISE_CONFIG_DIR=/config
+    PIP_NO_CACHE_DIR=1
+
+ENV APPRISE_CONFIG_DIR=/config
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -27,7 +29,7 @@ RUN apk add --no-cache \
         uwsgi \
         uwsgi-python \
     && \
-    apk add --no-cache --virtual=build-dependencies \
+    apk add --no-cache --virtual=.build-deps \
         cargo \
         g++ \
         gcc \
@@ -35,11 +37,14 @@ RUN apk add --no-cache \
         openssl-dev \
         python3-dev \
     && \
-    pip3 install --no-cache-dir --upgrade pip wheel \
+    pip install --upgrade pip wheel \
     && \
-    pip3 install --no-cache-dir --requirement /app/requirements.txt \
-    && apk del --purge build-dependencies \
-    && rm -rf /tmp/*
+    pip install --requirement /app/requirements.txt \
+    && apk del --purge .build-deps \
+    && rm -rf \
+        /root/.cache \
+        /root/.cargo \
+        /tmp/*
 
 USER kah
 COPY ./apps/apprise-api/entrypoint.sh /entrypoint.sh

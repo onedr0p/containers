@@ -5,6 +5,11 @@ ARG BUILDPLATFORM
 ARG VERSION
 ARG CHANNEL
 
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    CRYPTOGRAPHY_DONT_BUILD_RUST=1 \
+    PIP_NO_CACHE_DIR=1
+
 ENV SABNZBD__PORT=8080
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -27,7 +32,7 @@ RUN \
         py3-pip \ 
         par2cmdline \
     && \
-    apk add --no-cache --virtual=build-dependencies \
+    apk add --no-cache --virtual=.build-deps \
         build-base \
         libffi-dev \
         openssl-dev \
@@ -35,11 +40,14 @@ RUN \
         cargo \
         python3-dev \
     && \
-    pip3 install --no-cache-dir --upgrade pip \
+    pip install --upgrade pip \
     && \
-    pip3 install --no-cache-dir --upgrade --requirement /app/requirements.txt \
-    && apk del --purge build-dependencies \
-    && rm -rf /tmp/*
+    pip install --upgrade --requirement /app/requirements.txt \
+    && apk del --purge .build-deps \
+    && rm -rf \
+        /root/.cache \
+        /root/.cargo \
+        /tmp/*
 
 USER kah
 COPY ./apps/sabnzbd/sabnzbd.ini /app/sabnzbd.ini
