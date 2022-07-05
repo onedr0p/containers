@@ -70,3 +70,7 @@ Here's an example of how tags are created in the GitHub workflows, be careful wi
 | `sonarr`    | `develop` | `false` | `false` | `sonarr-develop:rolling`    |
 | `sonarr`    | `main`    | `true`  | `false` | `sonarr:3.0.8.1507`         |
 | `sonarr`    | `main`    | `true`  | `false` | `sonarr:rolling`            |
+
+## Credits
+
+A lot of inspiration and ideas are thanks to the hard work of [hotio.dev](https://hotio.dev/) and [linuxserver.io](https://www.linuxserver.io/) contributors.
