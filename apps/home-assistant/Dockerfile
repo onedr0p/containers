@@ -27,11 +27,9 @@ RUN \
         bluez-deprecated \
         bluez-libs \
         cups-libs \
-        curl \
         eudev-libs \
         ffmpeg \
         git \
-        iputils \
         libcap \
         libjpeg-turbo \
         libstdc++ \
@@ -76,7 +74,9 @@ RUN \
         python3-dev \
         unixodbc-dev \
     && \
-    pip install --upgrade \
+    pip install \
+        --upgrade \
+        --find-links "${WHEELS_LINKS}" \
         cython \
         pip \
         setuptools \
@@ -87,7 +87,11 @@ RUN \
     && \
     mkdir -p /pip-packages \
     && \
-    pip install --upgrade --target /pip-packages distlib \
+    pip install \
+        --upgrade \
+        --find-links "${WHEELS_LINKS}" \
+        --target /pip-packages \
+        distlib \
     && \
     NUMPY_VERSION=$(grep "numpy" requirements_all.txt) \
     && \
@@ -96,6 +100,8 @@ RUN \
         "${NUMPY_VERSION}" \
     && \
     pip install \
+        --no-index \
+        --only-binary=:all: \
         --find-links "${WHEELS_LINKS}" \
         --requirement "https://raw.githubusercontent.com/home-assistant/docker/${HOME_ASSISTANT_BASE}/requirements.txt" \
     && \
