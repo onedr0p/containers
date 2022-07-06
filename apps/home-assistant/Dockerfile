@@ -97,8 +97,7 @@ RUN \
     && \
     NUMPY_VERSION=$(grep "numpy" requirements_all.txt) \
     && \
-    pip install ${PIPFLAGS} \
-        "${NUMPY_VERSION}" \
+    pip install "${NUMPY_VERSION}" \
     && \
     case "${TARGETPLATFORM}" in \
         'linux/amd64') \
