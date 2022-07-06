@@ -13,6 +13,7 @@ ARG CHANNEL
 ENV \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
+    PIP_ROOT_USER_ACTION=ignore \
     PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PIPFLAGS="--use-deprecated=legacy-resolver --find-links https://wheels.home-assistant.io/musllinux/" \
