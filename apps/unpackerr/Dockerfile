@@ -1,5 +1,5 @@
 ARG VERSION
-FROM docker.io/library/golang:1.18-alpine3.16 as builder
+FROM public.ecr.aws/docker/library/golang:1.18.3-alpine3.16 as builder
 ARG VERSION
 ARG TARGETOS
 ARG TARGETARCH
