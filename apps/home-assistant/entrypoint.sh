@@ -10,5 +10,5 @@ fi
 
 exec \
     /usr/bin/hass \
-        -c /config \
+        --config /config \
         "$@"
