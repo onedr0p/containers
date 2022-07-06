@@ -1,8 +1,8 @@
 FROM ghcr.io/onedr0p/alpine:rolling@sha256:d7f6c7fb07ad7b70a54ee1a1aef8f74b62f9a7959821ae103593224624f09c07
 
-# https://github.com/linuxserver/docker-homeassistant/blob/main/Dockerfile
-# https://github.com/home-assistant/docker/blob/master/Dockerfile
-# https://github.com/home-assistant/docker-base/blob/master/alpine/Dockerfile
+# https://github.com/linuxserver/docker-homeassistant
+# https://github.com/home-assistant/docker
+# https://github.com/home-assistant/docker-base
 # https://github.com/pypa/pip/issues/10788
 
 ARG TARGETPLATFORM
@@ -14,6 +14,7 @@ ENV \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PIPFLAGS="--use-deprecated=legacy-resolver --find-links https://wheels.home-assistant.io/musllinux/" \
     PYTHONPATH="${PYTHONPATH}:/pip-packages" \
     HOME="/config"
@@ -35,27 +36,18 @@ RUN \
         eudev-libs \
         ffmpeg4 \
         git \
-        iperf3 \
         libcap \
-        libgpiod \
         libjpeg-turbo \
-        libpulse \
         libstdc++ \
         libxslt \
-        libzbar \
         mariadb-connector-c \
         mariadb-connector-c-dev \
-        nmap \
         openssh-client \
         openssl \
-        pianobar \
         postgresql-libs \
-        pulseaudio-alsa \
         py3-pip \
         python3 \
-        socat \
-        tiff \
-        xz
+        tiff
 
 #hadolint ignore=DL3018,DL3013
 RUN \
@@ -67,14 +59,11 @@ RUN \
         cups-dev \
         eudev-dev \
         ffmpeg4-dev \
-        g++ \
-        gcc \
         glib-dev \
         jpeg-dev \
         libffi-dev \
         libxml2-dev \
         libxslt-dev \
-        make \
         postgresql-dev \
         python3-dev \
         unixodbc-dev \
@@ -97,7 +86,8 @@ RUN \
     && \
     NUMPY_VERSION=$(grep "numpy" requirements_all.txt) \
     && \
-    pip install "${NUMPY_VERSION}" \
+    pip install ${PIPFLAGS} \
+        "${NUMPY_VERSION}" \
     && \
     case "${TARGETPLATFORM}" in \
         'linux/amd64') \
@@ -111,8 +101,6 @@ RUN \
     HOME_ASSISTANT_BASE=$(curl -fsSL "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/build.yaml" | grep "${ARCH}: " | cut -d ":" -f3) \
     && \
     pip install ${PIPFLAGS} \
-        --no-index \
-        --only-binary=:all: \
         --requirement "https://raw.githubusercontent.com/home-assistant/docker/${HOME_ASSISTANT_BASE}/requirements.txt" \
     && \
     pip install ${PIPFLAGS} \
@@ -125,11 +113,6 @@ RUN \
         pycups PySwitchbot \
     && \
     apk del --purge .build-deps \
-    && \
-    for cleanfiles in *.pyc *.pyo; \
-    do \
-        find /usr/lib/python3.* -iname "${cleanfiles}" -exec rm -f '{}' + \
-    ; done \
     && \
     rm -rf \
         /root/.cache \
