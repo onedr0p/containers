@@ -15,7 +15,6 @@ RUN chown -R root:root /usr/bin/rclone \
     && ln -s /usr/bin/rclone /app/rclone \
     && rm -rf /tmp/*
 
-USER kah
 CMD ["/app/rclone"]
 
 LABEL org.opencontainers.image.source="https://github.com/rclone/rclone"
