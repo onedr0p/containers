@@ -25,4 +25,6 @@ FROM ghcr.io/onedr0p/alpine:rolling@sha256:d7f6c7fb07ad7b70a54ee1a1aef8f74b62f9a
 COPY --from=builder /app/usr/* /app
 COPY --from=builder /app/lib/* /app
 
+ENTRYPOINT ["/app/bin/tvheadend"]
+
 LABEL org.opencontainers.image.source="https://github.com/tvheadend/tvheadend"
