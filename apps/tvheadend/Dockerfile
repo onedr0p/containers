@@ -14,6 +14,7 @@ RUN \
     && git clone --depth 1 https://github.com/tvheadend/tvheadend.git \
     && cd tvheadend \
     && JOBSARGS=$(nproc) ./Autobuild.sh \
+    && cd .. \
     && ar x tvheadend_0.0.0-unknown_amd64.deb \
     && tar -xvf data.tar.gz \
     && rm -rf control.tar.gz data.tar.gz debian-binary tvheadend \

@@ -1,14 +1,14 @@
 {
-  "app": "theme-park",
+  "app": "tvheadend",
   "base": false,
   "channels": [
     {
-      "name": "stable",
+      "name": "unstable",
       "platforms": [
         "linux/amd64",
         "linux/arm64"
       ],
-      "stable": true,
+      "stable": false,
       "tests": {
         "enabled": true,
         "type": "web"
