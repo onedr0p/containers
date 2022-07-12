@@ -13,7 +13,13 @@ ENV HOME="/config"
 COPY ./apps/tvheadend/patches/ /tmp/patches/
 
 RUN \
+    case "${TARGETPLATFORM}" in \
+        'linux/amd64') export EXTRA_PACKAGES='libva-dev' ;; \
+        'linux/arm64') export EXTRA_PACKAGES='' ;; \
+    esac \
+    && \
     apk add --no-cache \
+        ${EXTRA_PACKAGES} \
         autoconf \
         automake \
         bsd-compat-headers \
@@ -36,7 +42,6 @@ RUN \
         libgcrypt-dev \
         libhdhomerun-dev \
         libtool \
-        libva-dev \
         libvpx-dev \
         libxml2-dev \
         libxslt-dev \
@@ -114,7 +119,7 @@ RUN \
     && cp /usr/include/gnu-libiconv/iconv.h /usr/include/iconv.h
 
 RUN \
-    curl -s -L https://cpanmin.us | perl - App::cpanminus \
+    curl -fsSL https://cpanmin.us | perl - App::cpanminus \
     && cpanm --installdeps /tmp/patches
 
 WORKDIR /tmp/xmltv
@@ -134,6 +139,11 @@ RUN \
 
 WORKDIR /tmp/tvheadend
 RUN \
+    case "${TARGETPLATFORM}" in \
+        'linux/amd64') export EXTRA_OPTS='--enable-vaapi' ;; \
+        'linux/arm64') export EXTRA_OPTS='' ;; \
+    esac \
+    && \
     git clone https://github.com/tvheadend/tvheadend.git . \
     && \
     if [ -n "${VERSION}" ]; then \
@@ -168,7 +178,7 @@ RUN \
         --enable-libav \
         --enable-pngquant \
         --enable-trace \
-        --enable-vaapi \
+        ${EXTRA_OPTS} \
         --infodir=/usr/share/info \
         --localstatedir=/var \
         --mandir=/usr/share/man \
@@ -182,10 +192,8 @@ WORKDIR /tmp/argtable
 RUN \
     ARGTABLE_VER1="${ARGTABLE_VER//./-}" \
     && \
-    curl -s -o /tmp/argtable-src.tar.gz -L \
-        "https://sourceforge.net/projects/argtable/files/argtable/argtable-${ARGTABLE_VER}/argtable${ARGTABLE_VER1}.tar.gz" \
-    && \
-    tar xf /tmp/argtable-src.tar.gz -C /tmp/argtable --strip-components=1 \
+    curl -fsSL "https://sourceforge.net/projects/argtable/files/argtable/argtable-${ARGTABLE_VER}/argtable${ARGTABLE_VER1}.tar.gz" \
+        | tar xzf - -C . --strip-components=1 \
     && cp /tmp/patches/config.* . \
     && ./configure --prefix=/usr \
     && make -j $(nproc) \
@@ -211,7 +219,13 @@ ARG CHANNEL
 ENV HOME="/config"
 
 RUN \
+    case "${TARGETPLATFORM}" in \
+        'linux/amd64') export EXTRA_PACKAGES='libva libva-intel-driver intel-media-driver mesa-dri-ati' ;; \
+        'linux/arm64') export EXTRA_PACKAGES='' ;; \
+    esac \
+    && \
     apk add --no-cache \
+        ${EXTRA_PACKAGES} \
         bsd-compat-headers \
         bzip2 \
         curl \
@@ -224,10 +238,6 @@ RUN \
         libdvbcsa \
         libhdhomerun-libs \
         libssl1.1 \
-        libva \
-        libva-intel-driver \
-        intel-media-driver \
-        mesa-dri-ati \
         libvpx \
         libxml2 \
         libxslt \
@@ -294,10 +304,16 @@ RUN \
         wget \
         x264 \
         x265 \
-        zlib \
-    && mkdir -p /picons \
-    && curl -s -o /picons.tar.bz2 -L \
-        "https://lsio-ci.ams3.digitaloceanspaces.com/picons/picons.tar.bz2"
+        zlib
+
+RUN \
+    mkdir -p /app/picons \
+    && curl -fsSL "https://lsio-ci.ams3.digitaloceanspaces.com/picons/picons.tar.bz2" \
+        | tar xjf - -C /app/picons \
+    && \
+    chown -R root:root /app \
+    && chmod -R 755 /app \
+    && rm -rf /tmp/*
 
 COPY --from=builder /tmp/argtable-build/usr/ /usr/
 COPY --from=builder /tmp/comskip-build/usr/ /usr/
@@ -307,6 +323,7 @@ COPY --from=builder /usr/local/share/man/ /usr/local/share/man/
 COPY --from=builder /usr/local/share/perl5/ /usr/local/share/perl5/
 
 USER kah
+COPY ./apps/tvheadend/defaults /app/defaults
 COPY ./apps/tvheadend/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
