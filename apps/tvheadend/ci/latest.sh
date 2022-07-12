@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-version=$(curl -sX GET "https://api.github.com/repos/GilbN/theme.park/releases/latest" | jq --raw-output '. | .tag_name')
-version="${version#*v}"
-version="${version#*release-}"
-printf "%s" "${version}"
+git clone --quiet https://github.com/tvheadend/tvheadend.git /tmp/tvheadend
+pushd /tmp/tvheadend > /dev/null || exit
+version=$(git rev-list --count --first-parent HEAD)
+popd > /dev/null || exit
+rm -rf /tmp/tvheadend
+printf "4.3.%d" "${version}"
