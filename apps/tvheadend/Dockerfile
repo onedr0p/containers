@@ -1,5 +1,4 @@
 FROM ghcr.io/onedr0p/alpine:rolling@sha256:d7f6c7fb07ad7b70a54ee1a1aef8f74b62f9a7959821ae103593224624f09c07 as builder
-############## build stage ##############
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
