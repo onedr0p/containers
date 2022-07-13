@@ -8,7 +8,7 @@ ARG CHANNEL
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 #hadolint ignore=DL3018
-RUN apk add --no-cache ca-certificates pigz rclone~"${VERSION}" zstd
+RUN apk add --no-cache ca-certificates pigz rclone~"${VERSION}" tar zstd
 #hadolint ignore=DL3059
 RUN chown -R root:root /usr/bin/rclone \
     && chmod -R 755 /usr/bin/rclone \
