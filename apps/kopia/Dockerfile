@@ -24,11 +24,9 @@ RUN \
     esac \
     && \
     curl -fsSL "https://github.com/kopia/kopia/releases/download/v${VERSION}/kopia-${VERSION}-linux-${ARCH}.tar.gz" \
-        | tar xzf - -C /app --strip-components=1 \
-    && chown -R root:root /app \
-    && chmod -R 755 /app \
+        | tar xzf - -C /usr/bin/ --strip-components=1 \
     && rm -rf /tmp/*
 
-CMD ["/app/kopia"]
+CMD ["kopia"]
 
 LABEL org.opencontainers.image.source="https://github.com/kopia/kopia"
