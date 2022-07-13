@@ -26,4 +26,4 @@ USER kah
 COPY ./apps/stash/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
-LABEL org.opencontainers.image.source="https://github.com/stashapp/navidrome"
+LABEL org.opencontainers.image.source="https://github.com/stashapp/stash"
