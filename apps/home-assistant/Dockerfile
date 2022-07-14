@@ -35,7 +35,7 @@ RUN \
         ca-certificates \
         cups-libs \
         eudev-libs \
-        ffmpeg4 \
+        ffmpeg \
         git \
         libcap \
         libjpeg-turbo \
@@ -59,7 +59,7 @@ RUN \
         cmake \
         cups-dev \
         eudev-dev \
-        ffmpeg4-dev \
+        ffmpeg-dev \
         glib-dev \
         jpeg-dev \
         libffi-dev \
