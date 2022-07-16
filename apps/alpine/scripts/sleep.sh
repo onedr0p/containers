@@ -7,7 +7,7 @@ seconds="$(shuf -i "${min_seconds}"-"${max_seconds}" -n 1)"
 function logz {
     msg="${1}"
     level="${2:-info}"
-    printf "\e[1;32m%-6s\e[m\n" "timestamp=\"$(date --rfc-3339=seconds)\" level=\"${level}\" msg=\"${msg}\""
+    printf "\e[1;32m%-6s\e[m\n" "timestamp=\"$(date +"%Y-%m-%dT%H:%M:%S%z")\" level=\"${level}\" msg=\"${msg}\""
 }
 
 function datez {
