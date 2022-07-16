@@ -75,6 +75,7 @@ RUN \
         jq \
         locales \
         moreutils \
+        pv \
         tini \
         tzdata \
         vim-tiny \

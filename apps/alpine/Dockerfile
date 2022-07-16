@@ -45,6 +45,8 @@ RUN \
         curl               iputils       jo \
         # 564 kB           # 200 kB      # 316 kB
         jq                 moreutils     nano \
+        # 76 kB
+        pv \
         # 36 kB            # 3.3 MB      # 320 kB
         tini               tzdata        unzip \
         # 16 kB            # 480 kB
