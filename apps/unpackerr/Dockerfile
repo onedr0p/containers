@@ -26,7 +26,7 @@ RUN \
         ;; \
     esac
 
-FROM ghcr.io/onedr0p/alpine:rolling@sha256:d7f6c7fb07ad7b70a54ee1a1aef8f74b62f9a7959821ae103593224624f09c07
+FROM ghcr.io/onedr0p/alpine:rolling@sha256:96119a1af7e88b8833dc5dc9a777229b6c04a700441b13ae7423586635ca48b3
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
