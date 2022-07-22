@@ -28,8 +28,9 @@ if [[ -z "${database_exists}" ]]; then
     createuser "${POSTGRES_USER}"
     printf "\e[1;32m%-6s\e[m\n" "Create Database ${POSTGRES_DB} ..."
     createdb --owner "${POSTGRES_USER}" "${POSTGRES_DB}"
-    printf "\e[1;32m%-6s\e[m\n" "Set User Password ..."
-    psql --command "alter user ${POSTGRES_USER} with encrypted password '${POSTGRES_PASS}';"
-    printf "\e[1;32m%-6s\e[m\n" "Grant User Privileges ..."
-    psql --command "grant all privileges on database ${POSTGRES_DB} to ${POSTGRES_USER};"
 fi
+
+printf "\e[1;32m%-6s\e[m\n" "Update User Password ..."
+psql --command "alter user ${POSTGRES_USER} with encrypted password '${POSTGRES_PASS}';"
+printf "\e[1;32m%-6s\e[m\n" "Update User Privileges on Database ..."
+psql --command "grant all privileges on database ${POSTGRES_DB} to ${POSTGRES_USER};"
