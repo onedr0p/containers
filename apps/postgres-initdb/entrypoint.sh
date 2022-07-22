@@ -31,6 +31,6 @@ if [[ -z "${database_exists}" ]]; then
 fi
 
 printf "\e[1;32m%-6s\e[m\n" "Update User Password ..."
-psql --command "alter user ${POSTGRES_USER} with encrypted password '${POSTGRES_PASS}';"
+psql --command "alter user \"${POSTGRES_USER}\" with encrypted password '${POSTGRES_PASS}';"
 printf "\e[1;32m%-6s\e[m\n" "Update User Privileges on Database ..."
-psql --command "grant all privileges on database ${POSTGRES_DB} to ${POSTGRES_USER};"
+psql --command "grant all privileges on database \"${POSTGRES_DB}\" to \"${POSTGRES_USER}\";"
