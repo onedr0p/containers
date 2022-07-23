@@ -9,6 +9,11 @@ if [[ -z "${PGHOST}" || -z "${PGHOST}" || -z "${PGPASSWORD}" || -z "${POSTGRES_U
     exit 1
 fi
 
+until pg_isready; do
+    printf "\e[1;32m%-6s\e[m\n" "Waiting for Host '${PGHOST}' ..."
+    sleep 1
+done
+
 if [[ "${POSTGRES_USER_RESET}" == "true" && "${POSTGRES_RESET_CONFIRM}" == "YES" ]]; then
     printf "\e[1;32m%-6s\e[m\n" "Drop User ${POSTGRES_USER} ..."
     dropuser "${POSTGRES_USER}"
