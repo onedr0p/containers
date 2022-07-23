@@ -29,6 +29,8 @@ user_exists=$(\
 if [[ -z "${user_exists}" ]]; then
     printf "\e[1;32m%-6s\e[m\n" "Create User ${POSTGRES_USER} ..."
     createuser "${POSTGRES_USER}"
+    printf "\e[1;32m%-6s\e[m\n" "Update User Password ..."
+    psql --command "alter user \"${POSTGRES_USER}\" with encrypted password '${POSTGRES_PASS}';"
 fi
 
 for init_db in ${POSTGRES_DB}
@@ -50,8 +52,6 @@ do
         createdb --owner "${POSTGRES_USER}" "${init_db}"
     fi
 
-    printf "\e[1;32m%-6s\e[m\n" "Update User Password ..."
-    psql --command "alter user \"${POSTGRES_USER}\" with encrypted password '${POSTGRES_PASS}';"
     printf "\e[1;32m%-6s\e[m\n" "Update User Privileges on Database ..."
     psql --command "grant all privileges on database \"${init_db}\" to \"${POSTGRES_USER}\";"
 done
