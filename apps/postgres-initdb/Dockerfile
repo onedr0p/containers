@@ -7,6 +7,7 @@ ARG CHANNEL
 
 ENV POSTGRES_SUPER_USER="postgres" \
     POSTGRES_RESET="false" \
+    POSTGRES_USER_RESET="false" \
     POSTGRES_RESET_CONFIRM="NO"
 
 #hadolint ignore=DL3018
