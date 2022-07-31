@@ -15,7 +15,7 @@ This container support setting certain custom enviroment variables with the use 
 | SONARR__PORT                    | `8989`              |
 | SONARR__POSTGRES_HOST           |                     |
 | SONARR__POSTGRES_MAIN_DB        |                     |
-| SONARR__POSTGRES_MAIN_LOG       |                     |
+| SONARR__POSTGRES_LOG_DB         |                     |
 | SONARR__POSTGRES_PASSWORD       |                     |
 | SONARR__POSTGRES_PORT           | `5432`              |
 | SONARR__POSTGRES_USER           |                     |

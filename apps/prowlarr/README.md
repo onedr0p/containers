@@ -15,7 +15,7 @@ This container support setting certain custom enviroment variables with the use 
 | PROWLARR__PORT                    | `9696`              |
 | PROWLARR__POSTGRES_HOST           |                     |
 | PROWLARR__POSTGRES_MAIN_DB        |                     |
-| PROWLARR__POSTGRES_MAIN_LOG       |                     |
+| PROWLARR__POSTGRES_LOG_DB         |                     |
 | PROWLARR__POSTGRES_PASSWORD       |                     |
 | PROWLARR__POSTGRES_PORT           | `5432`              |
 | PROWLARR__POSTGRES_USER           |                     |

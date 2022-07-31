@@ -15,7 +15,7 @@ This container support setting certain custom enviroment variables with the use 
 | LIDARR__PORT                    | `8686`              |
 | LIDARR__POSTGRES_HOST           |                     |
 | LIDARR__POSTGRES_MAIN_DB        |                     |
-| LIDARR__POSTGRES_MAIN_LOG       |                     |
+| LIDARR__POSTGRES_LOG_DB         |                     |
 | LIDARR__POSTGRES_PASSWORD       |                     |
 | LIDARR__POSTGRES_PORT           | `5432`              |
 | LIDARR__POSTGRES_USER           |                     |

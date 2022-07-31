@@ -15,7 +15,8 @@ This container support setting certain custom enviroment variables with the use 
 | READARR__PORT                    | `8787`              |
 | READARR__POSTGRES_HOST           |                     |
 | READARR__POSTGRES_MAIN_DB        |                     |
-| READARR__POSTGRES_MAIN_LOG       |                     |
+| READARR__POSTGRES_LOG_DB         |                     |
+| READARR__POSTGRES_CACHE_DB       |                     |
 | READARR__POSTGRES_PASSWORD       |                     |
 | READARR__POSTGRES_PORT           | `5432`              |
 | READARR__POSTGRES_USER           |                     |
