@@ -208,7 +208,6 @@ RUN \
     && make -j $(nproc) \
     && make DESTDIR=/tmp/comskip-build install
 
-FROM docker.io/linuxserver/tvheadend:latest@sha256:b6ef430fe479ab5790012af550be9d4795fce094a3f79add3805e395640c1229 as tv_grab_bins
 FROM ghcr.io/onedr0p/alpine:rolling@sha256:ed7edf90c1e7df516ff37267841a17d0bedf7ef873f8f81bb3ddf06b3a464d06
 
 ARG TARGETPLATFORM
@@ -315,9 +314,7 @@ RUN \
     && chmod -R 755 /app \
     && rm -rf /tmp/*
 
-COPY --from=tv_grab_bins /usr/bin/tv_grab_file /usr/bin/tv_grab_file
-COPY --from=tv_grab_bins /usr/bin/tv_grab_url /usr/bin/tv_grab_url
-COPY --from=tv_grab_bins /usr/bin/tv_grab_wg /usr/bin/tv_grab_wg
+COPY ./apps/tvheadend/bin /usr/bin/
 COPY --from=builder /tmp/argtable-build/usr/ /usr/
 COPY --from=builder /tmp/comskip-build/usr/ /usr/
 COPY --from=builder /tmp/tvheadend-build/usr/ /usr/
