@@ -34,6 +34,7 @@ RUN \
         python3 \
         py3-pip \ 
         par2cmdline \
+        p7zip \
     && \
     apk add --no-cache --virtual=.build-deps \
         build-base \
