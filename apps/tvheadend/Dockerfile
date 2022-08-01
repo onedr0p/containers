@@ -208,7 +208,7 @@ RUN \
     && make -j $(nproc) \
     && make DESTDIR=/tmp/comskip-build install
 
-FROM docker.io/linuxserver/tvheadend:latest@sha256:5121302236dceafb38bce37c58f2ad1f39b5742cdc4d70f4dd19879768e4fd04 as tv_grab_bins
+FROM docker.io/linuxserver/tvheadend:latest@sha256:b6ef430fe479ab5790012af550be9d4795fce094a3f79add3805e395640c1229 as tv_grab_bins
 FROM ghcr.io/onedr0p/alpine:rolling@sha256:ed7edf90c1e7df516ff37267841a17d0bedf7ef873f8f81bb3ddf06b3a464d06
 
 ARG TARGETPLATFORM
