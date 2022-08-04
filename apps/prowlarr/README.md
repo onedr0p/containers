@@ -6,6 +6,7 @@ This container support setting certain custom enviroment variables with the use 
 
 | Name                              | Default             |
 |-----------------------------------|---------------------|
+| PROWLARR__ANALYTICS_ENABLED       | `False`             |
 | PROWLARR__API_KEY                 |                     |
 | PROWLARR__AUTHENTICATION_METHOD   | `None`              |
 | PROWLARR__AUTHENTICATION_REQUIRED |                     |

@@ -8,7 +8,8 @@ ARG CHANNEL
 ENV \
     PROWLARR__INSTANCE_NAME="Prowlarr" \
     PROWLARR__BRANCH="${CHANNEL}" \
-    PROWLARR__PORT="9696"
+    PROWLARR__PORT="9696" \
+    PROWLARR__ANALYTICS_ENABLED="False"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
