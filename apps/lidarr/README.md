@@ -6,6 +6,7 @@ This container support setting certain custom enviroment variables with the use 
 
 | Name                            | Default             |
 |---------------------------------|---------------------|
+| LIDARR__ANALYTICS_ENABLED       | `False`             |
 | LIDARR__API_KEY                 |                     |
 | LIDARR__AUTHENTICATION_METHOD   | `None`              |
 | LIDARR__AUTHENTICATION_REQUIRED |                     |

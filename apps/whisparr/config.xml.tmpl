@@ -11,7 +11,7 @@
   <PostgresPort>${WHISPARR__POSTGRES_PORT:-5432}</PostgresPort>
   <PostgresHost>${WHISPARR__POSTGRES_HOST}</PostgresHost>
   <PostgresMainDb>${WHISPARR__POSTGRES_MAIN_DB}</PostgresMainDb>
-  <PostgresLogDb>${WHISPARR__POSTGRES_MAIN_LOG}</PostgresLogDb>
+  <PostgresLogDb>${WHISPARR__POSTGRES_LOG_DB}</PostgresLogDb>
   <Port>${WHISPARR__PORT}</Port>
   <BindAddress>*</BindAddress>
   <LaunchBrowser>False</LaunchBrowser>
@@ -20,4 +20,5 @@
   <SslCertPath></SslCertPath>
   <SslCertPassword></SslCertPassword>
   <UpdateMechanism>BuiltIn</UpdateMechanism>
+  <AnalyticsEnabled>${WHISPARR__ANALYTICS_ENABLED}</AnalyticsEnabled>
 </Config>

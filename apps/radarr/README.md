@@ -6,6 +6,7 @@ This container support setting certain custom enviroment variables with the use 
 
 | Name                            | Default             |
 |---------------------------------|---------------------|
+| RADARR__ANALYTICS_ENABLED       | `False`             |
 | RADARR__API_KEY                 |                     |
 | RADARR__AUTHENTICATION_METHOD   | `None`              |
 | RADARR__AUTHENTICATION_REQUIRED |                     |

@@ -8,7 +8,8 @@ ARG CHANNEL
 ENV \
     RADARR__INSTANCE_NAME="Radarr" \
     RADARR__BRANCH="${CHANNEL}" \
-    RADARR__PORT="7878"
+    RADARR__PORT="7878" \
+    RADARR__ANALYTICS_ENABLED="False"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 

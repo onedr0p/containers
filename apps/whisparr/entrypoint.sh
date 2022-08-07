@@ -9,6 +9,7 @@ if [[ -f /config/config.xml ]]; then
     current_log_level="$(xmlstarlet sel -t -v "//LogLevel" -nl /config/config.xml)"
     current_url_base="$(xmlstarlet sel -t -v "//UrlBase" -nl /config/config.xml)"
     current_branch="$(xmlstarlet sel -t -v "//Branch" -nl /config/config.xml)"
+    current_analytics_enabled="$(xmlstarlet sel -t -v "//AnalyticsEnabled" -nl /config/config.xml)"
     current_api_key="$(xmlstarlet sel -t -v "//ApiKey" -nl /config/config.xml)"
     current_authentication_method="$(xmlstarlet sel -t -v "//AuthenticationMethod" -nl /config/config.xml)"
     current_authentication_required="$(xmlstarlet sel -t -v "//AuthenticationRequired" -nl /config/config.xml)"
@@ -28,6 +29,7 @@ envsubst < /app/config.xml.tmpl > /config/config.xml
 [[ -z "${WHISPARR__LOG_LEVEL}" && -n "${current_log_level}" ]] && xmlstarlet edit --inplace --update //LogLevel -v "${current_log_level}" /config/config.xml
 [[ -z "${WHISPARR__URL_BASE}" && -n "${current_url_base}" ]] && xmlstarlet edit --inplace --update //UrlBase -v "${current_url_base}" /config/config.xml
 [[ -z "${WHISPARR__BRANCH}" && -n "${current_branch}" ]] && xmlstarlet edit --inplace --update //Branch -v "${current_branch}" /config/config.xml
+[[ -z "${WHISPARR__ANALYTICS_ENABLED}" && -n "${current_analytics_enabled}" ]] && xmlstarlet edit --inplace --update //AnalyticsEnabled -v "${current_analytics_enabled}" /config/config.xml
 [[ -z "${WHISPARR__API_KEY}" && -n "${current_api_key}" ]] && xmlstarlet edit --inplace --update //ApiKey -v "${current_api_key}" /config/config.xml
 [[ -z "${WHISPARR__AUTHENTICATION_METHOD}" && -n "${current_authentication_method}" ]] && xmlstarlet edit --inplace --update //AuthenticationMethod -v "${current_authentication_method}" /config/config.xml
 [[ -z "${WHISPARR__AUTHENTICATION_REQUIRED}" && -n "${current_authentication_required}" ]] && xmlstarlet edit --inplace --update //AuthenticationRequired -v "${current_authentication_required}" /config/config.xml
@@ -37,7 +39,7 @@ envsubst < /app/config.xml.tmpl > /config/config.xml
 [[ -z "${WHISPARR__POSTGRES_PORT}" && -n "${current_postgres_port}" ]] && xmlstarlet edit --inplace --update //PostgresPort -v "${current_postgres_port}" /config/config.xml
 [[ -z "${WHISPARR__POSTGRES_HOST}" && -n "${current_postgres_host}" ]] && xmlstarlet edit --inplace --update //PostgresHost -v "${current_postgres_host}" /config/config.xml
 [[ -z "${WHISPARR__POSTGRES_MAIN_DB}" &&  -n "${current_postgres_main_db}" ]] && xmlstarlet edit --inplace --update //PostgresMainDb -v "${current_postgres_main_db}" /config/config.xml
-[[ -z "${WHISPARR__POSTGRES_MAIN_LOG}" && -n "${current_postgres_log_db}" ]] && xmlstarlet edit --inplace --update //PostgresLogDb -v "${current_postgres_log_db}" /config/config.xml
+[[ -z "${WHISPARR__POSTGRES_LOG_DB}" && -n "${current_postgres_log_db}" ]] && xmlstarlet edit --inplace --update //PostgresLogDb -v "${current_postgres_log_db}" /config/config.xml
 
 # BindAddress, LaunchBrowser, Port, EnableSsl, SslPort, SslCertPath, SslCertPassword, UpdateMechanism
 # have been omited because their configuration is not really needed in a container environment

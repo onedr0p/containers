@@ -6,6 +6,7 @@ This container support setting certain custom enviroment variables with the use 
 
 | Name                             | Default             |
 |----------------------------------|---------------------|
+| READARR__ANALYTICS_ENABLED       | `False`             |
 | READARR__API_KEY                 |                     |
 | READARR__AUTHENTICATION_METHOD   | `None`              |
 | READARR__AUTHENTICATION_REQUIRED |                     |

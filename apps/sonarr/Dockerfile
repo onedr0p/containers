@@ -8,7 +8,8 @@ ARG CHANNEL
 ENV \
     SONARR__INSTANCE_NAME="Sonarr" \
     SONARR__BRANCH="${CHANNEL}" \
-    SONARR__PORT="8989"
+    SONARR__PORT="8989" \
+    SONARR__ANALYTICS_ENABLED="False"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 

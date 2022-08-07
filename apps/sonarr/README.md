@@ -6,6 +6,7 @@ This container support setting certain custom enviroment variables with the use 
 
 | Name                            | Default             |
 |---------------------------------|---------------------|
+| SONARR__ANALYTICS_ENABLED       | `False`             |
 | SONARR__API_KEY                 |                     |
 | SONARR__AUTHENTICATION_METHOD   | `None`              |
 | SONARR__AUTHENTICATION_REQUIRED |                     |

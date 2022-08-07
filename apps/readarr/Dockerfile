@@ -8,7 +8,8 @@ ARG CHANNEL
 ENV \
     READARR__INSTANCE_NAME="Readarr" \
     READARR__BRANCH="${CHANNEL}" \
-    READARR__PORT="8787"
+    READARR__PORT="8787" \
+    READARR__ANALYTICS_ENABLED="False"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 

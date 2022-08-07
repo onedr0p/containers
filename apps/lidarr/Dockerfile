@@ -8,7 +8,8 @@ ARG CHANNEL
 ENV \
     LIDARR__INSTANCE_NAME="Lidarr" \
     LIDARR__BRANCH="${CHANNEL}" \
-    LIDARR__PORT="8686"
+    LIDARR__PORT="8686" \
+    LIDARR__ANALYTICS_ENABLED="False"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 

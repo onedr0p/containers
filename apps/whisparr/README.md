@@ -6,6 +6,7 @@ This container support setting certain custom enviroment variables with the use 
 
 | Name                              | Default             |
 |-----------------------------------|---------------------|
+| WHISPARR__ANALYTICS_ENABLED       | `False`             |
 | WHISPARR__API_KEY                 |                     |
 | WHISPARR__AUTHENTICATION_METHOD   | `None`              |
 | WHISPARR__AUTHENTICATION_REQUIRED |                     |
@@ -15,7 +16,7 @@ This container support setting certain custom enviroment variables with the use 
 | WHISPARR__PORT                    | `6969`              |
 | WHISPARR__POSTGRES_HOST           |                     |
 | WHISPARR__POSTGRES_MAIN_DB        |                     |
-| WHISPARR__POSTGRES_MAIN_LOG       |                     |
+| WHISPARR__POSTGRES_LOG_DB         |                     |
 | WHISPARR__POSTGRES_PASSWORD       |                     |
 | WHISPARR__POSTGRES_PORT           | `5432`              |
 | WHISPARR__POSTGRES_USER           |                     |

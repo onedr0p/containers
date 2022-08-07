@@ -8,7 +8,8 @@ ARG CHANNEL
 ENV \
     WHISPARR__INSTANCE_NAME="Whisparr" \
     WHISPARR__BRANCH="${CHANNEL}" \
-    WHISPARR__PORT="6969"
+    WHISPARR__PORT="6969" \
+    WHISPARR__ANALYTICS_ENABLED="False"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
