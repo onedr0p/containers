@@ -4,9 +4,9 @@ name: "Release: Schedule"
 on:
   workflow_dispatch:
   schedule:
-    # NOTE: The longest build for an app is roughly 1h20m (home-assistant/arm64)
+    # NOTE: The longest build for an app is ~1h30m
     # Keep this to run every 2 or more hours to prevent gremlins from spawning
-    - cron: "0 */2 * * *"
+    - cron: "0 */3 * * *"
 
 env:
   TOKEN: ${{ secrets.TOKEN }}
