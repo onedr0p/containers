@@ -10,6 +10,10 @@ RUN \
     && \
     git clone --branch "v${VERSION}" --depth 1 https://github.com/szabodanika/microbin.git . \
     && \
+    find ./ -type f -exec sed -i 's|\./pasta_data/public|/config/public|gi' {} \; \
+    && \
+    find ./ -type f -exec sed -i 's|pasta_data/database.json|/config/database.json|gi' {} \; \
+    && \
     cargo build --release
 
 FROM ghcr.io/onedr0p/alpine:rolling@sha256:ed7edf90c1e7df516ff37267841a17d0bedf7ef873f8f81bb3ddf06b3a464d06
