@@ -2,7 +2,6 @@
 
 #shellcheck disable=SC1091
 test -f "/scripts/umask.sh" && source "/scripts/umask.sh"
-test -f "/scripts/vpn.sh" && source "/scripts/vpn.sh"
 
 export LD_LIBRARY_PATH="/app/emby"
 export FONTCONFIG_PATH="/app/emby/etc/fonts"
