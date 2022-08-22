@@ -28,7 +28,7 @@ user_exists=$(\
 
 if [[ -z "${user_exists}" ]]; then
     printf "\e[1;32m%-6s\e[m\n" "Create User ${POSTGRES_USER} ..."
-    createuser "${POSTGRES_USER}"
+    createuser ${POSTGRES_USER_FLAGS} "${POSTGRES_USER}"
     printf "\e[1;32m%-6s\e[m\n" "Update User Password ..."
     psql --command "alter user \"${POSTGRES_USER}\" with encrypted password '${POSTGRES_PASS}';"
 fi
