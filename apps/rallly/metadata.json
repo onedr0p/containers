@@ -1,0 +1,28 @@
+{
+  "app": "rallly",
+  "base": false,
+  "channels": [
+    {
+      "name": "production",
+      "platforms": [
+        "linux/amd64"
+      ],
+      "stable": true,
+      "tests": {
+        "enabled": true,
+        "type": "web"
+      }
+    },
+    {
+      "name": "main",
+      "platforms": [
+        "linux/amd64"
+      ],
+      "stable": false,
+      "tests": {
+        "enabled": true,
+        "type": "web"
+      }
+    }
+  ]
+}
