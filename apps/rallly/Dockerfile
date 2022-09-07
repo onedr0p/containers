@@ -18,13 +18,7 @@ RUN apk add --no-cache yarn
 ENV \
     DATABASE_URL=postgres://postgres:postgres@localhost:5432/db \
     NEXT_PUBLIC_BASE_URL=http://localhost:3000 \
-    SECRET_PASSWORD=minimum-32-characters \
-    SUPPORT_EMAIL=foo@yourdomain.com \
-    SMTP_HOST=your-smtp-server \
-    SMTP_PORT=587 \
-    SMTP_SECURE=false \
-    SMTP_USER=your-smtp-user \
-    SMTP_PWD=your-smtp-password
+    SECRET_PASSWORD=minimum-32-characters
 USER kah
 CMD sh -c "yarn start"
 LABEL org.opencontainers.image.source="https://github.com/lukevella/rallly"
