@@ -11,7 +11,10 @@ ENV QBITTORRENT__PORT=8080 \
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 #hadolint ignore=DL3018
-RUN apk add --no-cache ca-certificates geoip p7zip python3 qbittorrent-nox~"${VERSION}"
+RUN \
+    apk add --no-cache ca-certificates geoip p7zip python3 \
+    && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/main libcrypto3 \
+    && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community qbittorrent-nox~"${VERSION}"
 #hadolint ignore=DL3059
 RUN chown -R root:root /usr/bin/qbittorrent-nox \
     && chmod -R 755 /usr/bin/qbittorrent-nox \
