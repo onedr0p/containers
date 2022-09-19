@@ -1,11 +1,9 @@
 FROM public.ecr.aws/docker/library/node:16-alpine as builder
 
-ARG CHANNEL
-
 WORKDIR /tmp/rallly
 #hadolint ignore=DL3018
 RUN apk add --no-cache git \
-    && git clone --branch ${CHANNEL} --depth 1 https://github.com/lukevella/rallly . \
+    && git clone --depth 1 https://github.com/lukevella/rallly . \
     && cp sample.env .env \
     && cp prisma/schema.prisma . \
     && yarn --frozen-lockfile \

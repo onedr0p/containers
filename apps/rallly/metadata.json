@@ -3,7 +3,7 @@
   "base": false,
   "channels": [
     {
-      "name": "production",
+      "name": "stable",
       "platforms": [
         "linux/amd64"
       ],
