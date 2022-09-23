@@ -13,7 +13,8 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 #hadolint ignore=DL3018
 RUN \
     apk add --no-cache ca-certificates geoip p7zip python3 \
-    && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/main libcrypto3 \
+    && echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
+    && echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
     && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community qbittorrent-nox~"${VERSION}"
 #hadolint ignore=DL3059
 RUN chown -R root:root /usr/bin/qbittorrent-nox \
