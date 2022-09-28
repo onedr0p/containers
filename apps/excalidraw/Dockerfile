@@ -1,5 +1,5 @@
 ARG VERSION
-FROM public.ecr.aws/docker/library/node:16-alpine as builder
+FROM public.ecr.aws/docker/library/node:18-alpine as builder
 ARG VERSION
 WORKDIR /tmp/excalidraw
 #hadolint ignore=DL3018
