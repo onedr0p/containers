@@ -46,4 +46,4 @@ if [[ "${#app_channel_array[@]}" -gt 0 ]]; then
     output="$(jo -a ${changes_array[*]})"
 fi
 
-echo "::set-output name=changes::${output}"
+echo "changes=${output}" >> $GITHUB_OUTPUT

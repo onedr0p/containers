@@ -43,7 +43,7 @@ jobs:
           done
 
           output="$(jo -a ${images_array[*]})"
-          echo "::set-output name=images::${output}"
+          echo "images=${output}" >> $GITHUB_OUTPUT
 
   images-build:
     uses: onedr0p/containers/.github/workflows/action-image-build.yaml@main
@@ -54,5 +54,4 @@ jobs:
       imagesToBuild: "${{ needs.generate-build-matrix.outputs.matrix }}"
       pushImages: "${{ github.event.inputs.push }}"
       updateMetadata: "${{ github.event.inputs.push }}"
-      sendNotification: "${{ github.event.inputs.push }}"
     secrets: inherit

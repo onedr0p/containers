@@ -56,7 +56,7 @@ jobs:
           done < <(echo '${{ needs.get-changes.outputs.addedOrModifiedImages }}' | jq --raw-output -c '.[]')
 
           output="$(jo -a ${changes_array[*]})"
-          echo "::set-output name=changes::${output}"
+          echo "changes=${output}" >> $GITHUB_OUTPUT
 
   images-build:
     uses: onedr0p/containers/.github/workflows/action-image-build.yaml@main
@@ -66,5 +66,4 @@ jobs:
       imagesToBuild: "${{ needs.generate-build-matrix.outputs.matrix }}"
       pushImages: "true"
       updateMetadata: "true"
-      sendNotification: "true"
     secrets: inherit
