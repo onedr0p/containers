@@ -15,7 +15,7 @@ RUN \
     apk add --no-cache ca-certificates geoip p7zip python3 \
     && echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
     && echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
-    && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community qbittorrent-nox~"${VERSION}"
+    && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community qt6-qtbase-sqlite qbittorrent-nox~"${VERSION}"
 #hadolint ignore=DL3059
 RUN chown -R root:root /usr/bin/qbittorrent-nox \
     && chmod -R 755 /usr/bin/qbittorrent-nox \
