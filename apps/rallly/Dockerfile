@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 public.ecr.aws/docker/library/node:18-alpine as builder
+FROM --platform=linux/amd64 public.ecr.aws/docker/library/node:19-alpine as builder
 
 WORKDIR /tmp/rallly
 #hadolint ignore=DL3018
