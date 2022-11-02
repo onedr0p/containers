@@ -7,7 +7,7 @@ process:
 # https://github.com/aelsabbahy/goss/blob/master/docs/manual.md#port
 port:
   # https://github.com/aelsabbahy/goss/issues/149
-  tcp:5076:
+  tcp6:5076:
     listening: true
 
 # https://github.com/aelsabbahy/goss/blob/master/docs/manual.md#http

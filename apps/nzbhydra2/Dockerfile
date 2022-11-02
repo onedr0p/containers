@@ -4,8 +4,6 @@ ARG TARGETPLATFORM
 ARG VERSION
 ARG CHANNEL
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
 #hadolint ignore=DL3018
 RUN apk add --no-cache ca-certificates openjdk11-jre-headless python3
 #hadolint ignore=DL3018,DL3059
