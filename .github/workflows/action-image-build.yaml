@@ -99,7 +99,8 @@ jobs:
               echo "chan_tag_version=${{ matrix.image.app }}-${{ matrix.image.channel }}:${chan_upstream_version}" >> $GITHUB_OUTPUT
           fi
 
-      - name: Setup tools
+      # https://github.com/redhat-actions/buildah-build/issues/100
+      - name: Setup Tools
         shell: bash
         run: |
           echo 'deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/unstable/xUbuntu_22.04/ /' | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:unstable.list

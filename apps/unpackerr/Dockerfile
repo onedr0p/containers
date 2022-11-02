@@ -1,6 +1,5 @@
 ARG VERSION
-FROM --platform=$TARGETPLATFORM public.ecr.aws/docker/library/golang:1.19.2-alpine3.16 as builder
-ARG VERSION
+FROM public.ecr.aws/docker/library/golang:1.19.3-alpine3.16 as builder
 ARG TARGETOS
 ARG TARGETARCH
 ARG TARGETVARIANT=""
@@ -26,10 +25,9 @@ RUN \
         ;; \
     esac
 
-FROM --platform=$TARGETPLATFORM ghcr.io/onedr0p/alpine:rolling@sha256:35dc08b62b80ebd6d9a4e46ff1c4503967d4c0ca6a9ca8b04e299102b0319bf6
+FROM ghcr.io/onedr0p/alpine:rolling@sha256:e25d6744afe5ae0c03e0b2af4977c2d7df3f56b713c3b5cdffb8c372edf626be
 
 ARG TARGETPLATFORM
-ARG BUILDPLATFORM
 ARG VERSION
 ARG CHANNEL
 
