@@ -64,7 +64,7 @@ jobs:
           chan_stable=$(jq --raw-output '.stable' <<< "${chan_config}")
 
           chan_platforms=$(jq --raw-output '.platforms | join(",")' <<< "${chan_config}") && \
-              echo "name=chan_platforms=${chan_platforms}" >> $GITHUB_OUTPUT
+              echo "chan_platforms=${chan_platforms}" >> $GITHUB_OUTPUT
           chan_tests_enabled=$(jq --raw-output '.tests.enabled' <<< "${chan_config}") && \
               echo "chan_tests_enabled=${chan_tests_enabled}" >> $GITHUB_OUTPUT
           chan_tests_type=$(jq --raw-output '.tests.type' <<< "${chan_config}") && \
