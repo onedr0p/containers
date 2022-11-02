@@ -1,5 +1,6 @@
 ARG VERSION
 FROM public.ecr.aws/docker/library/golang:1.19.3-alpine3.16 as builder
+ARG VERSION
 ARG TARGETOS
 ARG TARGETARCH
 ARG TARGETVARIANT=""
@@ -32,8 +33,6 @@ ARG VERSION
 ARG CHANNEL
 
 COPY --from=builder /go/bin/unpackerr /app/unpackerr
-
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 #hadolint ignore=DL3018
 RUN apk add --no-cache ca-certificates
