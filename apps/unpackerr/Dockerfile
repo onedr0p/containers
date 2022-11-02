@@ -1,5 +1,5 @@
 ARG VERSION
-FROM --platform=$TARGETPLATFORM public.ecr.aws/docker/library/golang:1.19.2-alpine3.16 as builder
+FROM public.ecr.aws/docker/library/golang:1.19.2-alpine3.16 as builder
 ARG VERSION
 ARG TARGETOS
 ARG TARGETARCH
