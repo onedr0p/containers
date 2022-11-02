@@ -99,9 +99,11 @@ jobs:
               echo "chan_tag_version=${{ matrix.image.app }}-${{ matrix.image.channel }}:${chan_upstream_version}" >> $GITHUB_OUTPUT
           fi
 
-      - name: Setup cli tools
+      - name: Setup tools
         shell: bash
-        run: sudo apt-get install moreutils jo
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y buildah moreutils jo qemu-user-static
 
       - name: Setup CUE
         uses: cue-lang/setup-cue@v1.0.0-alpha.2
@@ -112,12 +114,6 @@ jobs:
         with:
           # renovate: datasource=github-releases depName=aelsabbahy/goss
           version: v0.3.20
-
-      - name: Setup QEMU
-        shell: bash
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y qemu-user-static
 
       - name: Validate image metadata
         shell: bash
