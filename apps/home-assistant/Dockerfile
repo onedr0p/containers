@@ -21,8 +21,6 @@ ENV \
 
 ENV HOME_ASSISTANT__HACS_INSTALL="false"
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
 WORKDIR /tmp
 
 #hadolint ignore=DL3018

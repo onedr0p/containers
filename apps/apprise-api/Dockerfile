@@ -14,8 +14,6 @@ ENV \
 
 ENV APPRISE_CONFIG_DIR=/config
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
 RUN \
     curl -fsSL "https://github.com/caronc/apprise-api/archive/refs/tags/v${VERSION}.tar.gz" \
         | tar xzf - -C /app --strip-components=1 \

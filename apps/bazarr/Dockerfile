@@ -12,9 +12,6 @@ ENV \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     CRYPTOGRAPHY_DONT_BUILD_RUST=1
 
-
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
 RUN \
     curl -fsSL -o /tmp/app.zip "https://github.com/morpheus65535/bazarr/releases/download/v${VERSION}/bazarr.zip" \
     && unzip -q /tmp/app.zip -d /app \

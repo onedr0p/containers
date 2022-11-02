@@ -11,8 +11,6 @@ ENV RTORRENT__DEFAULT_CONFIG="true" \
     RTORRENT__SOCKET="/sock/rtorrent.sock" \
     RTORRENT__BT_PORT="50415"
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
 #hadolint ignore=DL3018
 RUN apk add --no-cache ca-certificates
 #hadolint ignore=DL3059

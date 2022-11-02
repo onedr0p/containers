@@ -12,8 +12,6 @@ ENV FLOOD_OPTION_rundir="/config" \
     # FLOOD_OPTION_rtsocket="/sock/rtorrent.sock"
     # FLOOD_OPTION_rtconfig="/rc/rtorrent.rc"
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
 #hadolint ignore=DL3018
 RUN \
     apk add --no-cache ca-certificates \

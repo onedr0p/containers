@@ -14,8 +14,6 @@ ENV \
 
 ENV SABNZBD__PORT=8080
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
 RUN \
     curl -fsSL "https://github.com/sabnzbd/sabnzbd/releases/download/${VERSION}/SABnzbd-${VERSION}-src.tar.gz" \
         | tar xzf - -C /app --strip-components=1 \

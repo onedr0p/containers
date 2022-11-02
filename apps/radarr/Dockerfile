@@ -10,8 +10,6 @@ ENV \
     RADARR__PORT="7878" \
     RADARR__ANALYTICS_ENABLED="False"
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
 #hadolint ignore=DL3018
 RUN apk add --no-cache ca-certificates icu-libs libintl sqlite-libs xmlstarlet
 #hadolint ignore=DL3059

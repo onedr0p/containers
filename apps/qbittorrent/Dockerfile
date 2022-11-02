@@ -7,8 +7,6 @@ ARG CHANNEL
 ENV QBITTORRENT__PORT=8080 \
     QBITTORRENT__BT_PORT=50413
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
 #hadolint ignore=DL3018
 RUN \
     apk add --no-cache ca-certificates geoip p7zip python3 \

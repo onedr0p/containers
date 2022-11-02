@@ -14,8 +14,6 @@ ENV \
 
 ENV TAUTULLI_DOCKER="True"
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
 RUN \
     curl -fsSL "https://github.com/Tautulli/Tautulli/archive/v${VERSION}.tar.gz" | tar xzf - -C /app --strip-components 1 \
     && \

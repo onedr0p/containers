@@ -7,8 +7,6 @@ ARG CHANNEL
 USER root
 ENV NGINX_WEB_ROOT "/usr/share/nginx/html"
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
 #hadolint ignore=DL3008
 RUN \
     apt-get update -qq \

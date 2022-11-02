@@ -6,8 +6,6 @@ ARG CHANNEL
 
 WORKDIR /tmp
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
 # hadolint ignore=DL3008,DL3015,SC2039,SC2086
 RUN \
     case "${TARGETPLATFORM}" in \
@@ -47,8 +45,6 @@ ARG CHANNEL
 ENV NVIDIA_DRIVER_CAPABILITIES="compute,video,utility"
 
 USER root
-
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # hadolint ignore=DL3008,DL3015,SC2039,SC2086
 RUN \

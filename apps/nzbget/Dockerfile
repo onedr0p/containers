@@ -12,8 +12,6 @@ ENV \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     CRYPTOGRAPHY_DONT_BUILD_RUST=1
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
 RUN \
     curl -fsSL -o /tmp/nzbget.run \
       "https://github.com/nzbget/nzbget/releases/download/v${VERSION}/nzbget-${VERSION}-bin-linux.run" \

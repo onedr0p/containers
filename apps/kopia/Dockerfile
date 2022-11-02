@@ -11,8 +11,6 @@ ENV KOPIA_CONFIG_PATH="/config/repository.config" \
     KOPIA_CHECK_FOR_UPDATES="false" \
     RCLONE_CONFIG="/config/rclone/rclone.conf"
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
 #hadolint ignore=DL3018
 RUN apk add --no-cache ca-certificates rclone
 #hadolint ignore=DL3059

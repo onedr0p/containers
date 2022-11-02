@@ -15,8 +15,6 @@ ENV \
 ENV PLEXAPI_CONFIG_PATH="/config/config.ini" \
     JBOPS__SCRIPT_PATH="fun/plexapi_haiku.py"
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
 #hadolint ignore=DL3018,DL3013
 RUN apk add --no-cache \
         ca-certificates \

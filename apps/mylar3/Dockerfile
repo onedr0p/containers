@@ -14,8 +14,6 @@ ENV \
 
 ENV MYLAR3__PORT=8090
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
 RUN \
     curl -fsSL "https://github.com/mylar3/mylar3/archive/refs/tags/v${VERSION}.tar.gz" \
         | tar xzf - -C /app --strip-components=1 \
