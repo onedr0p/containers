@@ -12,6 +12,11 @@
 
 shopt -s lastpipe
 
+FETCH_ALL=false
+if [ "$1" == "all" ]; then
+    FETCH_ALL=true
+fi
+
 declare -A app_channel_array
 find ./apps -name metadata.json | while read -r metadata; do
     declare -a __channels=()
@@ -19,11 +24,15 @@ find ./apps -name metadata.json | while read -r metadata; do
     jq --raw-output -c '.channels | .[]' "${metadata}" | while read -r channels; do
         channel="$(jq --raw-output '.name' <<< "${channels}")"
         stable="$(jq --raw-output '.stable' <<< "${channels}")"
-        published_version=$(./.github/scripts/published.sh "${app}" "${channel}" "${stable}")
-        upstream_version=$(./.github/scripts/upstream.sh "${app}" "${channel}" "${stable}")
-        if [[ "${published_version}" != "${upstream_version}" ]]; then
-            echo "${app}$([[ ! ${stable} == false ]] || echo "-${channel}"):${published_version:-<NOTFOUND>} -> ${upstream_version}"
+        if [ ${FETCH_ALL} == true ]; then
             __channels+=("${channel}")
+        else
+            published_version=$(./.github/scripts/published.sh "${app}" "${channel}" "${stable}")
+            upstream_version=$(./.github/scripts/upstream.sh "${app}" "${channel}" "${stable}")
+            if [[ "${published_version}" != "${upstream_version}" ]]; then
+                echo "${app}$([[ ! ${stable} == false ]] || echo "-${channel}"):${published_version:-<NOTFOUND>} -> ${upstream_version}"
+                __channels+=("${channel}")
+            fi
         fi
     done
     if [[ "${#__channels[@]}" -gt 0 ]]; then
