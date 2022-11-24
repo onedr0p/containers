@@ -3,4 +3,5 @@ channel=$1
 version=$(curl -s "https://registry.hub.docker.com/v2/repositories/library/alpine/tags?ordering=name&name=$channel" | jq --raw-output --arg s "$channel" '.results[] | select(.name | contains($s)) | .name'  | head -n1)
 version="${version#*v}"
 version="${version#*release-}"
+version="${version%_*}"
 printf "%s" "${version}"
