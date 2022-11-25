@@ -1,4 +1,4 @@
-FROM ghcr.io/onedr0p/ubuntu:rolling@sha256:f9cf9b85251fded70455eed9aa09e91fa7e73890f7c59abcc889256e51531ce1
+FROM ghcr.io/onedr0p/ubuntu-jammy:jammy-20221101@sha256:1e416d5608d929fd1279f2e653d0997e8297fa3a04002595fc0785759bb08d63
 
 ARG TARGETPLATFORM
 ARG VERSION
@@ -16,7 +16,7 @@ RUN \
     case "${TARGETPLATFORM}" in \
         'linux/amd64') \
             curl -sL https://repositories.intel.com/graphics/intel-graphics.key | apt-key add - \
-            && echo 'deb [arch=amd64] https://repositories.intel.com/graphics/ubuntu focal main' > /etc/apt/sources.list.d/intel.list \
+            && echo 'deb [arch=amd64] https://repositories.intel.com/graphics/ubuntu jammy main' > /etc/apt/sources.list.d/intel.list \
             && \
             export ARCH='amd64'; \
             export EXTRA_INSTALL_ARG='intel-media-va-driver-non-free nvidia-opencl-icd-340 i965-va-driver mesa-va-drivers'; \
@@ -38,7 +38,7 @@ RUN \
         ${EXTRA_INSTALL_ARG} \
     && \
     curl -fsSL "https://repo.jellyfin.org/ubuntu/jellyfin_team.gpg.key" | apt-key add - && \
-    echo "deb [arch=${ARCH}] https://repo.jellyfin.org/ubuntu focal main" | tee /etc/apt/sources.list.d/jellyfin.list && \
+    echo "deb [arch=${ARCH}] https://repo.jellyfin.org/ubuntu jammy main" | tee /etc/apt/sources.list.d/jellyfin.list && \
     apt-get -qq update && \
     apt-get -qq install -y \
         jellyfin-server="${VERSION}*" \
