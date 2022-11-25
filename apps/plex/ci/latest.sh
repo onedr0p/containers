@@ -14,6 +14,10 @@ if [[ "${channel}" == "stable" ]]; then
     version=$(curl -sX GET 'https://plex.tv/api/downloads/5.json' | jq -r '.computer.Linux.version')
 fi
 
+if [[ "${channel}" == "amd" ]]; then
+    version=$(curl -sX GET 'https://plex.tv/api/downloads/5.json' | jq -r '.computer.Linux.version')
+fi
+
 version="${version#*v}"
 version="${version#*release-}"
 printf "%s" "${version}"
