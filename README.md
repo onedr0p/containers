@@ -46,7 +46,7 @@ For applications that need to have persistent configuration data the config volu
 
 ## Contributing
 
-1. Install [Docker](https://docs.docker.com/get-docker/), [Taskfile](https://taskfile.dev/) & [Cuelang](https://cuelang.org/)
+1. Install [Podman](https://podman.io/), [Podman Desktop for MacOS](https://podman-desktop.io/) [Taskfile](https://taskfile.dev/) & [Cuelang](https://cuelang.org/)
 2. Get familiar with the structure of the repositroy
 3. Find a similar application in the apps directory
 4. Copy & Paste an application and update the directory name
