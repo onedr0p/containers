@@ -9,8 +9,9 @@ ENV GO111MODULE=on \
     CGO_ENABLED=0 \
     GOOS=${TARGETOS} \
     GOARCH=${TARGETARCH} \
-    GOARM=${TARGETVARIANT}
-
+    GOARM=${TARGETVARIANT} \
+    GOPATH=/go
+ENV PATH $GOPATH/bin:$PATH
 #hadolint ignore=DL3018
 RUN \
     apk add --no-cache go upx \

@@ -10,7 +10,8 @@ ENV GO111MODULE=on \
     GOOS=${TARGETOS} \
     GOARCH=${TARGETARCH} \
     GOARM=${TARGETVARIANT}
-
+ENV GOPATH /go
+ENV PATH $GOPATH/bin:$PATH
 #hadolint ignore=DL3018
 RUN \
     apk add --no-cache go upx \
@@ -18,7 +19,6 @@ RUN \
     && upx --ultra-brute /go/bin/envsubst
 
 FROM public.ecr.aws/docker/library/ubuntu:${VERSION}
-
 ARG VERSION
 ARG CHANNEL
 ARG TARGETPLATFORM
