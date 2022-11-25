@@ -10,21 +10,12 @@ ENV GO111MODULE=on \
     GOOS=${TARGETOS} \
     GOARCH=${TARGETARCH} \
     GOARM=${TARGETVARIANT}
-# TODO: upx for arm64 not in alpine 3.16
+
 #hadolint ignore=DL3018,DL3059
 RUN \
-    case "${TARGETPLATFORM}" in \
-        'linux/amd64') \
-            # 1.9M -> 1.0M
-            apk add --no-cache git upx \
-            && go install -ldflags="-s -w" "github.com/davidnewhall/unpackerr@v${VERSION}" \
-            && upx --ultra-brute /go/bin/unpackerr \
-        ;; \
-        'linux/arm64') \
-            apk add --no-cache git \
-            && go install -ldflags="-s -w" "github.com/davidnewhall/unpackerr@v${VERSION}" \
-        ;; \
-    esac
+    apk add --no-cache git upx \
+    && go install -ldflags="-s -w" "github.com/davidnewhall/unpackerr@v${VERSION}" \
+    && upx --ultra-brute /go/bin/unpackerr
 
 FROM ghcr.io/onedr0p/alpine:rolling@sha256:4aa9bf81b468ac839a40e4916e0705f087472bcc5eb027d008b81543ab984f8c
 

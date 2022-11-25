@@ -1,5 +1,6 @@
 ARG VERSION
 FROM public.ecr.aws/docker/library/golang:1.19-alpine as builder
+ARG VERSION
 ARG TARGETOS
 ARG TARGETARCH
 ARG TARGETVARIANT=""
@@ -11,16 +12,10 @@ ENV GO111MODULE=on \
     GOARM=${TARGETVARIANT}
 RUN go install -ldflags="-s -w" github.com/drone/envsubst/cmd/envsubst@latest
 
-# TODO: upx for arm64 not in alpine 3.16
 #hadolint ignore=DL3018,DL3059
 RUN \
-    case "${TARGETPLATFORM}" in \
-        'linux/amd64') \
-            # 1.9M -> 1.0M
-            apk add --no-cache upx \
-            && upx --ultra-brute /go/bin/envsubst \
-        ;; \
-    esac
+    apk add --no-cache upx \
+    && upx --ultra-brute /go/bin/envsubst
 
 FROM public.ecr.aws/docker/library/alpine:${VERSION}
 ARG VERSION
