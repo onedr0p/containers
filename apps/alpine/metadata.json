@@ -3,24 +3,12 @@
   "base": true,
   "channels": [
     {
-      "name": "3.16",
-      "platforms": [
-        "linux/amd64",
-        "linux/arm64"
-      ],
-      "stable": true,
-      "tests": {
-        "enabled": true,
-        "type": "cli"
-      }
-    },
-    {
       "name": "3.17",
       "platforms": [
         "linux/amd64",
         "linux/arm64"
       ],
-      "stable": false,
+      "stable": true,
       "tests": {
         "enabled": true,
         "type": "cli"
