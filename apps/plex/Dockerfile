@@ -30,14 +30,6 @@ RUN \
         uuid-runtime \
         xmlstarlet \
         ca-certificates \
-        gnupg \
-    && \
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 9386B48A1A693C5C \
-    && . /etc/lsb-release \
-    && echo "deb https://repo.radeon.com/amdgpu/latest/ubuntu $DISTRIB_CODENAME main" >> /etc/apt/sources.list \
-    && apt-get -qq update \
-    && apt-get -qq install -y mesa-amdgpu-va-drivers \
-    && apt-get -qq remove -y gnupg \ 
     && \
     curl -fsSL -o /tmp/plex.deb \
         "${PLEX_DOWNLOAD}/${VERSION}/debian/plexmediaserver_${VERSION}_${ARCH}.deb" \
