@@ -1,5 +1,5 @@
 ARG VERSION
-FROM public.ecr.aws/docker/library/golang:1.19-alpine as builder
+FROM public.ecr.aws/docker/library/alpine:3.17.0 as builder
 ARG VERSION
 ARG TARGETOS
 ARG TARGETARCH
@@ -9,15 +9,16 @@ ENV GO111MODULE=on \
     CGO_ENABLED=0 \
     GOOS=${TARGETOS} \
     GOARCH=${TARGETARCH} \
-    GOARM=${TARGETVARIANT}
-
-#hadolint ignore=DL3018,DL3059
+    GOARM=${TARGETVARIANT} \
+    GOPATH=/go
+ENV PATH $GOPATH/bin:$PATH
+#hadolint ignore=DL3018
 RUN \
-    apk add --no-cache git upx \
+    apk add --no-cache git go upx \
     && go install -ldflags="-s -w" "github.com/davidnewhall/unpackerr@v${VERSION}" \
     && upx --ultra-brute /go/bin/unpackerr
 
-FROM ghcr.io/onedr0p/alpine:rolling@sha256:4aa9bf81b468ac839a40e4916e0705f087472bcc5eb027d008b81543ab984f8c
+FROM ghcr.io/onedr0p/alpine:rolling@sha256:8e1eb13c3ca5c038f3bf22a5fe9e354867f97f98a78027c44b7c76fce81fa61d
 
 ARG TARGETPLATFORM
 ARG VERSION
