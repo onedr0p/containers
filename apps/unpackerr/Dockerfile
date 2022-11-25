@@ -17,7 +17,7 @@ RUN \
     && go install -ldflags="-s -w" "github.com/davidnewhall/unpackerr@v${VERSION}" \
     && upx --ultra-brute /go/bin/unpackerr
 
-FROM ghcr.io/onedr0p/alpine:rolling@sha256:4aa9bf81b468ac839a40e4916e0705f087472bcc5eb027d008b81543ab984f8c
+FROM ghcr.io/onedr0p/alpine:rolling@sha256:8e1eb13c3ca5c038f3bf22a5fe9e354867f97f98a78027c44b7c76fce81fa61d
 
 ARG TARGETPLATFORM
 ARG VERSION
