@@ -1,5 +1,5 @@
 ARG VERSION
-FROM public.ecr.aws/docker/library/golang:1.19-alpine as builder
+FROM public.ecr.aws/docker/library/alpine:3.17.0 as builder
 ARG VERSION
 ARG TARGETOS
 ARG TARGETARCH
@@ -10,11 +10,11 @@ ENV GO111MODULE=on \
     GOOS=${TARGETOS} \
     GOARCH=${TARGETARCH} \
     GOARM=${TARGETVARIANT}
-RUN go install -ldflags="-s -w" github.com/drone/envsubst/cmd/envsubst@latest
 
-#hadolint ignore=DL3018,DL3059
+#hadolint ignore=DL3018
 RUN \
-    apk add --no-cache upx \
+    apk add --no-cache go upx \
+    && go install -ldflags="-s -w" github.com/drone/envsubst/cmd/envsubst@latest \
     && upx --ultra-brute /go/bin/envsubst
 
 FROM public.ecr.aws/docker/library/ubuntu:${VERSION}
