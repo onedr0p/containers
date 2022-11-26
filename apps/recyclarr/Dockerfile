@@ -10,7 +10,7 @@ ENV \
     DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=true
 
 #hadolint ignore=DL3018
-RUN apk add --no-cache ca-certificates
+RUN apk add --no-cache ca-certificates libssl1.1
 #hadolint ignore=DL3018,DL3059
 RUN \
     case "${TARGETPLATFORM}" in \
