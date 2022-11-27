@@ -10,13 +10,27 @@ ENV QBITTORRENT__PORT=8080 \
 #hadolint ignore=DL3018
 RUN \
     apk add --no-cache ca-certificates geoip p7zip python3 \
-    && echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
-    && echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
-    && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community qt6-qtbase-sqlite qbittorrent-nox~"${VERSION}"
-#hadolint ignore=DL3059
-RUN chown -R root:root /usr/bin/qbittorrent-nox \
-    && chmod -R 755 /usr/bin/qbittorrent-nox \
-    && ln -s /usr/bin/qbittorrent-nox /app/qbittorrent-nox \
+    && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community qt6-qtbase-sqlite
+
+RUN \
+    case "${TARGETPLATFORM}" in \
+        'linux/amd64') export ARCH="x86_64" ;; \
+        'linux/arm64') export ARCH="aarch64" ;; \
+    esac \
+    && \
+    case "${CHANNEL}" in \
+        'stable') \
+            export RELEASE=$(curl -sX GET "https://github.com/userdocs/qbittorrent-nox-static/releases/latest/download/dependency-version.json" | jq -r '. | "release-\(.qbittorrent)_v\(.libtorrent_1_2)"') \
+            && curl -fsSL -o /app/qbittorrent-nox "https://github.com/userdocs/qbittorrent-nox-static/releases/latest/download/${RELEASE}/${ARCH}-qbittorrent-nox" \
+        ;; \
+        'beta') \
+            export RELEASE=$(curl -sX GET "https://github.com/userdocs/qbittorrent-nox-static/releases/latest/download/dependency-version.json" | jq -r '. | "release-\(.qbittorrent)_v\(.libtorrent_2_0)"') \
+            && curl -fsSL -o /app/qbittorrent-nox "https://github.com/userdocs/qbittorrent-nox-static/releases/latest/download/${RELEASE}/${ARCH}-qbittorrent-nox" \
+        ;; \
+    esac \
+    && \
+    chown -R root:root /app/qbittorrent-nox \
+    && chmod -R 755 /app/qbittorrent-nox \
     && rm -rf /tmp/*
 
 USER kah
