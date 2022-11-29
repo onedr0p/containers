@@ -8,8 +8,6 @@ The goal of this project is to support [semantically versioned](https://semver.o
 
 We also try to adhere to a [KISS principle](https://en.wikipedia.org/wiki/KISS_principle), logging to stdout, [one process per container](https://testdriven.io/tips/59de3279-4a2d-4556-9cd0-b444249ed31e/), no [s6-overlay](https://github.com/just-containers/s6-overlay) and all images are built on top of [Alpine](https://hub.docker.com/_/alpine) or [Ubuntu](https://hub.docker.com/_/ubuntu).
 
-In most cases if the application developers supports a container image and adheres to the above I will often not build a custom image and use their image instead.
-
 ## Tag immutability
 
 The containers built here do not use immutable tags, as least not in the more common way you have seen from [linuxserver.io](https://fleet.linuxserver.io/) or [Bitnami](https://bitnami.com/stacks/containers). 
@@ -72,6 +70,15 @@ Here's an example of how tags are created in the GitHub workflows, be careful wi
 | `sonarr`    | `develop` | `false` | `false` | `sonarr-develop:rolling`    |
 | `sonarr`    | `main`    | `true`  | `false` | `sonarr:3.0.8.1507`         |
 | `sonarr`    | `main`    | `true`  | `false` | `sonarr:rolling`            |
+
+## Deprecations
+
+Containers here can be **deprecated** at any point, this could be for any reason described below.
+
+1. The upstream application is **no longer actively developed**
+2. The upstream application has an **official upstream container** that follows closely to the mission statement described here
+3. The upstream application has been **replaced with a better alternative**
+4. The **maintenance burden** of keeping the container here **is too bothersome**
 
 ## Credits
 
