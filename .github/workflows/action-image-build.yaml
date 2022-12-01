@@ -151,7 +151,7 @@ jobs:
             CHANNEL=${{ matrix.image.channel }}
           platforms: ${{ steps.vars.outputs.chan_platforms }}
           context: .
-          containerfiles: |
+          file: |
             ${{ steps.vars.outputs.chan_dockerfile }}
           push: ${{ inputs.pushImages == 'true' }}
           tags: |-
