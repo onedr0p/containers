@@ -59,7 +59,7 @@ jobs:
           echo "changes=${output}" >> $GITHUB_OUTPUT
 
   images-build:
-    uses: onedr0p/containers/.github/workflows/action-image-build.yaml@main
+    uses: tuxpeople/containers/.github/workflows/action-image-build.yaml@main
     needs:
       - generate-build-matrix
     with:
