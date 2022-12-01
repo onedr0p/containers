@@ -124,9 +124,16 @@ jobs:
         run: |-
           cue vet --schema '#Spec' ./apps/${{ matrix.image.app }}/metadata.json ./metadata.rules.cue
 
+      - name: Login to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build all platforms
         id: build_image
-        uses: redhat-actions/buildah-build@v2.10
+        uses: docker/build-push-action@v3.2.0
         with:
           build-args: |-
             VERSION=${{ steps.vars.outputs.chan_upstream_version }}
@@ -135,7 +142,7 @@ jobs:
           context: .
           containerfiles: |
             ${{ steps.vars.outputs.chan_dockerfile }}
-          layers: true
+          push: true
           tags: |-
             ${{ env.IMAGE_REGISTRY_GHCR }}/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_rolling }}
             ${{ env.IMAGE_REGISTRY_GHCR }}/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_version }}
