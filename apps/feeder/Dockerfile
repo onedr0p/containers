@@ -12,13 +12,13 @@ RUN apt-get update && \
 
 # Build the virtualenv as a separate step: Only re-execute this step when requirements.txt changes
 FROM build AS build-venv
-COPY requirements.txt /requirements.txt
+COPY ./apps/feeder/requirements.txt /requirements.txt
 RUN /venv/bin/pip install --disable-pip-version-check -r /requirements.txt
 
 # Copy the virtualenv into a distroless image
 # hadolint ignore=DL3006
 FROM gcr.io/distroless/python3-debian11
 COPY --from=build-venv /venv /venv
-COPY root /app
+COPY ./apps/feeder/app /app
 WORKDIR /app/out
 ENTRYPOINT ["/venv/bin/python3", "/app/feeder.py"]
