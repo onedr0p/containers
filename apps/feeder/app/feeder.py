@@ -96,8 +96,9 @@ def update_feeds():
       # If the summary contains HTML code, set its type.
       summary_type = 'html' if '<' in item['summary'] else None
       fe.summary(summary=item['summary'], type=summary_type)
-    for tag in item.tags:
-      fe.category(term=tag.term)
+    if('tags' in item):
+      for tag in item.tags:
+        fe.category(term=tag.term)
     if('content' in item):
       fe.content(content=content.value, type='html')
   fg.atom_file('feed.xml')
