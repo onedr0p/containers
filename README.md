@@ -80,6 +80,8 @@ Containers here can be **deprecated** at any point, this could be for any reason
 3. The upstream application has been **replaced with a better alternative**
 4. The **maintenance burden** of keeping the container here **is too bothersome**
 
+**Note**: Deprecated containers will remained published to this repo for 6 months after which they will be pruned.
+
 ## Credits
 
 A lot of inspiration and ideas are thanks to the hard work of [hotio.dev](https://hotio.dev/) and [linuxserver.io](https://www.linuxserver.io/) contributors.
