@@ -126,10 +126,6 @@ jobs:
       - name: Setup Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v2
-        with:
-          install: true
-          version: latest
-          driver-opts: image=moby/buildkit:latest
 
       - name: Setup GHCR
         if: ${{ inputs.pushImages == 'true' }}
@@ -180,7 +176,7 @@ jobs:
             ${{ steps.vars.outputs.chan_label_type }}.created="${{ steps.vars.outputs.chan_build_date }}"
             ${{ steps.vars.outputs.chan_label_type }}.title="${{ matrix.image.app }} (${{ matrix.image.channel }})"
             ${{ steps.vars.outputs.chan_label_type }}.version="${{ steps.vars.outputs.chan_upstream_version }}"
-            ${{ steps.vars.outputs.chan_label_type }}.authors="Devin Buhl <devin.kray@gmail.com>, Bernd Schorgers <me@bjw-s.dev>"
+            ${{ steps.vars.outputs.chan_label_type }}.authors="Devin Buhl <devin.kray@gmail.com>"
             ${{ steps.vars.outputs.chan_label_type }}.url="https://github.com/onedr0p/containers/apps/${{ matrix.image.app }}"
             ${{ steps.vars.outputs.chan_label_type }}.build.url="https://github.com/onedr0p/containers/actions/runs/${{ github.run_id }}"
             ${{ steps.vars.outputs.chan_label_type }}.documentation="https://github.com/onedr0p/containers/apps/${{ matrix.image.app }}/README.md"
