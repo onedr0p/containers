@@ -36,6 +36,9 @@ on:
         default: 'false'
         type: string
 
+env:
+  IMAGE_REGISTRY_GHCR: ghcr.io
+
 jobs:
   build-and-test:
     name: Build and test
@@ -132,7 +135,7 @@ jobs:
         if: ${{ inputs.pushImages == 'true' }}
         uses: docker/login-action@v2
         with:
-          registry: ghcr.io
+          registry: ${{ env.IMAGE_REGISTRY_GHCR }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
@@ -147,7 +150,7 @@ jobs:
           file: ${{ steps.vars.outputs.chan_dockerfile }}
           load: true
           tags: |-
-            ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_testing }}
+            ${{ env.IMAGE_REGISTRY_GHCR }}/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_testing }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -164,7 +167,7 @@ jobs:
           GOSS_FILES_STRATEGY: cp
           CONTAINER_LOG_OUTPUT: goss_container_log_output
         run: >
-          dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_testing }} ${{ steps.vars.outputs.chan_goss_args }}
+          dgoss run ${{ env.IMAGE_REGISTRY_GHCR }}/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_testing }} ${{ steps.vars.outputs.chan_goss_args }}
 
       - name: Build all platforms
         id: release
@@ -187,8 +190,8 @@ jobs:
           file: ${{ steps.vars.outputs.chan_dockerfile }}
           push: ${{ inputs.pushImages == 'true' }}
           tags: |-
-            ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_rolling }}
-            ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_version }}
+            ${{ env.IMAGE_REGISTRY_GHCR }}/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_rolling }}
+            ${{ env.IMAGE_REGISTRY_GHCR }}/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
