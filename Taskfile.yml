@@ -22,6 +22,11 @@ tasks:
         -t {{.APP}}:{{.CHANNEL}}
         --build-arg CHANNEL={{.CHANNEL}}
         --build-arg VERSION=$(bash ./.github/scripts/upstream.sh "{{.APP}}" "{{.CHANNEL}}")
+        {{if eq .MULTIPLATFORM "true"}}
+        --platform $(jq -r '.channels[] | select(.name=="{{.CHANNEL}}").platforms | join(",")' ./apps/{{.APP}}/metadata.json)
+        {{else}}
+        --platform "linux/$(uname -m | sed 's/x86_64/amd64/')"
+        {{end}}
         -f ./apps/{{.APP}}/Dockerfile .
       - >-
         ./.goss/dgoss run {{.APP}}:{{.CHANNEL}} {{if eq .BASE "true"}}tail -f /dev/null{{end}}
@@ -32,6 +37,8 @@ tasks:
       GOSS_SLEEP: 2
       GOSS_FILE: ./apps/{{.APP}}/ci/goss.yaml
       GOSS_FILES_STRATEGY: cp
+    vars:
+      MULTIPLATFORM: '{{ default "false" .MULTIPLATFORM }}'
 
   download-goss:
     silent: true
