@@ -32,8 +32,8 @@ RUN \
 
 USER kah
 
-COPY ./apps/radarr/config.xml.tmpl /app/config.xml.tmpl
-COPY ./apps/radarr/entrypoint.sh /entrypoint.sh
+COPY ./apps/radarr/zeus/config.xml.tmpl /app/config.xml.tmpl
+COPY ./apps/radarr/zeus/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
 LABEL org.opencontainers.image.source="https://github.com/Radarr/Radarr"

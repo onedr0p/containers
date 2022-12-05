@@ -1,13 +1,10 @@
-FROM ghcr.io/onedr0p/ubuntu:rolling@sha256:f881d763cf5e99aa8fb583cf5d8f9b869ccbf08b7d4ac98341c3082be058d065
+FROM ghcr.io/onedr0p/ubuntu:jammy-20221101@sha256:bf2d52a2e698ab9c2e0a1af7f7b70b9806091c5ca21d9f1a4d1c3809f41e5e93
 
 ARG TARGETPLATFORM
-ARG BUILDPLATFORM
 ARG VERSION
 ARG CHANNEL
 
 ENV NVIDIA_DRIVER_CAPABILITIES="compute,video,utility"
-
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # hadolint ignore=DL3008,DL3015,SC2086
 RUN \
@@ -19,7 +16,7 @@ RUN \
     case "${TARGETPLATFORM}" in \
         'linux/amd64') \
             curl -sL https://repositories.intel.com/graphics/intel-graphics.key | apt-key add - \
-            && echo 'deb [arch=amd64] https://repositories.intel.com/graphics/ubuntu focal main' > /etc/apt/sources.list.d/intel.list \
+            && echo 'deb [arch=amd64] https://repositories.intel.com/graphics/ubuntu jammy main' > /etc/apt/sources.list.d/intel.list \
             && \
             export ARCH='amd64'; \
             export EXTRA_INSTALL_ARG='intel-media-va-driver-non-free nvidia-opencl-icd-340 i965-va-driver mesa-va-drivers'; \
@@ -41,7 +38,7 @@ RUN \
         ${EXTRA_INSTALL_ARG} \
     && \
     curl -fsSL "https://repo.jellyfin.org/ubuntu/jellyfin_team.gpg.key" | apt-key add - && \
-    echo "deb [arch=${ARCH}] https://repo.jellyfin.org/ubuntu focal main" | tee /etc/apt/sources.list.d/jellyfin.list && \
+    echo "deb [arch=${ARCH}] https://repo.jellyfin.org/ubuntu jammy main" | tee /etc/apt/sources.list.d/jellyfin.list && \
     apt-get -qq update && \
     apt-get -qq install -y \
         jellyfin-server="${VERSION}*" \

@@ -1,25 +1,36 @@
-FROM ghcr.io/onedr0p/alpine:rolling@sha256:35dc08b62b80ebd6d9a4e46ff1c4503967d4c0ca6a9ca8b04e299102b0319bf6
+FROM ghcr.io/onedr0p/alpine:rolling@sha256:8e1eb13c3ca5c038f3bf22a5fe9e354867f97f98a78027c44b7c76fce81fa61d
 
 ARG TARGETPLATFORM
-ARG BUILDPLATFORM
 ARG VERSION
 ARG CHANNEL
 
 ENV QBITTORRENT__PORT=8080 \
     QBITTORRENT__BT_PORT=50413
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
 #hadolint ignore=DL3018
 RUN \
     apk add --no-cache ca-certificates geoip p7zip python3 \
-    && echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
-    && echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
-    && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community qt6-qtbase-sqlite qbittorrent-nox~"${VERSION}"
-#hadolint ignore=DL3059
-RUN chown -R root:root /usr/bin/qbittorrent-nox \
-    && chmod -R 755 /usr/bin/qbittorrent-nox \
-    && ln -s /usr/bin/qbittorrent-nox /app/qbittorrent-nox \
+    && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community qt6-qtbase-sqlite
+
+RUN \
+    case "${TARGETPLATFORM}" in \
+        'linux/amd64') export ARCH="x86_64" ;; \
+        'linux/arm64') export ARCH="aarch64" ;; \
+    esac \
+    && \
+    case "${CHANNEL}" in \
+        'stable') \
+            export RELEASE=$(curl -sL "https://github.com/userdocs/qbittorrent-nox-static/releases/latest/download/dependency-version.json" | jq -r '. | "release-\(.qbittorrent)_v\(.libtorrent_1_2)"') \
+            && curl -fsSL -o /app/qbittorrent-nox "https://github.com/userdocs/qbittorrent-nox-static/releases/download/${RELEASE}/${ARCH}-qbittorrent-nox" \
+        ;; \
+        'beta') \
+            export RELEASE=$(curl -sL "https://github.com/userdocs/qbittorrent-nox-static/releases/latest/download/dependency-version.json" | jq -r '. | "release-\(.qbittorrent)_v\(.libtorrent_2_0)"') \
+            && curl -fsSL -o /app/qbittorrent-nox "https://github.com/userdocs/qbittorrent-nox-static/releases/download/${RELEASE}/${ARCH}-qbittorrent-nox" \
+        ;; \
+    esac \
+    && \
+    chown -R root:root /app/qbittorrent-nox \
+    && chmod -R 755 /app/qbittorrent-nox \
     && rm -rf /tmp/*
 
 USER kah

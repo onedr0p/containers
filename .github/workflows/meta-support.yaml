@@ -9,7 +9,7 @@ jobs:
   support:
     runs-on: ubuntu-22.04
     steps:
-      - uses: dessant/support-requests@v2
+      - uses: dessant/support-requests@v3
         with:
           github-token: ${{ secrets.TOKEN }}
           support-label: support

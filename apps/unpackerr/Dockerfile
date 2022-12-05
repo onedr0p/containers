@@ -1,5 +1,5 @@
 ARG VERSION
-FROM public.ecr.aws/docker/library/golang:1.19.2-alpine3.16 as builder
+FROM public.ecr.aws/docker/library/alpine:3.17.0 as builder
 ARG VERSION
 ARG TARGETOS
 ARG TARGETARCH
@@ -9,33 +9,22 @@ ENV GO111MODULE=on \
     CGO_ENABLED=0 \
     GOOS=${TARGETOS} \
     GOARCH=${TARGETARCH} \
-    GOARM=${TARGETVARIANT}
-# TODO: upx for arm64 not in alpine 3.16
-#hadolint ignore=DL3018,DL3059
+    GOARM=${TARGETVARIANT} \
+    GOPATH=/go
+ENV PATH $GOPATH/bin:$PATH
+#hadolint ignore=DL3018
 RUN \
-    case "${TARGETPLATFORM}" in \
-        'linux/amd64') \
-            # 1.9M -> 1.0M
-            apk add --no-cache git upx \
-            && go install -ldflags="-s -w" "github.com/davidnewhall/unpackerr@v${VERSION}" \
-            && upx --ultra-brute /go/bin/unpackerr \
-        ;; \
-        'linux/arm64') \
-            apk add --no-cache git \
-            && go install -ldflags="-s -w" "github.com/davidnewhall/unpackerr@v${VERSION}" \
-        ;; \
-    esac
+    apk add --no-cache git go upx \
+    && go install -ldflags="-s -w" "github.com/davidnewhall/unpackerr@v${VERSION}" \
+    && upx --ultra-brute /go/bin/unpackerr
 
-FROM --platform=$TARGETPLATFORM ghcr.io/onedr0p/alpine:rolling@sha256:35dc08b62b80ebd6d9a4e46ff1c4503967d4c0ca6a9ca8b04e299102b0319bf6
+FROM ghcr.io/onedr0p/alpine:rolling@sha256:8e1eb13c3ca5c038f3bf22a5fe9e354867f97f98a78027c44b7c76fce81fa61d
 
 ARG TARGETPLATFORM
-ARG BUILDPLATFORM
 ARG VERSION
 ARG CHANNEL
 
 COPY --from=builder /go/bin/unpackerr /app/unpackerr
-
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 #hadolint ignore=DL3018
 RUN apk add --no-cache ca-certificates

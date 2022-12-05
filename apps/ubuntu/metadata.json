@@ -3,7 +3,7 @@
   "base": true,
   "channels": [
     {
-      "name": "focal",
+      "name": "jammy",
       "platforms": [
         "linux/amd64",
         "linux/arm64"
