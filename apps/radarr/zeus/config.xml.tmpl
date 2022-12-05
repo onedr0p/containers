@@ -1,24 +1,27 @@
 <Config>
-  <LogLevel>${RADARR__LOG_LEVEL:-info}</LogLevel>
-  <UrlBase>${RADARR__URL_BASE}</UrlBase>
-  <Branch>${RADARR__BRANCH}</Branch>
+  <AnalyticsEnabled>${RADARR__ANALYTICS_ENABLED}</AnalyticsEnabled>
   <ApiKey>${RADARR__API_KEY}</ApiKey>
   <AuthenticationMethod>${RADARR__AUTHENTICATION_METHOD:-External}</AuthenticationMethod>
   <AuthenticationRequired>${RADARR__AUTHENTICATION_REQUIRED:-0}</AuthenticationRequired>
+  <BindAddress>*</BindAddress>
+  <Branch>${RADARR__BRANCH}</Branch>
+  <EnableSsl>False</EnableSsl>
   <InstanceName>${RADARR__INSTANCE_NAME}</InstanceName>
-  <PostgresUser>${RADARR__POSTGRES_USER}</PostgresUser>
+  <LaunchBrowser>False</LaunchBrowser>
+  <LogLevel>${RADARR__LOG_LEVEL:-info}</LogLevel>
+  <OidcAuthority>${RADARR__OIDC_AUTHORITY}</OidcAuthority>
+  <OidcClientId>${RADARR__OIDC_CLIENT_ID}<OidcClientId>
+  <OidcClientSecret>${RADARR__OIDC_CLIENT_SECRET}</OidcClientSecret>
+  <Port>${RADARR__PORT}</Port>
+  <PostgresHost>${RADARR__POSTGRES_HOST}</PostgresHost>
+  <PostgresLogDb>${RADARR__POSTGRES_LOG_DB}</PostgresLogDb>
+  <PostgresMainDb>${RADARR__POSTGRES_MAIN_DB}</PostgresMainDb>
   <PostgresPassword>${RADARR__POSTGRES_PASSWORD}</PostgresPassword>
   <PostgresPort>${RADARR__POSTGRES_PORT:-5432}</PostgresPort>
-  <PostgresHost>${RADARR__POSTGRES_HOST}</PostgresHost>
-  <PostgresMainDb>${RADARR__POSTGRES_MAIN_DB}</PostgresMainDb>
-  <PostgresLogDb>${RADARR__POSTGRES_LOG_DB}</PostgresLogDb>
-  <Port>${RADARR__PORT}</Port>
-  <BindAddress>*</BindAddress>
-  <LaunchBrowser>False</LaunchBrowser>
-  <EnableSsl>False</EnableSsl>
-  <SslPort>6969</SslPort>
-  <SslCertPath></SslCertPath>
+  <PostgresUser>${RADARR__POSTGRES_USER}</PostgresUser>
   <SslCertPassword></SslCertPassword>
+  <SslCertPath></SslCertPath>
+  <SslPort>6969</SslPort>
   <UpdateMechanism>BuiltIn</UpdateMechanism>
-  <AnalyticsEnabled>${RADARR__ANALYTICS_ENABLED}</AnalyticsEnabled>
+  <UrlBase>${RADARR__URL_BASE}</UrlBase>
 </Config>
