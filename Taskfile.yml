@@ -1,6 +1,9 @@
 ---
 version: "3"
 
+vars:
+  CHANNEL: '{{ default "stable" .CHANNEL }}'
+
 tasks:
   default:
     silent: true
