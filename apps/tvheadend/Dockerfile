@@ -217,7 +217,7 @@ ENV HOME="/config"
 
 RUN \
     case "${TARGETPLATFORM}" in \
-        'linux/amd64') export EXTRA_PACKAGES='libva libva-intel-driver intel-media-driver mesa-dri-ati' ;; \
+        'linux/amd64') export EXTRA_PACKAGES='libva libva-intel-driver intel-media-driver' ;; \
         'linux/arm64') export EXTRA_PACKAGES='' ;; \
     esac \
     && \
