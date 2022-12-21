@@ -8,7 +8,7 @@ jobs:
   stale:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/stale@v6
+      - uses: actions/stale@v7
         with:
           repo-token: ${{ secrets.TOKEN }}
           days-before-issue-stale: 60
