@@ -12,9 +12,6 @@ if [[ -f /config/config.xml ]]; then
     current_branch="$(xmlstarlet sel -t -v "//Branch" -nl /config/config.xml)"
     current_instance_name="$(xmlstarlet sel -t -v "//InstanceName" -nl /config/config.xml)"
     current_log_level="$(xmlstarlet sel -t -v "//LogLevel" -nl /config/config.xml)"
-    current_oidc_authority="$(xmlstarlet sel -t -v "//OidcAuthority" -nl /config/config.xml)"
-    current_oidc_client_id="$(xmlstarlet sel -t -v "//OidcClientId" -nl /config/config.xml)"
-    current_oidc_client_secret="$(xmlstarlet sel -t -v "//OidcClientSecret" -nl /config/config.xml)"
     current_postgres_host="$(xmlstarlet sel -t -v "//PostgresHost" -nl /config/config.xml)"
     current_postgres_log_db="$(xmlstarlet sel -t -v "//PostgresLogDb" -nl /config/config.xml)"
     current_postgres_main_db="$(xmlstarlet sel -t -v "//PostgresMainDb" -nl /config/config.xml)"
@@ -35,9 +32,6 @@ envsubst < /app/config.xml.tmpl > /config/config.xml
 [[ -z "${RADARR__BRANCH}" && -n "${current_branch}" ]] && xmlstarlet edit --inplace --update //Branch -v "${current_branch}" /config/config.xml
 [[ -z "${RADARR__INSTANCE_NAME}" && -n "${current_instance_name}" ]] && xmlstarlet edit --inplace --update //InstanceName -v "${current_instance_name}" /config/config.xml
 [[ -z "${RADARR__LOG_LEVEL}" && -n "${current_log_level}" ]] && xmlstarlet edit --inplace --update //LogLevel -v "${current_log_level}" /config/config.xml
-[[ -z "${RADARR__OIDC_AUTHORITY}" && -n "${current_oidc_authority}" ]] && xmlstarlet edit --inplace --update //OidcAuthority -v "${current_oidc_authority}" /config/config.xml
-[[ -z "${RADARR__OIDC_CLIENT_ID}" && -n "${current_oidc_client_id}" ]] && xmlstarlet edit --inplace --update //OidcClientId -v "${current_oidc_client_id}" /config/config.xml
-[[ -z "${RADARR__OIDC_CLIENT_SECRET}" && -n "${current_oidc_client_secret}" ]] && xmlstarlet edit --inplace --update //OidcClientSecret -v "${current_oidc_client_secret}" /config/config.xml
 [[ -z "${RADARR__POSTGRES_HOST}" && -n "${current_postgres_host}" ]] && xmlstarlet edit --inplace --update //PostgresHost -v "${current_postgres_host}" /config/config.xml
 [[ -z "${RADARR__POSTGRES_LOG_DB}" && -n "${current_postgres_log_db}" ]] && xmlstarlet edit --inplace --update //PostgresLogDb -v "${current_postgres_log_db}" /config/config.xml
 [[ -z "${RADARR__POSTGRES_MAIN_DB}" &&  -n "${current_postgres_main_db}" ]] && xmlstarlet edit --inplace --update //PostgresMainDb -v "${current_postgres_main_db}" /config/config.xml
