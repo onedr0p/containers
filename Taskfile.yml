@@ -43,7 +43,6 @@ tasks:
   download-goss:
     silent: true
     vars:
-      # renovate: datasource=github-releases depName=aelsabbahy/goss
       GOSS_VERSION: v0.3.20
     cmds:
       - mkdir -p ./.goss
