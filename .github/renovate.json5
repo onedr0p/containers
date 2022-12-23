@@ -5,8 +5,7 @@
     ":disableRateLimiting",
     ":dependencyDashboard",
     ":semanticCommits",
-    ":automergeDigest",
-    "helpers:pinGitHubActionDigests"
+    ":automergeDigest"
   ],
   "platform": "github",
   "username": "rosey-bot[bot]",
@@ -22,7 +21,7 @@
       "description": "Auto-merge Github Actions",
       "matchDatasources": ["github-tags"],
       "automerge": true,
-      "automergeType": "branch",
+      "automergeType": "pr",
       "matchUpdateTypes": ["minor", "patch"],
       "matchPackagePatterns": ["renovatebot/github-action"]
     },
