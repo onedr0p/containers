@@ -37,12 +37,12 @@ on:
         type: string
 
 env:
-  IMAGE_REGISTRY_GHCR: ghcr.io
+  IMAGE_REGISTRY: ghcr.io
 
 jobs:
   build-and-test:
     name: Build and test
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     if: inputs.imagesToBuild != '' && inputs.imagesToBuild != '[]'
     strategy:
       matrix:
@@ -131,7 +131,7 @@ jobs:
         if: ${{ inputs.pushImages == 'true' }}
         uses: docker/login-action@v2
         with:
-          registry: ${{ env.IMAGE_REGISTRY_GHCR }}
+          registry: ${{ env.IMAGE_REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
@@ -146,7 +146,7 @@ jobs:
           file: ${{ steps.vars.outputs.chan_dockerfile }}
           load: true
           tags: |-
-            ${{ env.IMAGE_REGISTRY_GHCR }}/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_testing }}
+            ${{ env.IMAGE_REGISTRY }}/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_testing }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -163,7 +163,7 @@ jobs:
           GOSS_FILES_STRATEGY: cp
           CONTAINER_LOG_OUTPUT: goss_container_log_output
         run: >
-          dgoss run ${{ env.IMAGE_REGISTRY_GHCR }}/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_testing }} ${{ steps.vars.outputs.chan_goss_args }}
+          dgoss run ${{ env.IMAGE_REGISTRY }}/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_testing }} ${{ steps.vars.outputs.chan_goss_args }}
 
       - name: Build all platforms
         id: release
@@ -186,8 +186,8 @@ jobs:
           file: ${{ steps.vars.outputs.chan_dockerfile }}
           push: ${{ inputs.pushImages == 'true' }}
           tags: |-
-            ${{ env.IMAGE_REGISTRY_GHCR }}/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_rolling }}
-            ${{ env.IMAGE_REGISTRY_GHCR }}/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_version }}
+            ${{ env.IMAGE_REGISTRY }}/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_rolling }}
+            ${{ env.IMAGE_REGISTRY }}/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -217,7 +217,7 @@ jobs:
   # Summarize matrix https://github.community/t/status-check-for-a-matrix-jobs/127354/7
   build_success:
     name: Build matrix success
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     needs:
       - build-and-test
     if: ${{ always() }}

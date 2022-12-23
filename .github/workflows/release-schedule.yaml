@@ -1,5 +1,5 @@
 ---
-name: "Release: Schedule"
+name: "Scheduled Release"
 
 on:
   workflow_dispatch:
@@ -14,26 +14,33 @@ env:
 jobs:
   generate-build-matrix:
     name: Generate matrix for building images
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.fetch.outputs.changes }}
     steps:
-      - uses: actions/checkout@v3
-        with:
-          token: ${{ env.TOKEN }}
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - name: Install tools
         run: sudo apt-get install moreutils jo
 
+      - name: Generate Token
+        uses: tibdex/github-app-token@v1
+        id: generate-token
+        with:
+          app_id: "${{ secrets.BOT_APP_ID }}"
+          private_key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
+
       - name: Fetch new app versions
         id: fetch
         run: ./.github/scripts/fetch.sh
+        env:
+          TOKEN: "${{ steps.generate-token.outputs.token }}"
 
   images-build:
     uses: onedr0p/containers/.github/workflows/action-image-build.yaml@main
     if: needs.generate-build-matrix.outputs.matrix != '[]'
-    needs:
-      - generate-build-matrix
+    needs: ["generate-build-matrix"]
     with:
       imagesToBuild: "${{ needs.generate-build-matrix.outputs.matrix }}"
       pushImages: "true"
