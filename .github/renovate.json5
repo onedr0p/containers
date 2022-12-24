@@ -21,7 +21,7 @@
       "description": "Auto-merge Github Actions",
       "matchDatasources": ["github-tags"],
       "automerge": true,
-      "automergeType": "pr",
+      "automergeType": "branch",
       "matchUpdateTypes": ["minor", "patch"],
       "matchPackagePatterns": ["renovatebot/github-action"]
     },
