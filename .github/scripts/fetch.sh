@@ -29,7 +29,7 @@ find ./apps -name metadata.json | while read -r metadata; do
         else
             published_version=$(./.github/scripts/published.sh "${app}" "${channel}" "${stable}")
             upstream_version=$(./.github/scripts/upstream.sh "${app}" "${channel}" "${stable}")
-            if [[ "${published_version}" != "${upstream_version}" && "${upstream_version}" != "" ]]; then
+            if [[ "${published_version}" != "${upstream_version}" && "${upstream_version}" != "" && "${upstream_version}" != "null" ]]; then
                 echo "${app}$([[ ! ${stable} == false ]] || echo "-${channel}"):${published_version:-<NOTFOUND>} -> ${upstream_version}"
                 __channels+=("${channel}")
             fi
