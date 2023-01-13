@@ -43,7 +43,7 @@ RUN \
     apt-get -qq install -y \
         jellyfin-server="${VERSION}*" \
         jellyfin-web \
-        jellyfin-ffmpeg \
+        jellyfin-ffmpeg5 \
     && \
     apt-get remove -y gnupg2 \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
