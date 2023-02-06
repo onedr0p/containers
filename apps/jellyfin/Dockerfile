@@ -54,7 +54,7 @@ RUN \
         /tmp/* \
         /var/lib/apt/lists/* \
         /var/tmp/ \
-    && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
+    && printf "umask %d\n" "${UMASK}" >> /etc/bash.bashrc
 
 USER kah
 COPY ./apps/jellyfin/entrypoint.sh /entrypoint.sh

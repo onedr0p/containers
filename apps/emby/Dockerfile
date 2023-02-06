@@ -73,7 +73,7 @@ RUN \
         /var/tmp/ \
     && chown -R root:root /app \
     && chmod -R 755 /app \
-    && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
+    && printf "umask %d\n" "${UMASK}" >> /etc/bash.bashrc
 
 USER kah
 COPY --from=builder /app/emby /app/emby
