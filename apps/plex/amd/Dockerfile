@@ -111,7 +111,7 @@ RUN \
         /var/tmp/ \
     && chown -R root:root /app \
     && chmod -R 755 "${PLEX_MEDIA_SERVER_HOME}" \
-    && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc
+    && printf "umask %d\n" "${UMASK}" >> /etc/bash.bashrc
 
 # Copy lib files
 COPY --from=amd /output/usr/lib/dri/*.so* /usr/lib/plexmediaserver/lib/dri/

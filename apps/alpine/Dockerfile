@@ -60,7 +60,7 @@ RUN \
     && chown -R kah:kah /config \
     && chmod -R 775 /config \
     && printf "/bin/bash /scripts/greeting.sh\n" > /etc/profile.d/greeting.sh \
-    && printf "umask %d" "${UMASK}" > /etc/profile.d/umask.sh \
+    && printf "umask %d\n" "${UMASK}" > /etc/profile.d/umask.sh \
     && ln -s /usr/bin/vi   /usr/local/bin/vi \
     && ln -s /usr/bin/vi   /usr/local/bin/vim \
     && ln -s /usr/bin/nano /usr/local/bin/nano \
