@@ -4,8 +4,16 @@ ARG TARGETPLATFORM
 ARG VERSION
 ARG CHANNEL
 
+ENV ND_MUSICFOLDER=/music \
+    ND_DATAFOLDER=/config \
+    ND_SCANINTERVAL=1m \
+    ND_TRANSCODINGCACHESIZE=100MB \
+    ND_SESSIONTIMEOUT=30m \
+    ND_LOGLEVEL=info \
+    ND_PORT=4533
+
 #hadolint ignore=DL3018
-RUN apk add --no-cache ca-certificates
+RUN apk add --no-cache ca-certificates ffmpeg
 #hadolint ignore=DL3059
 RUN \
     case "${TARGETPLATFORM}" in \
