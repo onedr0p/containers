@@ -176,9 +176,9 @@ jobs:
             ${{ steps.vars.outputs.chan_label_type }}.title="${{ matrix.image.app }} (${{ matrix.image.channel }})"
             ${{ steps.vars.outputs.chan_label_type }}.version="${{ steps.vars.outputs.chan_upstream_version }}"
             ${{ steps.vars.outputs.chan_label_type }}.authors="Devin Buhl <devin.kray@gmail.com>"
-            ${{ steps.vars.outputs.chan_label_type }}.url="https://github.com/onedr0p/containers/apps/${{ matrix.image.app }}"
-            ${{ steps.vars.outputs.chan_label_type }}.build.url="https://github.com/onedr0p/containers/actions/runs/${{ github.run_id }}"
-            ${{ steps.vars.outputs.chan_label_type }}.documentation="https://github.com/onedr0p/containers/apps/${{ matrix.image.app }}/README.md"
+            ${{ steps.vars.outputs.chan_label_type }}.url="https://github.com/dkw99/containers/apps/${{ matrix.image.app }}"
+            ${{ steps.vars.outputs.chan_label_type }}.build.url="https://github.com/dkw99/containers/actions/runs/${{ github.run_id }}"
+            ${{ steps.vars.outputs.chan_label_type }}.documentation="https://github.com/dkw99/containers/apps/${{ matrix.image.app }}/README.md"
             ${{ steps.vars.outputs.chan_label_type }}.revision="${{ github.sha }}"
           context: .
           platforms: ${{ steps.vars.outputs.chan_platforms }}

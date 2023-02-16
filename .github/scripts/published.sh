@@ -13,7 +13,7 @@ tags=$( \
     curl -fsSL \
         -H "Accept: application/vnd.github.v3+json" \
         -H "Authorization: token ${TOKEN}" \
-        "https://api.github.com/users/onedr0p/packages/container/${APP}/versions" \
+        "https://api.github.com/users/dkw99/packages/container/${APP}/versions" \
         2>/dev/null
 )
 

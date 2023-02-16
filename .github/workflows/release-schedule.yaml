@@ -38,7 +38,7 @@ jobs:
           TOKEN: "${{ steps.generate-token.outputs.token }}"
 
   images-build:
-    uses: onedr0p/containers/.github/workflows/action-image-build.yaml@main
+    uses: dkw99/containers/.github/workflows/action-image-build.yaml@main
     if: needs.generate-build-matrix.outputs.matrix != '[]'
     needs: ["generate-build-matrix"]
     with:
