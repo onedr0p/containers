@@ -54,7 +54,7 @@ RUN \
 #hadolint ignore=DL3018
 RUN \
     addgroup -S kah --gid 568 \
-        && adduser -S kah -G kah --uid 568 \
+        && adduser -S kah -G kah --uid 1041 \
     && \
     mkdir -p /config \
     && chown -R kah:kah /config \

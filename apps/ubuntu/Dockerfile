@@ -45,7 +45,7 @@ RUN \
         --no-create-home \
     && \
     mkdir -p /config \
-    && chown -R kah:kah /config \
+    && chown -R kah:users /config \
     && chmod -R 775 /config
 
 WORKDIR /app
