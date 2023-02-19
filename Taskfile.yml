@@ -43,7 +43,7 @@ tasks:
   download-goss:
     silent: true
     vars:
-      GOSS_VERSION: v0.3.20
+      GOSS_VERSION: v0.3.21
     cmds:
       - mkdir -p ./.goss
       - curl -fsSL -o ./.goss/goss https://github.com/aelsabbahy/goss/releases/download/{{.GOSS_VERSION}}/goss-linux-amd64
