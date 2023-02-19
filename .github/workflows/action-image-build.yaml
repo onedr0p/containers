@@ -36,9 +36,6 @@ on:
         default: 'false'
         type: string
 
-env:
-  IMAGE_REGISTRY: ghcr.io
-
 jobs:
   build-and-test:
     name: Build and test
@@ -116,8 +113,7 @@ jobs:
 
       - name: Validate image metadata
         shell: bash
-        run: |-
-          cue vet --schema '#Spec' ./apps/${{ matrix.image.app }}/metadata.json ./metadata.rules.cue
+        run: cue vet --schema '#Spec' ./apps/${{ matrix.image.app }}/metadata.json ./metadata.rules.cue
 
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v2
@@ -130,12 +126,12 @@ jobs:
         if: ${{ inputs.pushImages == 'true' }}
         uses: docker/login-action@v2
         with:
-          registry: ${{ env.IMAGE_REGISTRY }}
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build container image for testing
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           build-args: |-
             VERSION=${{ steps.vars.outputs.chan_upstream_version }}
@@ -144,8 +140,7 @@ jobs:
           platforms: linux/amd64 # load does not support muti-arch https://github.com/docker/buildx/issues/290
           file: ${{ steps.vars.outputs.chan_dockerfile }}
           load: true
-          tags: |-
-            ${{ env.IMAGE_REGISTRY }}/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_testing }}
+          tags: ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_testing }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -156,13 +151,11 @@ jobs:
         env:
           CONTAINER_RUNTIME: docker
           GOSS_FILE: ${{ steps.vars.outputs.chan_goss_config }}
-          GOSS_OPTS: |-
-            --retry-timeout 60s --sleep 2s --color --format documentation
+          GOSS_OPTS: --retry-timeout 60s --sleep 2s --color --format documentation
           GOSS_SLEEP: 2
           GOSS_FILES_STRATEGY: cp
           CONTAINER_LOG_OUTPUT: goss_container_log_output
-        run: >
-          dgoss run ${{ env.IMAGE_REGISTRY }}/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_testing }} ${{ steps.vars.outputs.chan_goss_args }}
+        run: dgoss run ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_testing }} ${{ steps.vars.outputs.chan_goss_args }}
 
       - name: Build all platforms
         id: release
@@ -185,8 +178,8 @@ jobs:
           file: ${{ steps.vars.outputs.chan_dockerfile }}
           push: ${{ inputs.pushImages == 'true' }}
           tags: |-
-            ${{ env.IMAGE_REGISTRY }}/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_rolling }}
-            ${{ env.IMAGE_REGISTRY }}/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_version }}
+            ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_rolling }}
+            ghcr.io/${{ github.repository_owner }}/${{ steps.vars.outputs.chan_tag_version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -194,15 +187,15 @@ jobs:
         id: build-success
         if: ${{ always() && steps.release.outcome == 'success' }}
         run: |-
-          echo "::set-output name=message::🎉 ${{ matrix.image.app }}-${{ matrix.image.channel }} (${{ steps.vars.outputs.chan_upstream_version }})"
-          echo "::set-output name=color::0x00FF00"
+          echo "message=🎉 ${{ matrix.image.app }}-${{ matrix.image.channel }} (${{ steps.vars.outputs.chan_upstream_version }})" >> $GITHUB_OUTPUT
+          echo "color=0x00FF00" >> $GITHUB_OUTPUT
 
       - name: Build failed
         id: build-failed
         if: ${{ always() && (steps.release.outcome == 'failure' || steps.dgoss.outcome == 'failure') }}
         run: |-
-          echo "::set-output name=message::💥 ${{ matrix.image.app }}-${{ matrix.image.channel }} (${{ steps.vars.outputs.chan_upstream_version }})"
-          echo "::set-output name=color::0xFF0000"
+          echo "message=💥 ${{ matrix.image.app }}-${{ matrix.image.channel }} (${{ steps.vars.outputs.chan_upstream_version }})" >> $GITHUB_OUTPUT
+          echo "color=0xFF0000" >> $GITHUB_OUTPUT
 
       - name: Send Discord Webhook
         uses: sarisia/actions-status-discord@v1
