@@ -1,12 +1,14 @@
 ---
 name: "Scheduled Release"
 
+concurrency:
+  group: container-release
+  cancel-in-progress: false
+
 on:
   workflow_dispatch:
   schedule:
-    # NOTE: The longest build for an app is ~1h30m
-    # Keep this to run every 2 or more hours to prevent gremlins from spawning
-    - cron: "0 */3 * * *"
+    - cron: "0 * * * *"
 
 env:
   TOKEN: ${{ secrets.TOKEN }}
