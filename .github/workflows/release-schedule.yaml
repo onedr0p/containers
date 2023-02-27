@@ -1,6 +1,10 @@
 ---
 name: "Scheduled Release"
 
+concurrency:
+  group: container-release
+  cancel-in-progress: false
+
 on:
   workflow_dispatch:
   schedule:
