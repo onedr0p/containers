@@ -46,7 +46,7 @@ jobs:
           echo "LOG_LEVEL=${{ github.event.inputs.logLevel || env.LOG_LEVEL }}" >> "${GITHUB_ENV}"
 
       - name: Renovate
-        uses: renovatebot/github-action@24c7a5d0372c64ae42b6b02f155a4223f5ea6a8d # v35.1.2
+        uses: renovatebot/github-action@927d318430b8127887559d9721fdfcaaa4646fb9 # v35.2.0
         with:
           configurationFile: "${{ env.RENOVATE_CONFIG_FILE }}"
           token: "${{ steps.generate-token.outputs.token }}"
