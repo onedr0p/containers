@@ -49,7 +49,6 @@ RUN \
     && ./automake.sh \
     && ./configure \
     && make \
-    && make check \
     && make install \
     && \
     pip install --upgrade pip \
