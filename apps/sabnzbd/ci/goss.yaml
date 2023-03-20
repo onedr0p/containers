@@ -14,3 +14,17 @@ port:
 http:
   http://localhost:8080/sabnzbd:
     status: 200
+
+# https://github.com/aelsabbahy/goss/blob/master/docs/manual.md#file
+file:
+  /usr/local/bin/par2:
+    exists: true
+  /usr/local/bin/par2create:
+    exists: true
+    filetype: symlink
+  /usr/local/bin/par2repair:
+    exists: true
+    filetype: symlink
+  /usr/local/bin/par2verify:
+    exists: true
+    filetype: symlink

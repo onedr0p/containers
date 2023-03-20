@@ -30,16 +30,27 @@ RUN \
         ca-certificates \
         python3 \
         py3-pip \
-        par2cmdline \
         p7zip \
     && \
     apk add --no-cache --virtual=.build-deps \
+        autoconf \
+        automake \
         build-base \
         libffi-dev \
         openssl-dev \
         musl-dev \
         cargo \
         python3-dev \
+    && \
+    curl -fsSL "https://github.com/animetosho/par2cmdline-turbo/archive/refs/heads/turbo.tar.gz" \
+        | tar xzf - -C /tmp --strip-components 1 \
+    && \
+    cd /tmp \
+    && ./automake.sh \
+    && ./configure \
+    && make \
+    && make check \
+    && make install \
     && \
     pip install --upgrade pip \
     && \
