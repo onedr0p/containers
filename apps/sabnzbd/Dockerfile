@@ -1,5 +1,6 @@
-FROM ghcr.io/onedr0p/alpine:rolling@sha256:5d973006bf93ba66e38758694dfed6df091a13e712b6a075f7ed7bb6fd8c2189
+FROM ghcr.io/onedr0p/par2cmdline-turbo:0.9.0 as par2cmdline-turbo
 
+FROM ghcr.io/onedr0p/alpine:rolling@sha256:5d973006bf93ba66e38758694dfed6df091a13e712b6a075f7ed7bb6fd8c2189
 ARG TARGETPLATFORM
 ARG VERSION
 ARG CHANNEL
@@ -12,30 +13,7 @@ ENV \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     CRYPTOGRAPHY_DONT_BUILD_RUST=1
 
-ENV PAR2CMDLINE_TURBO_VERSION=v0.9.0
-
 ENV SABNZBD__PORT=8080
-
-# Install par2cmdline-turbo
-RUN \
-    apk add --no-cache --virtual=.build-deps xz \
-    && \
-    case "${TARGETPLATFORM}" in \
-        'linux/amd64') export ARCH='amd64' ;; \
-        'linux/arm64') export ARCH='arm64' ;; \
-    esac \
-    \
-    && \
-    curl -fsSL -o /tmp/par2.xz \
-        "https://github.com/animetosho/par2cmdline-turbo/releases/download/${PAR2CMDLINE_TURBO_VERSION}/par2cmdline-turbo-${PAR2CMDLINE_TURBO_VERSION}-linux-${ARCH}.xz" \
-    && xz -v -d /tmp/par2.xz \
-    && chmod +x /tmp/par2 \
-    && mv /tmp/par2 /usr/local/bin/par2 \
-    && ln -s /usr/local/bin/par2 /usr/local/bin/par2create \
-    && ln -s /usr/local/bin/par2 /usr/local/bin/par2repair \
-    && ln -s /usr/local/bin/par2 /usr/local/bin/par2verify \
-    && apk del --purge .build-deps \
-    && rm -rf /tmp/*
 
 # Download source
 RUN \
@@ -72,6 +50,12 @@ RUN \
         /root/.cache \
         /root/.cargo \
         /tmp/*
+
+# Install par2cmdline-turbo
+COPY --from=par2cmdline-turbo /usr/local/bin/par2 /usr/local/bin/par2
+RUN ln -s /usr/local/bin/par2 /usr/local/bin/par2create \
+    && ln -s /usr/local/bin/par2 /usr/local/bin/par2repair \
+    && ln -s /usr/local/bin/par2 /usr/local/bin/par2verify
 
 USER kah
 COPY ./apps/sabnzbd/sabnzbd.ini /app/sabnzbd.ini
