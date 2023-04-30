@@ -30,6 +30,7 @@ RUN \
     pip install --upgrade \
         gevent-websocket \
         webrtcvad-wheels \
+        psycopg2 \
     && apk del --purge .build-deps \
     && rm -rf \
         /root/.cache \
