@@ -2,7 +2,7 @@ FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-COPY requirements.txt /
+COPY ./apps/ansible/requirements.txt /
 
 # hadolint ignore=DL3008,DL3009
 RUN apt-get update && \
