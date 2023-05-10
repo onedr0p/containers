@@ -1,5 +1,5 @@
 ARG VERSION
-FROM public.ecr.aws/docker/library/alpine:3.17 as builder
+FROM public.ecr.aws/docker/library/alpine:3.18 as builder
 ARG VERSION
 ARG TARGETOS
 ARG TARGETARCH
@@ -16,7 +16,7 @@ ENV PATH $GOPATH/bin:$PATH
 RUN \
     apk add --no-cache go upx \
     && go install -ldflags="-s -w" github.com/drone/envsubst/cmd/envsubst@latest \
-    && upx --ultra-brute /go/bin/envsubst
+    && upx /go/bin/envsubst
 
 FROM public.ecr.aws/docker/library/ubuntu:${VERSION}
 ARG VERSION
