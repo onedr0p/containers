@@ -16,7 +16,7 @@ ENV PATH $GOPATH/bin:$PATH
 RUN \
     apk add --no-cache go upx \
     && go install -ldflags="-s -w" github.com/drone/envsubst/cmd/envsubst@latest \
-    && upx --ultra-brute /go/bin/envsubst
+    && upx /go/bin/envsubst
 
 FROM public.ecr.aws/docker/library/ubuntu:${VERSION}
 ARG VERSION
