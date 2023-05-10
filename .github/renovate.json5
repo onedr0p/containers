@@ -6,12 +6,6 @@
     ":dependencyDashboard",
     ":semanticCommits"
   ],
-  "platform": "github",
-  "username": "sky-bot[bot]",
-  "repositories": ["tuxpeople/containers"],
-  "onboarding": false,
-  "requireConfig": false,
-  "gitAuthor": "sky-bot <98030736+sky-bot[bot]@users.noreply.github.com>",
   "dependencyDashboardTitle": "Renovate Dashboard 🤖",
   "suppressNotifications": ["prIgnoreNotification"],
   "commitBodyTable": true,
