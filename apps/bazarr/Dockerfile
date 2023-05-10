@@ -21,16 +21,14 @@ RUN \
 
 #hadolint ignore=DL3018,DL3013
 RUN \
-    apk add --no-cache ca-certificates ffmpeg python3 py3-lxml py3-numpy py3-gevent py3-cryptography py3-setuptools py3-psycopg2 \
+    apk add --no-cache ca-certificates ffmpeg python3 py3-lxml py3-numpy py3-gevent py3-cryptography py3-setuptools py3-pillow py3-psycopg2 \
     && \
     apk add --no-cache --virtual .build-deps py3-pip gcc python3-dev musl-dev \
     && \
     pip install --upgrade pip \
     && \
     pip install --upgrade \
-        pillow \
-        gevent-websocket \
-        webrtcvad-wheels \
+      "webrtcvad-wheels>=2.0.10" \
     && apk del --purge .build-deps \
     && rm -rf \
         /root/.cache \
