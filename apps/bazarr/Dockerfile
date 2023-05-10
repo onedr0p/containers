@@ -28,6 +28,7 @@ RUN \
     pip install --upgrade pip \
     && \
     pip install --upgrade \
+        pillow \
         gevent-websocket \
         webrtcvad-wheels \
     && apk del --purge .build-deps \
