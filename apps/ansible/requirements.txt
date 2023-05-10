@@ -1,4 +1,3 @@
-pip==23.1.2
 virtualenv==20.23.0
 pywinrm[kerberos]
 pywinrm==0.4.3
