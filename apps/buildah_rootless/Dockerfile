@@ -1,5 +1,5 @@
 # From: https://github.com/containers/buildah/blob/main/docs/tutorials/05-openshift-rootless-build.md
-FROM quay.io/buildah/stable:v1.23.1
+FROM quay.io/buildah/stable:v1.30.0
 
 RUN touch /etc/subgid /etc/subuid \
  && chmod g=u /etc/subgid /etc/subuid /etc/passwd \
