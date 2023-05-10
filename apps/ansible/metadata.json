@@ -1,5 +1,5 @@
 {
-  "app": "feeder",
+  "app": "ansible",
   "base": false,
   "channels": [
     {
