@@ -159,7 +159,7 @@ jobs:
 
       - name: Build all platforms
         id: release
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           build-args: |-
             VERSION=${{ steps.vars.outputs.chan_upstream_version }}
