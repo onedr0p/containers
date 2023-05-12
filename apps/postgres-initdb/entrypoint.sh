@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+printf "\e[1;32m%-6s\e[m\n" "Warning: This container will be deprecated in favor of the 'postgres-init' container. Discover more information on https://github.com/onedr0p/containers"
+
 export PGHOST="${POSTGRES_HOST}"
 export PGUSER="${POSTGRES_SUPER_USER}"
 export PGPASSWORD="${POSTGRES_SUPER_PASS}"
