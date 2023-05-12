@@ -4,11 +4,6 @@ ARG TARGETPLATFORM
 ARG VERSION
 ARG CHANNEL
 
-ENV POSTGRES_SUPER_USER="postgres" \
-    POSTGRES_RESET="false" \
-    POSTGRES_USER_RESET="false" \
-    POSTGRES_RESET_CONFIRM="NO"
-
 #hadolint ignore=DL3018
 RUN apk add --no-cache ca-certificates postgresql14-client~"${VERSION}"
 
