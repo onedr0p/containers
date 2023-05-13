@@ -9,7 +9,7 @@ RUN apk add --no-cache ca-certificates postgresql14-client~"${VERSION}"
 
 USER kah
 
-COPY ./apps/postgres-initdb/entrypoint.sh /entrypoint.sh
+COPY ./apps/postgres-init/entrypoint.sh /entrypoint.sh
 
 CMD ["/entrypoint.sh"]
 
