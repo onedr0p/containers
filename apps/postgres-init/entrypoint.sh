@@ -40,7 +40,7 @@ if [[ -z "${user_exists}" ]]; then
     createuser ${INIT_POSTGRES_USER_FLAGS} "${INIT_POSTGRES_USER}"
 fi
 
-printf "\e[1;32m%-6s\e[m\n" "Update User Password ..."
+printf "\e[1;32m%-6s\e[m\n" "Update password for user ${INIT_POSTGRES_USER} ..."
 psql --command "alter user \"${INIT_POSTGRES_USER}\" with encrypted password '${INIT_POSTGRES_PASS}';"
 
 for dbname in ${INIT_POSTGRES_DBNAME}; do
