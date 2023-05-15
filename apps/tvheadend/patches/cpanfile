@@ -1,4 +1,4 @@
-requires 'perl' => '5.24.0';
+requires 'perl' => '5.37.11';
 
 # perl packages for tvheadend x86
 requires 'Data::Dump' ;
