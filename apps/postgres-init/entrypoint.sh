@@ -38,9 +38,10 @@ user_exists=$(\
 if [[ -z "${user_exists}" ]]; then
     printf "\e[1;32m%-6s\e[m\n" "Create User ${INIT_POSTGRES_USER} ..."
     createuser ${INIT_POSTGRES_USER_FLAGS} "${INIT_POSTGRES_USER}"
-    printf "\e[1;32m%-6s\e[m\n" "Update User Password ..."
-    psql --command "alter user \"${INIT_POSTGRES_USER}\" with encrypted password '${INIT_POSTGRES_PASS}';"
 fi
+
+printf "\e[1;32m%-6s\e[m\n" "Update User Password ..."
+psql --command "alter user \"${INIT_POSTGRES_USER}\" with encrypted password '${INIT_POSTGRES_PASS}';"
 
 for dbname in ${INIT_POSTGRES_DBNAME}; do
     database_exists=$(\
