@@ -1,20 +1,84 @@
-ARG VERSION=latest@sha256:5b429165fa9642beb87e297fe02c7d545409f8d27a0e67e31670a5f6ea0933c1
+FROM mcr.microsoft.com/dotnet/runtime-deps:7.0-jammy@sha256:9a63816aa0ffc9e99aceda1be9d86142f3b9e24e96c19de386d46d05d23c31a0
 
-FROM ghcr.io/actions/actions-runner:${VERSION}
+ARG VERSION
+# renovate: datasource=github-releases depName=actions/runner-container-hooks
+ARG RUNNER_CONTAINER_HOOKS_VERSION=0.3.2
+ARG DOCKER_VERSION=20.10.23
 
-ENV \
-    DEBCONF_NONINTERACTIVE_SEEN=true \
-    DEBIAN_FRONTEND="noninteractive" \
-    APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=DontWarn
+ARG TARGETOS
+ARG TARGETARCH
+ARG TARGETVARIANT=""
+ARG TARGETPLATFORM
+ENV TARGETPLATFORM=${TARGETPLATFORM:-linux/amd64}
 
-# hadolint ignore=DL3008,DL3015,SC2086
+ENV DEBIAN_FRONTEND=noninteractive
+ENV LANG=en_US.UTF-8
+ENV RUNNER_MANUALLY_TRAP_SIG=1
+ENV ACTIONS_RUNNER_PRINT_LOG_TO_STDOUT=1
+
 RUN \
-    sudo apt-get -qq update \
+    # Prerequisites
+    set -eux \
+    && apt-get -qq update \
+    && apt-get install -y \
+        bash \
+        ca-certificates \
+        curl \
+        git \
+        jo \
+        jq \
+        locales \
+        moreutils \
+        sudo \
+        tzdata \
+        unrar \
+        unzip \
+        wget \
+    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
     && \
-    sudo apt-get install -y \
-        curl git wget \
+    case "${TARGETPLATFORM}" in \
+        'linux/amd64') export ARCH='x64' && export DOCKER_ARCH='x86_64' ;; \
+        'linux/arm64') export ARCH='arm64' && export DOCKER_ARCH='aarch64' ;; \
+    esac \
     && \
-    sudo rm -rf \
+    # Prepare user
+    adduser --disabled-password --gecos "" --uid 1001 runner \
+    && groupadd docker --gid 123 \
+    && usermod -aG sudo runner \
+    && usermod -aG docker runner \
+    && echo "%sudo   ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers \
+    && echo "Defaults env_keep += \"DEBIAN_FRONTEND\"" >> /etc/sudoers \
+    && \
+    # Install Runner
+    cd /home/runner \
+    && \
+    curl -fsSL -o runner.tar.gz "https://github.com/actions/runner/releases/download/v${VERSION}/actions-runner-linux-${ARCH}-${VERSION}.tar.gz" \
+        && tar xzf ./runner.tar.gz \
+        && rm runner.tar.gz \
+    && \
+    curl -fsSL -o runner-container-hooks.zip https://github.com/actions/runner-container-hooks/releases/download/v${RUNNER_CONTAINER_HOOKS_VERSION}/actions-runner-hooks-k8s-${RUNNER_CONTAINER_HOOKS_VERSION}.zip \
+        && unzip ./runner-container-hooks.zip -d ./k8s \
+        && rm runner-container-hooks.zip \
+    && \
+    # Install Docker
+    curl -fsSL -o docker.tgz https://download.docker.com/linux/static/stable/${DOCKER_ARCH}/docker-${DOCKER_VERSION}.tgz \
+        && tar zxvf docker.tgz \
+        && rm -rf docker.tgz \
+        && chown -R runner:docker . \
+        && install -o root -g root -m 755 docker/* /usr/bin/ \
+        && rm -rf docker \
+    && \
+    # Cleanup
+    apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+    && apt-get autoremove -y \
+    && apt-get clean \
+    && \
+    rm -rf \
         /tmp/* \
         /var/lib/apt/lists/* \
-        /var/tmp/
+        /var/cache/apt/* \
+        /var/tmp/*
+
+WORKDIR /home/runner
+USER runner
+CMD ["/home/runner/run.sh"]
