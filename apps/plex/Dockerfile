@@ -27,9 +27,10 @@ RUN \
     apt-get -qq update \
     && \
     apt-get -qq install -y \
+        ca-certificates \
+        libusb-dev \
         uuid-runtime \
         xmlstarlet \
-        ca-certificates \
     && \
     curl -fsSL -o /tmp/plex.deb \
         "${PLEX_DOWNLOAD}/${VERSION}/debian/plexmediaserver_${VERSION}_${ARCH}.deb" \
