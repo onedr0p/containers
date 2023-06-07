@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/runtime-deps:7.0-jammy@sha256:5690e0143dc8aea31aa5402b93893482d94bb09be95ea91b9c55aecc4a99a7fc
+FROM mcr.microsoft.com/dotnet/runtime-deps:7.0-jammy@sha256:396342d1e572ca2703483d5d490d0bb42550ce993fe5e4783f8da817c4430057
 
 ARG VERSION
 # renovate: datasource=github-releases depName=actions/runner-container-hooks
