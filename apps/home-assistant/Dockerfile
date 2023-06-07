@@ -15,11 +15,9 @@ ENV \
     PIP_ROOT_USER_ACTION=ignore \
     PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
-    PIPFLAGS="--use-deprecated=legacy-resolver --find-links https://wheels.home-assistant.io/musllinux/" \
+    WHEELS_LINKS="https://wheels.home-assistant.io/musllinux/" \
     PYTHONPATH="${PYTHONPATH}:/pip-packages" \
     HOME="/config"
-
-ENV HOME_ASSISTANT__HACS_INSTALL="false"
 
 WORKDIR /tmp
 
@@ -45,6 +43,7 @@ RUN \
         postgresql-libs \
         py3-pip \
         python3 \
+        socat \
         tiff
 
 #hadolint ignore=DL3018,DL3013
@@ -69,6 +68,7 @@ RUN \
     pip install --upgrade \
         cython \
         pip \
+        pyparsing \
         setuptools \
         wheel \
     && \
@@ -84,7 +84,7 @@ RUN \
     && \
     NUMPY_VERSION=$(grep "numpy" requirements_all.txt) \
     && \
-    pip install ${PIPFLAGS} \
+    pip install --find-links "${WHEELS_LINKS}" \
         "${NUMPY_VERSION}" \
     && \
     case "${TARGETPLATFORM}" in \
@@ -98,16 +98,16 @@ RUN \
     && \
     HOME_ASSISTANT_BASE=$(curl -fsSL "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/build.yaml" | grep "${ARCH}: " | cut -d ":" -f3) \
     && \
-    pip install ${PIPFLAGS} \
+    pip install --no-index --only-binary=:all: --find-links "${WHEELS_LINKS}" \
         --requirement "https://raw.githubusercontent.com/home-assistant/docker/${HOME_ASSISTANT_BASE}/requirements.txt" \
     && \
-    pip install ${PIPFLAGS} \
+    pip install --find-links "${WHEELS_LINKS}" \
         --requirement requirements_all.txt \
     && \
-    pip install ${PIPFLAGS} \
+    pip install --only-binary=:all: --find-links "${WHEELS_LINKS}" \
         homeassistant=="${VERSION}" \
     && \
-    pip install ${PIPFLAGS} \
+    pip install --find-links "${WHEELS_LINKS}" \
         pycups PySwitchbot \
     && \
     apk del --purge .build-deps \
