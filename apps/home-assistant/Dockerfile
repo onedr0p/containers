@@ -15,7 +15,8 @@ ENV \
     PIP_ROOT_USER_ACTION=ignore \
     PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
-    WHEELS_LINKS="https://wheels.home-assistant.io/musllinux/" \
+    ALPINE_WHEELS="https://wheel-index.linuxserver.io/alpine-3.18/" \
+    HOMEASSISTANT_WHEELS="https://wheel-index.linuxserver.io/homeassistant-3.18/" \
     PYTHONPATH="${PYTHONPATH}:/pip-packages" \
     HOME="/config"
 
@@ -46,7 +47,7 @@ RUN \
         socat \
         tiff
 
-#hadolint ignore=DL3018,DL3013
+#hadolint ignore=DL3018,DL3013,DL3059
 RUN \
     apk add --no-cache --virtual=.build-deps \
         autoconf \
@@ -63,15 +64,19 @@ RUN \
         libxslt-dev \
         postgresql-dev \
         python3-dev \
-        unixodbc-dev \
-    && \
+        unixodbc-dev
+
+#hadolint ignore=DL3018,DL3013,DL3059
+RUN \
     pip install --upgrade \
         cython \
         pip \
         pyparsing \
         setuptools \
-        wheel \
-    && \
+        wheel
+
+#hadolint ignore=DL3018,DL3013,DL3059,DL4006
+RUN \
     curl -fsSL "https://github.com/home-assistant/core/archive/${VERSION}.tar.gz" \
         | tar xzf - -C /tmp --strip-components=1 \
     && \
@@ -84,7 +89,7 @@ RUN \
     && \
     NUMPY_VERSION=$(grep "numpy" requirements_all.txt) \
     && \
-    pip install --find-links "${WHEELS_LINKS}" \
+    pip install --find-links "${ALPINE_WHEELS}" --find-links "${HOMEASSISTANT_WHEELS}" \
         "${NUMPY_VERSION}" \
     && \
     case "${TARGETPLATFORM}" in \
@@ -98,16 +103,16 @@ RUN \
     && \
     HOME_ASSISTANT_BASE=$(curl -fsSL "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/build.yaml" | grep "${ARCH}: " | cut -d ":" -f3) \
     && \
-    pip install --no-index --only-binary=:all: --find-links "${WHEELS_LINKS}" \
+    pip install --no-index --only-binary=:all: --find-links "${ALPINE_WHEELS}" --find-links "${HOMEASSISTANT_WHEELS}" \
         --requirement "https://raw.githubusercontent.com/home-assistant/docker/${HOME_ASSISTANT_BASE}/requirements.txt" \
     && \
-    pip install --find-links "${WHEELS_LINKS}" \
+    pip install --find-links "${ALPINE_WHEELS}" --find-links "${HOMEASSISTANT_WHEELS}" \
         --requirement requirements_all.txt \
     && \
-    pip install --only-binary=:all: --find-links "${WHEELS_LINKS}" \
+    pip install --only-binary=:all: --find-links "${ALPINE_WHEELS}" --find-links "${HOMEASSISTANT_WHEELS}" \
         homeassistant=="${VERSION}" \
     && \
-    pip install --find-links "${WHEELS_LINKS}" \
+    pip install --find-links "${ALPINE_WHEELS}" --find-links "${HOMEASSISTANT_WHEELS}" \
         pycups PySwitchbot \
     && \
     apk del --purge .build-deps \
