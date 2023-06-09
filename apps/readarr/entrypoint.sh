@@ -52,7 +52,7 @@ fi
 
 #shellcheck disable=SC2086
 exec \
-    /app/Readarr \
+    /app/bin/Readarr \
         --nobrowser \
         --data=/config \
         "$@"

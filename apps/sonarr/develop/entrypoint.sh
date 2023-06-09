@@ -50,7 +50,7 @@ fi
 
 #shellcheck disable=SC2086
 exec \
-    /app/Sonarr \
+    /app/bin/Sonarr \
         --nobrowser \
         --data=/config \
         "$@"

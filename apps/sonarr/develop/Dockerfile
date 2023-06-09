@@ -19,11 +19,13 @@ RUN \
         'linux/arm64') export ARCH='arm64' ;; \
     esac \
     && \
+    mkdir -p /app/bin \
+    && \
     curl -fsSL "https://download.sonarr.tv/v4/${SONARR__BRANCH}/${VERSION}/Sonarr.${SONARR__BRANCH}.${VERSION}.linux-musl-${ARCH}.tar.gz" \
-        | tar xzf - -C /app --strip-components=1 \
+        | tar xzf - -C /app/bin --strip-components=1 \
     && \
     rm -rf \
-        /app/Sonarr.Update \
+        /app/bin/Sonarr.Update \
     && \
     printf "UpdateMethod=docker\nBranch=%s\nPackageVersion=%s\nPackageAuthor=[onedr0p](https://github.com/onedr0p)\n" "${SONARR__BRANCH}" "${VERSION}" > /app/package_info \
     && chown -R root:root /app \

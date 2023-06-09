@@ -51,7 +51,7 @@ fi
 #shellcheck disable=SC2086
 exec \
     /usr/bin/mono --debug \
-        /app/Sonarr.exe \
+        /app/bin/Sonarr.exe \
             --nobrowser \
             --data=/config \
             "$@"
