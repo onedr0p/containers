@@ -38,7 +38,7 @@ RUN \
     && apt-get clean \
     && \
     rm -rf \
-        /app/Sonarr.Update \
+        /app/bin/Sonarr.Update \
         /tmp/* \
         /var/lib/apt/lists/* \
         /var/tmp/ \
