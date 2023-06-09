@@ -20,10 +20,10 @@ RUN \
     esac \
     && \
     curl -fsSL "https://readarr.servarr.com/v1/update/${READARR__BRANCH}/updatefile?version=${VERSION}&os=linuxmusl&runtime=netcore&arch=${ARCH}" \
-        | tar xzf - -C /app --strip-components=1 \
+        | tar xzf - -C /app/bin --strip-components=1 \
     && \
     rm -rf \
-        /app/Readarr.Update \
+        /app/bin/Readarr.Update \
     && \
     printf "UpdateMethod=docker\nBranch=%s\nPackageVersion=%s\nPackageAuthor=[onedr0p](https://github.com/onedr0p)\n" "${READARR__BRANCH}" "${VERSION}" > /app/package_info \
     && chown -R root:root /app \
