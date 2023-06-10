@@ -28,7 +28,7 @@ RUN \
         python3 py3-lxml py3-numpy py3-gevent py3-cryptography py3-setuptools py3-pillow py3-psycopg2 \
     && \
     apk add --no-cache --virtual .build-deps-py --repository http://dl-cdn.alpinelinux.org/alpine/v3.17/main \
-        py3-pip python3-dev gcc musl-dev \
+        py3-pip python3-dev \
     && \
     apk add --no-cache --virtual .build-deps-core gcc musl-dev \
     && \
