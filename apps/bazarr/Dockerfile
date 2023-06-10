@@ -21,15 +21,23 @@ RUN \
 
 #hadolint ignore=DL3018,DL3013
 RUN \
-    apk add --no-cache ca-certificates mediainfo ffmpeg python3 py3-lxml py3-numpy py3-gevent py3-cryptography py3-setuptools py3-pillow py3-psycopg2 \
+    apk add --no-cache ca-certificates mediainfo ffmpeg \
     && \
-    apk add --no-cache --virtual .build-deps py3-pip gcc python3-dev musl-dev \
+    # Force python 3.10
+    apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.17/main \
+        python3 py3-lxml py3-numpy py3-gevent py3-cryptography py3-setuptools py3-pillow py3-psycopg2 \
+    && \
+    apk add --no-cache --virtual .build-deps-py --repository http://dl-cdn.alpinelinux.org/alpine/v3.17/main \
+        py3-pip python3-dev gcc musl-dev \
+    && \
+    apk add --no-cache --virtual .build-deps-core gcc musl-dev \
     && \
     pip install --upgrade pip \
     && \
     pip install --upgrade \
       "webrtcvad-wheels>=2.0.10" \
-    && apk del --purge .build-deps \
+    && apk del --purge .build-deps-py \
+    && apk del --purge .build-deps-core \
     && rm -rf \
         /root/.cache \
         /root/.cargo \
