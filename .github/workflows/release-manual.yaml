@@ -57,7 +57,7 @@ jobs:
           fi
 
   images-build:
-    uses: onedr0p/containers/.github/workflows/action-image-build.yaml@main
+    uses: ./.github/workflows/action-image-build.yaml
     if: needs.generate-build-matrix.outputs.matrix != '[]'
     needs: ["generate-build-matrix"]
     with:
