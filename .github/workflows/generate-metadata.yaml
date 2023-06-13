@@ -69,7 +69,7 @@ jobs:
       chan_tag_rolling: ${{ steps.vars.outputs.chan_tag_rolling }}
       chan_tag_version: ${{ steps.vars.outputs.chan_tag_version }}
     env:
-      image: ${{ fromJson(inputs.imagesToBuild) }}
+      image: ${{ fromJson(inputs.imageToBuild) }}
     steps:
       - uses: actions/checkout@v3
         with:
