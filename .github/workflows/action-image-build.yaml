@@ -34,46 +34,17 @@ on:
 jobs:
   build-and-test:
     name: Build Images
-    runs-on: ubuntu-latest
     if: inputs.imagesToBuild != '' && inputs.imagesToBuild != '[]'
     strategy:
       matrix:
         image: ["${{ fromJson(inputs.imagesToBuild) }}"]
       fail-fast: false
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 1
-
-      - id: matrix-build
-        name: Build and Test Image
-        uses: ./.github/workflows/action-image-build-matrixed.yaml
-        with:
-          imageToBuild: ${{ matrix.image }}
-          pushImages: ${{ inputs.pushImages }}
-
-      - name: Build successful
-        id: build-success
-        if: ${{ always() && steps.matrix-build.outcome == 'success' }}
-        run: |-
-          echo "message=🎉 ${{ matrix.image.app }}-${{ matrix.image.channel }} (${{ steps.matrix-build.outputs.version }})" >> $GITHUB_OUTPUT
-          echo "color=0x00FF00" >> $GITHUB_OUTPUT
-
-      - name: Build failed
-        id: build-failed
-        if: ${{ always() && steps.matrix-build.outcome == 'failure' }}
-        run: |-
-          echo "message=💥 ${{ matrix.image.app }}-${{ matrix.image.channel }} (${{ steps.matrix-build.outputs.version }})" >> $GITHUB_OUTPUT
-          echo "color=0xFF0000" >> $GITHUB_OUTPUT
-
-      - name: Send Discord Webhook
-        uses: sarisia/actions-status-discord@v1
-        if: ${{ always() && inputs.sendNotification == 'true' }}
-        with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          title: ${{ steps.build-failed.outputs.message || steps.build-success.outputs.message }}
-          color: ${{ steps.build-failed.outputs.color }}
-          username: GitHub Actions
+    uses:
+      ./.github/workflows/action-image-build-matrixed.yaml
+    with:
+      imageToBuild: ${{ matrix.image }}
+      pushImages: ${{ inputs.pushImages }}
+      sendNotification: ${{ inputs.sendNotification }}
 
   # Summarize matrix https://github.community/t/status-check-for-a-matrix-jobs/127354/7
   build_success:
