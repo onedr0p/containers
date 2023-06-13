@@ -37,11 +37,12 @@ jobs:
   generate-metadata:
     uses: ./.github/workflows/generate-metadata.yaml
     with:
-      imageToBuild: ${{ fromJSON(inputs.imageToBuild) }}
+      imageToBuild: ${{ inputs.imageToBuild }}
 
   build-and-test:
     name: Build and Test
-    needs: generate-metadata
+    needs:
+      - generate-metadata
     runs-on: ubuntu-latest
     if: inputs.imageToBuild != '' &&inputs.imageToBuild != '{}'
     strategy:
