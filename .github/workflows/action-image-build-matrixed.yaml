@@ -11,7 +11,7 @@ on:
                 "app": "sonarr",
                 "channel": "main"
               }
-        required: false
+        required: true
         type: string
         default: ''
 

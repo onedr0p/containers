@@ -32,9 +32,22 @@ on:
         type: string
 
 jobs:
+  log-images:
+    name: Log Images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log images to build
+        run: |
+          echo "imagesToBuild=${{ inputs.imagesToBuild }}"
+          echo "pushImages=${{ inputs.pushImages }}"
+          echo "sendNotification=${{ inputs.sendNotification }}"
+
+
   build-and-test:
     name: Build Images
     if: inputs.imagesToBuild != '' && inputs.imagesToBuild != '[]'
+    needs:
+      - log-images
     strategy:
       matrix:
         image: ["${{ fromJson(inputs.imagesToBuild) }}"]
