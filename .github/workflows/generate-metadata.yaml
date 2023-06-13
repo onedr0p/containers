@@ -3,7 +3,7 @@ name: "Generate Metadata"
 on:
   workflow_call:
     inputs:
-      imagesToBuild:
+      imageToBuild:
         description: |-
           Pass a json string with the image & channel to build:
           {

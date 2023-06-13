@@ -36,6 +36,8 @@ on:
 jobs:
   generate-metadata:
     uses: ./.github/workflows/generate-metadata.yaml
+    with:
+      imageToBuild: ${{ fromJSON(inputs.imageToBuild) }}
 
   build-and-test:
     name: Build and Test
