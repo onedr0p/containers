@@ -54,6 +54,7 @@ jobs:
 
             output="$(jo -a ${images_array[*]})"
             echo "changes=${output}" >> $GITHUB_OUTPUT
+            echo "Changes:\n ${output}"
           fi
 
   images-build:
