@@ -55,7 +55,7 @@ jobs:
   generate-metadata:
     name: Generate Image Metadata
     runs-on: ubuntu-latest
-    if: inputs.imagesToBuild != '' && inputs.imagesToBuild != '{}'
+    if: inputs.imageToBuild != '' && inputs.imageToBuild != '{}'
     outputs:
       chan_platforms: ${{ steps.vars.outputs.platforms }}
       chan_tests_enabled: ${{ steps.vars.outputs.chan_tests_enabled }}
