@@ -52,5 +52,4 @@ jobs:
     needs: ["generate-build-matrix"]
     with:
       imagesToBuild: "${{ needs.generate-build-matrix.outputs.matrix }}"
-      updateMetadata: "false"
     secrets: inherit

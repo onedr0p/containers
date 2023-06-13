@@ -1,5 +1,5 @@
 ---
-name: "Action: Image Build"
+name: "Action: Image Build (matrixed)"
 
 on:
   workflow_call:

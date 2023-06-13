@@ -63,5 +63,4 @@ jobs:
     with:
       imagesToBuild: "${{ needs.generate-build-matrix.outputs.matrix }}"
       pushImages: "${{ github.event.inputs.push }}"
-      updateMetadata: "${{ github.event.inputs.push }}"
     secrets: inherit
