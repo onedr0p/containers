@@ -1,0 +1,126 @@
+name: "Generate Metadata"
+
+on:
+  workflow_call:
+    inputs:
+      imagesToBuild:
+        description: |-
+          Pass a json string with the image & channel to build:
+          {
+            "app": "sonarr",
+            "channel": "main"
+          }
+        type: string
+        required: true
+
+    outputs:
+      chan_platforms:
+        description: "A list of platforms to build for"
+        value: ${{ jobs.generate-metadata.outputs.platforms }}
+      chan_tests_enabled:
+        description: "Whether or not tests are enabled for the channel"
+        value: ${{ jobs.generate-metadata.outputs.chan_tests_enabled }}
+      chan_tests_type:
+        description: "The type of tests to run"
+        value: ${{ jobs.generate-metadata.outputs.chan_tests_type }}
+      chan_upstream_version:
+        description: "The upstream version of the app"
+        value: ${{ jobs.generate-metadata.outputs.chan_upstream_version }}
+      chan_goss_args:
+        description: "The arguments to pass to goss"
+        value: ${{ jobs.generate-metadata.outputs.chan_goss_args }}
+      chan_label_type:
+        description: "The type of label to use for image"
+        value: ${{ jobs.generate-metadata.outputs.chan_label_type }}
+      chan_dockerfile:
+        description: "The path to the Dockerfile to use"
+        value: ${{ jobs.generate-metadata.outputs.chan_dockerfile }}
+      chan_goss_config:
+        description: "The path to the goss config to use"
+        value: ${{ jobs.generate-metadata.outputs.chan_goss_config }}
+      chan_image_name:
+        description: "The name of the image to build"
+        value: ${{ jobs.generate-metadata.outputs.chan_image_name }}
+      chan_tag_testing:
+        description: "The tag to use for testing"
+        value: ${{ jobs.generate-metadata.outputs.chan_tag_testing }}
+      chan_tag_rolling:
+        description: "The rolling tag to use (eg latest)"
+        value: ${{ jobs.generate-metadata.outputs.chan_tag_rolling }}
+      chan_tag_version:
+        description: "The version tag to use (eg 3.0.0)"
+        value: ${{ jobs.generate-metadata.outputs.chan_tag_version }}
+
+jobs:
+  generate-metadata:
+    name: Generate Image Metadata
+    runs-on: ubuntu-latest
+    if: inputs.imagesToBuild != '' && inputs.imagesToBuild != '{}'
+    outputs:
+      chan_platforms: ${{ steps.vars.outputs.platforms }}
+      chan_tests_enabled: ${{ steps.vars.outputs.chan_tests_enabled }}
+      chan_tests_type: ${{ steps.vars.outputs.chan_tests_type }}
+      chan_upstream_version: ${{ steps.vars.outputs.chan_upstream_version }}
+      chan_goss_args: ${{ steps.vars.outputs.chan_goss_args }}
+      chan_label_type: ${{ steps.vars.outputs.chan_label_type }}
+      chan_dockerfile: ${{ steps.vars.outputs.chan_dockerfile }}
+      chan_goss_config: ${{ steps.vars.outputs.chan_goss_config }}
+      chan_tag_testing: ${{ steps.vars.outputs.chan_tag_testing }}
+      chan_tag_rolling: ${{ steps.vars.outputs.chan_tag_rolling }}
+      chan_tag_version: ${{ steps.vars.outputs.chan_tag_version }}
+    env:
+      image: ${{ fromJson(inputs.imagesToBuild) }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: Setup workflow Variables
+        id: vars
+        shell: bash
+        run: |-
+          container_base=$(jq '.base' ./apps/${{ env.image.app }}/metadata.json)
+          echo "chan_build_date=$(date --rfc-3339=seconds --utc)" >> $GITHUB_OUTPUT
+
+          chan_config=$(jq --arg chan "${{ env.image.channel }}" '(.channels | .[] | select(.name == $chan))' ./apps/${{ env.image.app }}/metadata.json)
+          chan_stable=$(jq --raw-output '.stable' <<< "${chan_config}")
+
+          chan_platforms=$(jq --raw-output '.platforms' <<< "${chan_config}") && \
+              echo "chan_platforms=${chan_platforms}" >> $GITHUB_OUTPUT
+          chan_tests_enabled=$(jq --raw-output '.tests.enabled' <<< "${chan_config}") && \
+              echo "chan_tests_enabled=${chan_tests_enabled}" >> $GITHUB_OUTPUT
+          chan_tests_type=$(jq --raw-output '.tests.type' <<< "${chan_config}") && \
+              echo "chan_tests_type=${chan_tests_type}" >> $GITHUB_OUTPUT
+
+          chan_upstream_version=$(bash ./.github/scripts/upstream.sh "${{ env.image.app }}" "${{ env.image.channel }}") && \
+              echo "chan_upstream_version=${chan_upstream_version}" >> $GITHUB_OUTPUT
+
+          if [[ "${chan_tests_enabled}" == true && "${chan_tests_type}" == "cli" ]]; then
+              echo "chan_goss_args=tail -f /dev/null" >> $GITHUB_OUTPUT
+          fi
+
+          if [[ "${container_base}" == true ]]; then
+              echo "chan_label_type=org.opencontainers.image.base" >> $GITHUB_OUTPUT
+          else
+              echo "chan_label_type=org.opencontainers.image" >> $GITHUB_OUTPUT
+          fi
+
+          if test -f "./apps/${{ env.image.app }}/${{ env.image.channel }}/Dockerfile"; then
+              echo "chan_dockerfile=./apps/${{ env.image.app }}/${{ env.image.channel }}/Dockerfile" >> $GITHUB_OUTPUT
+              echo "chan_goss_config=./apps/${{ env.image.app }}/${{ env.image.channel }}/goss.yaml" >> $GITHUB_OUTPUT
+          else
+              echo "chan_dockerfile=./apps/${{ env.image.app }}/Dockerfile" >> $GITHUB_OUTPUT
+              echo "chan_goss_config=./apps/${{ env.image.app }}/ci/goss.yaml" >> $GITHUB_OUTPUT
+          fi
+
+          if [[ "${chan_stable}" == true ]]; then
+              echo "chan_image_name=${{ env.image.app }}" >> $GITHUB_OUTPUT
+              echo "chan_tag_testing=${{ env.image.app }}:testingz" >> $GITHUB_OUTPUT
+              echo "chan_tag_rolling=${{ env.image.app }}:rolling" >> $GITHUB_OUTPUT
+              echo "chan_tag_version=${{ env.image.app }}:${chan_upstream_version}" >> $GITHUB_OUTPUT
+          else
+              echo "chan_image_name=${{ env.image.app }}-${{ env.image.channel }}" >> $GITHUB_OUTPUT
+              echo "chan_tag_testing=${{ env.image.app }}-${{ env.image.channel }}:testingz" >> $GITHUB_OUTPUT
+              echo "chan_tag_rolling=${{ env.image.app }}-${{ env.image.channel }}:rolling" >> $GITHUB_OUTPUT
+              echo "chan_tag_version=${{ env.image.app }}-${{ env.image.channel }}:${chan_upstream_version}" >> $GITHUB_OUTPUT
+          fi
