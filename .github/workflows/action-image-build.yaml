@@ -41,6 +41,10 @@ jobs:
         image: ["${{ fromJson(inputs.imagesToBuild) }}"]
       fail-fast: false
     steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
       - id: matrix-build
         name: Build and Test Image
         uses: ./.github/workflows/action-image-build-matrixed.yaml
