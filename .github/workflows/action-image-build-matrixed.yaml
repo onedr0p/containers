@@ -44,7 +44,7 @@ jobs:
     needs:
       - generate-metadata
     runs-on: ubuntu-latest
-    if: inputs.imageToBuild != '' &&inputs.imageToBuild != '{}'
+    if: ${{ inputs.imageToBuild != '' && inputs.imageToBuild != '{}' }}
     strategy:
       matrix:
         platform: ["${{ fromJson(needs.generate-metadata.outputs.chan_platforms) }}"]
