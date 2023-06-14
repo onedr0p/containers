@@ -97,7 +97,6 @@ jobs:
           context: .
           platforms: ${{ matrix.image.platform }}
           file: ${{ matrix.image.chan_dockerfile }}
-          load: true
           outputs: type=image,name=ghcr.io/${{ github.repository_owner }}/${{ matrix.image.chan_image_name }},push-by-digest=true,name-canonical=true,push=${{ inputs.pushImages }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
