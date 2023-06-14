@@ -25,17 +25,17 @@ if __name__ == "__main__":
     out = {"manifestsToBuild": [], "imagePlatformPermutations": []}
 
     for app in changed_apps:
-        with open("./apps/${app.app}/metadata.json") as f:
+        name = app["app"]
+        channel = app["channel"]
+        with open(f"./apps/{name}/metadata.json") as f:
             metadata = json.load(f)
 
         # Generate Config
         cfg = {}
         for ch in metadata["channels"]:
-            if ch["name"] == app.channel:
+            if ch["name"] == channel:
                 cfg = ch
                 break
-        name = app["app"]
-        channel = cfg["channel"]
 
         app["chan_build_date"] = datetime.now(timezone.utc).isoformat()
         app["chan_stable"] = cfg["stable"]
@@ -46,7 +46,7 @@ if __name__ == "__main__":
         if app["chan_tests_enabled"] and app["chan_tests_type"] == "cli":
             app["chan_goss_args"] = "tail -f /dev/null"
 
-        if app["base"]:
+        if app.get("base", False):
             app["chan_label_type"] ="org.opencontainers.image.base"
         else:
             app["chan_label_type"]="org.opencontainers.image"
