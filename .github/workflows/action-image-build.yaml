@@ -45,7 +45,7 @@ jobs:
 
   build-and-test:
     name: Build Images
-    if: inputs.imagesToBuild != '' && inputs.imagesToBuild != '[]'
+    # if: inputs.imagesToBuild != '' && inputs.imagesToBuild != '[]'
     needs:
       - log-images
     strategy:
