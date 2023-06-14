@@ -117,7 +117,7 @@ jobs:
         shell: bash
         env:
           CONTAINER_RUNTIME: docker
-          GOSS_FILE: ${{ matrix.image.chan_goss_file }}
+          GOSS_FILE: ${{ matrix.image.chan_goss_config }}
           GOSS_OPTS: --retry-timeout 60s --sleep 2s --color --format documentation
           GOSS_SLEEP: 2
           GOSS_FILES_STRATEGY: cp
