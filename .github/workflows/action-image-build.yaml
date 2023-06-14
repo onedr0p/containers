@@ -193,6 +193,7 @@ jobs:
           TAGS: ${{ toJSON(matrix.manifest.tags) }}
         run:
           docker buildx imagetools create $(jq -cr '. | map("-t ghcr.io/${{ github.repository_owner }}/" + .) | join(" ")'  <<< "$TAGS") $(printf 'ghcr.io/${{ github.repository_owner }}/${{ needs.generate-metadata.outputs.chan_image_name }}@sha256:%s ' *)
+        shell: bash -x
 
       - name: Build successful
         id: build-success
