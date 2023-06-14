@@ -74,8 +74,6 @@ jobs:
       chan_tag_testing: ${{ steps.vars.outputs.chan_tag_testing }}
       chan_tag_rolling: ${{ steps.vars.outputs.chan_tag_rolling }}
       chan_tag_version: ${{ steps.vars.outputs.chan_tag_version }}
-    env:
-      image: ${{ inputs.imageToBuild }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -85,14 +83,14 @@ jobs:
         id: vars
         shell: bash
         run: |-
-          app=$(jq --raw-output '.app' <<< "${{ env.image }}") && \
+          app=$(jq --raw-output '.app' <<< "${{ inputs.imageToBuild }}") && \
               echo "app=${app}" >> $GITHUB_OUTPUT
-          channel=$(jq --raw-output '.channel' <<< "${{ env.image }}") && \
+          channel=$(jq --raw-output '.channel' <<< "${{ inputs.imageToBuild }}") && \
               echo "channel=${channel}" >> $GITHUB_OUTPUT
-          container_base=$(jq '.base' ./apps/${ app }/metadata.json)
+          container_base=$(jq '.base' ./apps/${app}/metadata.json)
           echo "chan_build_date=$(date --rfc-3339=seconds --utc)" >> $GITHUB_OUTPUT
 
-          chan_config=$(jq --arg chan "${ channel }" '(.channels | .[] | select(.name == $chan))' ./apps/${app}/metadata.json)
+          chan_config=$(jq --arg chan "${channel}" '(.channels | .[] | select(.name == $chan))' ./apps/${app}/metadata.json)
           chan_stable=$(jq --raw-output '.stable' <<< "${chan_config}")
 
           chan_platforms=$(jq --raw-output '.platforms' <<< "${chan_config}") && \
