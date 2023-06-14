@@ -180,6 +180,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Log Files
+        working-directory: /tmp/${{ matrix.manifest.image }}/digests
+        run: |
+          ls -la
+          cat *
+
       - name: Merge Manifests
         id: merge
         working-directory: /tmp/${{ matrix.manifest.image }}/digests
