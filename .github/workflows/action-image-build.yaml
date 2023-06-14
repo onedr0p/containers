@@ -55,7 +55,7 @@ jobs:
           echo "matrices=${matrices}" >> $GITHUB_OUTPUT
 
   build-platform-images:
-    name: Build and Test Platform Images
+    name: Build/Test ${{ matrix.image.chan_image_name }} - ${{ matrix.image.platform }}
     runs-on: ubuntu-latest
     needs:
       - prepare
@@ -148,7 +148,7 @@ jobs:
           retention-days: 1
 
   merge:
-    name: Merge Platform Images
+    name: Merge ${{ matrix.manifest.image }}
     runs-on: ubuntu-latest
     needs:
       - build-platform-images
