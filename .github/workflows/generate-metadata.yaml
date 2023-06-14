@@ -83,9 +83,9 @@ jobs:
         id: vars
         shell: bash
         run: |-
-          app=$(jq --raw-output '.app' <<< "${{ inputs.imageToBuild }}") && \
+          app=$(jq --raw-output '.app' <<< '${{ inputs.imageToBuild }}'') && \
               echo "app=${app}" >> $GITHUB_OUTPUT
-          channel=$(jq --raw-output '.channel' <<< "${{ inputs.imageToBuild }}") && \
+          channel=$(jq --raw-output '.channel' <<< '${{ inputs.imageToBuild }}') && \
               echo "channel=${channel}" >> $GITHUB_OUTPUT
           container_base=$(jq '.base' ./apps/${app}/metadata.json)
           echo "chan_build_date=$(date --rfc-3339=seconds --utc)" >> $GITHUB_OUTPUT
