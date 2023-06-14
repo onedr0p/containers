@@ -69,7 +69,7 @@ jobs:
       chan_tag_rolling: ${{ steps.vars.outputs.chan_tag_rolling }}
       chan_tag_version: ${{ steps.vars.outputs.chan_tag_version }}
     env:
-      image: ${{ fromJson(inputs.imageToBuild) }}
+      image: ${{ inputs.imageToBuild }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -79,10 +79,12 @@ jobs:
         id: vars
         shell: bash
         run: |-
-          container_base=$(jq '.base' ./apps/${{ env.image.app }}/metadata.json)
+          app=$(jq --raw-output '.app' <<< "${{ env.image }}")
+          channel=$(jq --raw-output '.channel' <<< "${{ env.image }}")
+          container_base=$(jq '.base' ./apps/${ app }/metadata.json)
           echo "chan_build_date=$(date --rfc-3339=seconds --utc)" >> $GITHUB_OUTPUT
 
-          chan_config=$(jq --arg chan "${{ env.image.channel }}" '(.channels | .[] | select(.name == $chan))' ./apps/${{ env.image.app }}/metadata.json)
+          chan_config=$(jq --arg chan "${ channel }" '(.channels | .[] | select(.name == $chan))' ./apps/${app}/metadata.json)
           chan_stable=$(jq --raw-output '.stable' <<< "${chan_config}")
 
           chan_platforms=$(jq --raw-output '.platforms' <<< "${chan_config}") && \
@@ -92,7 +94,7 @@ jobs:
           chan_tests_type=$(jq --raw-output '.tests.type' <<< "${chan_config}") && \
               echo "chan_tests_type=${chan_tests_type}" >> $GITHUB_OUTPUT
 
-          chan_upstream_version=$(bash ./.github/scripts/upstream.sh "${{ env.image.app }}" "${{ env.image.channel }}") && \
+          chan_upstream_version=$(bash ./.github/scripts/upstream.sh "${app}" "${channel}") && \
               echo "chan_upstream_version=${chan_upstream_version}" >> $GITHUB_OUTPUT
 
           if [[ "${chan_tests_enabled}" == true && "${chan_tests_type}" == "cli" ]]; then
@@ -105,22 +107,22 @@ jobs:
               echo "chan_label_type=org.opencontainers.image" >> $GITHUB_OUTPUT
           fi
 
-          if test -f "./apps/${{ env.image.app }}/${{ env.image.channel }}/Dockerfile"; then
-              echo "chan_dockerfile=./apps/${{ env.image.app }}/${{ env.image.channel }}/Dockerfile" >> $GITHUB_OUTPUT
-              echo "chan_goss_config=./apps/${{ env.image.app }}/${{ env.image.channel }}/goss.yaml" >> $GITHUB_OUTPUT
+          if test -f "./apps/${app}/${channel}/Dockerfile"; then
+              echo "chan_dockerfile=./apps/${app}/${channel}/Dockerfile" >> $GITHUB_OUTPUT
+              echo "chan_goss_config=./apps/${app}/${channel}/goss.yaml" >> $GITHUB_OUTPUT
           else
-              echo "chan_dockerfile=./apps/${{ env.image.app }}/Dockerfile" >> $GITHUB_OUTPUT
-              echo "chan_goss_config=./apps/${{ env.image.app }}/ci/goss.yaml" >> $GITHUB_OUTPUT
+              echo "chan_dockerfile=./apps/${app}/Dockerfile" >> $GITHUB_OUTPUT
+              echo "chan_goss_config=./apps/${app}/ci/goss.yaml" >> $GITHUB_OUTPUT
           fi
 
           if [[ "${chan_stable}" == true ]]; then
-              echo "chan_image_name=${{ env.image.app }}" >> $GITHUB_OUTPUT
-              echo "chan_tag_testing=${{ env.image.app }}:testingz" >> $GITHUB_OUTPUT
-              echo "chan_tag_rolling=${{ env.image.app }}:rolling" >> $GITHUB_OUTPUT
-              echo "chan_tag_version=${{ env.image.app }}:${chan_upstream_version}" >> $GITHUB_OUTPUT
+              echo "chan_image_name=${app}" >> $GITHUB_OUTPUT
+              echo "chan_tag_testing=${app}:testingz" >> $GITHUB_OUTPUT
+              echo "chan_tag_rolling=${app}:rolling" >> $GITHUB_OUTPUT
+              echo "chan_tag_version=${app}:${chan_upstream_version}" >> $GITHUB_OUTPUT
           else
-              echo "chan_image_name=${{ env.image.app }}-${{ env.image.channel }}" >> $GITHUB_OUTPUT
-              echo "chan_tag_testing=${{ env.image.app }}-${{ env.image.channel }}:testingz" >> $GITHUB_OUTPUT
-              echo "chan_tag_rolling=${{ env.image.app }}-${{ env.image.channel }}:rolling" >> $GITHUB_OUTPUT
-              echo "chan_tag_version=${{ env.image.app }}-${{ env.image.channel }}:${chan_upstream_version}" >> $GITHUB_OUTPUT
+              echo "chan_image_name=${app}-${channel}" >> $GITHUB_OUTPUT
+              echo "chan_tag_testing=${app}-${channel}:testingz" >> $GITHUB_OUTPUT
+              echo "chan_tag_rolling=${app}-${channel}:rolling" >> $GITHUB_OUTPUT
+              echo "chan_tag_version=${app}-${channel}:${chan_upstream_version}" >> $GITHUB_OUTPUT
           fi
