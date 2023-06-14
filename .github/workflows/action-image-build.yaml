@@ -92,7 +92,7 @@ jobs:
         uses: cue-lang/setup-cue@0be332bb74c8a2f07821389447ba3163e2da3bfb
 
       - name: Setup Goss
-        if: ${{ matrix.image.chan_tests_enabled && matrix.image.platform == "linux/amd64"}}
+        if: ${{ matrix.image.chan_tests_enabled && matrix.image.platform == 'linux/amd64'}}
         uses: e1himself/goss-installation-action@v1.1.0
         with:
           version: v0.3.21
@@ -113,7 +113,7 @@ jobs:
 
       - name: Run Goss Tests
         id: dgoss
-        if: ${{ matrix.image.chan_tests_enabled && matrix.image.platform == "linux/amd64" }}
+        if: ${{ matrix.image.chan_tests_enabled && matrix.image.platform == 'linux/amd64' }}
         shell: bash
         env:
           CONTAINER_RUNTIME: docker
