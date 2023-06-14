@@ -123,7 +123,7 @@ jobs:
           GOSS_FILES_STRATEGY: cp
           CONTAINER_LOG_OUTPUT: goss_container_log_output
         run: |
-          dgoss run ghcr.io/${{ github.repository_owner }}/${{ matrix.image.chan_image_name }}@${{ steps.build.outputs.digest }}
+          dgoss run ghcr.io/${{ github.repository_owner }}/${{ matrix.image.chan_image_name }}@${{ steps.build.outputs.digest }} ${{ matrix.image.chan_goss_args }}
 
       - name: Export Digest
         id: export-digest

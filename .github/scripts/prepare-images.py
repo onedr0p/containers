@@ -56,7 +56,7 @@ if __name__ == "__main__":
             app["chan_goss_config"] = f"./apps/{name}/{channel}/goss.yaml"
         else:
             app["chan_dockerfile"] = f"./apps/{name}/Dockerfile"
-            app["chan_goss_config"] = f"./apps/{name}/goss.yaml"
+            app["chan_goss_config"] = f"./apps/{name}/ci/goss.yaml"
 
         if app["chan_stable"]:
             app["chan_image_name"] = name
