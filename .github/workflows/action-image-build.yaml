@@ -38,9 +38,9 @@ jobs:
     steps:
       - name: Log images to build
         run: |
-          echo "imagesToBuild=${{ inputs.imagesToBuild }}"
-          echo "pushImages=${{ inputs.pushImages }}"
-          echo "sendNotification=${{ inputs.sendNotification }}"
+          echo 'imagesToBuild=${{ inputs.imagesToBuild }}'
+          echo 'pushImages=${{ inputs.pushImages }}'
+          echo 'sendNotification=${{ inputs.sendNotification }}'
 
 
   build-and-test:
