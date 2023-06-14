@@ -55,7 +55,8 @@ jobs:
     uses:
       ./.github/workflows/action-image-build-matrixed.yaml
     with:
-      imageToBuild: ${{ toJSON(matrix.image) }}
+      app: ${{ matrix.image.app }}
+      channel: ${{ matrix.image.channel }}
       pushImages: ${{ inputs.pushImages }}
       sendNotification: ${{ inputs.sendNotification }}
 

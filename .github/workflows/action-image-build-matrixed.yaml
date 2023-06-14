@@ -4,13 +4,14 @@ name: "Action: Image Build"
 on:
   workflow_call:
     inputs:
-      imageToBuild:
-        description: |-
-          Pass a json string with the image and channel to build. e.g.:
-              {
-                "app": "sonarr",
-                "channel": "main"
-              }
+      app:
+        description: app to build
+        required: true
+        type: string
+        default: ''
+
+      channel:
+        description: channel to build
         required: true
         type: string
         default: ''
@@ -37,14 +38,14 @@ jobs:
   generate-metadata:
     uses: ./.github/workflows/generate-metadata.yaml
     with:
-      imageToBuild: ${{ inputs.imageToBuild }}
+      app: ${{ inputs.app }}
+      channel: ${{ inputs.channel }}
 
   build-and-test:
     name: Build and Test
     needs:
       - generate-metadata
     runs-on: ubuntu-latest
-    if: ${{ inputs.imageToBuild != '' && inputs.imageToBuild != '{}' }}
     strategy:
       matrix:
         platform: ["${{ fromJson(needs.generate-metadata.outputs.chan_platforms) }}"]
