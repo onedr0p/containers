@@ -1,5 +1,5 @@
 ---
-name: "Action: Image Build (matrixed)"
+name: "Action: Image Build"
 
 on:
   workflow_call:
@@ -33,11 +33,15 @@ on:
 
 jobs:
   prepare:
-    name: Log Images
+    name: Prepare Matrices
     runs-on: ubuntu-latest
     outputs:
       matrices: ${{ fromJSON(steps.generate-matrices.outputs.matrices) }}
     steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
       - name: Log images to build
         run: |
           echo 'imagesToBuild=${{ inputs.imagesToBuild }}'
