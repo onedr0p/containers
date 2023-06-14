@@ -50,6 +50,12 @@ on:
       chan_tag_version:
         description: "The version tag to use (eg 3.0.0)"
         value: ${{ jobs.generate-metadata.outputs.chan_tag_version }}
+      app:
+        description: "The app to build"
+        value: ${{ jobs.generate-metadata.outputs.app }}
+      channel:
+        description: "The channel to build"
+        value: ${{ jobs.generate-metadata.outputs.channel }}
 
 jobs:
   generate-metadata:
@@ -79,8 +85,10 @@ jobs:
         id: vars
         shell: bash
         run: |-
-          app=$(jq --raw-output '.app' <<< "${{ env.image }}")
-          channel=$(jq --raw-output '.channel' <<< "${{ env.image }}")
+          app=$(jq --raw-output '.app' <<< "${{ env.image }}") && \
+              echo "app=${app}" >> $GITHUB_OUTPUT
+          channel=$(jq --raw-output '.channel' <<< "${{ env.image }}") && \
+              echo "channel=${channel}" >> $GITHUB_OUTPUT
           container_base=$(jq '.base' ./apps/${ app }/metadata.json)
           echo "chan_build_date=$(date --rfc-3339=seconds --utc)" >> $GITHUB_OUTPUT
 

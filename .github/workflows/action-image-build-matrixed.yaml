@@ -48,8 +48,6 @@ jobs:
     strategy:
       matrix:
         platform: ["${{ fromJson(needs.generate-metadata.outputs.chan_platforms) }}"]
-    env:
-      image: ${{ fromJSON(inputs.imageToBuild) }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -70,7 +68,7 @@ jobs:
 
       - name: Validate image metadata
         shell: bash
-        run: cue vet --schema '#Spec' ./apps/${{ env.image.app }}/metadata.json ./metadata.rules.cue
+        run: cue vet --schema '#Spec' ./apps/${{ needs.generate-metadata.outputs.app }}/metadata.json ./metadata.rules.cue
 
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v2
@@ -92,8 +90,8 @@ jobs:
         id: build
         with:
           build-args: |-
-            VERSION=${{ steps.vars.outputs.chan_upstream_version }}
-            CHANNEL=${{ env.image.channel }}
+            VERSION=${{ needs.generate-metadata.outputs.chan_upstream_version }}
+            CHANNEL=${{ needs.generate-metadata.outputs.channel }}
           context: .
           platforms: ${{ matrix.platform }}
           file: ${{ needs.generate-metadata.outputs.chan_dockerfile }}
