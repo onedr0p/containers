@@ -71,10 +71,10 @@ if __name__ == "__main__":
         for platform in cfg["platforms"]:
             if platform != "linux/amd64" and not forRelease:
                 continue
-            if platform != "linux/amd64":
-                out["chan_tests_enabled"] = False
             to_append = app.copy()
             to_append["platform"] = platform
+            if platform != "linux/amd64":
+                to_append["chan_tests_enabled"] = False
             out["imagePlatformPermutations"].append(to_append)
 
         manifest = {
