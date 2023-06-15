@@ -37,6 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrices: ${{ steps.generate-matrices.outputs.matrices }}
+    if: ${{ inputs.imagesToBuild != '' && inputs.imagesToBuild != '[]' }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -156,7 +157,7 @@ jobs:
           touch "/tmp/${{ matrix.image.chan_image_name }}/failed"
 
       - name: Upload Digest
-        if: ${{ inputs.push == 'true' }}
+        if: ${{ inputs.pushImages == 'true' }}
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.image.chan_image_name }}
@@ -172,7 +173,7 @@ jobs:
       - build-platform-images
     # Always run merge, as the prior matrix is all or nothing. We test for prior step failure
     # in the "Test Failed Bit" step. This ensures if one app fails, others can still complete.
-    if: ${{ always() && inputs.pushImages == 'true' }}
+    if: ${{ always() && inputs.pushImages == 'true' && ()}}
     strategy:
       matrix:
         manifest: ["${{ fromJSON(needs.prepare.outputs.matrices).manifestsToBuild }}"]
