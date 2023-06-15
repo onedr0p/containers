@@ -24,8 +24,8 @@ jobs:
         id: collect-changes
         uses: ./.github/actions/collect-changes
 
-  generate-build-matrix:
-    name: Generate matrix for building images
+  determine-images:
+    name: Determine Images to Build
     runs-on: ubuntu-latest
     needs: ["get-changes"]
     outputs:
@@ -60,9 +60,8 @@ jobs:
   images-build:
     uses: onedr0p/containers/.github/workflows/action-image-build.yaml@main
     needs:
-      - generate-build-matrix
+      - determine-images
     with:
-      imagesToBuild: "${{ needs.generate-build-matrix.outputs.matrix }}"
+      imagesToBuild: "${{ needs.determine-images.outputs.matrix }}"
       pushImages: "true"
-      updateMetadata: "true"
     secrets: inherit
