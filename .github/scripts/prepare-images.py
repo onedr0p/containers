@@ -21,6 +21,7 @@ def get_upstream_version(app, channel):
 if __name__ == "__main__":
 
     changed_apps = json.loads(sys.argv[1])
+    forRelease = sys.argv[2] == "true"
 
     out = {"manifestsToBuild": [], "imagePlatformPermutations": []}
 
@@ -68,6 +69,10 @@ if __name__ == "__main__":
             app["chan_tag_version"] = f"{name}-{channel}:{app['chan_upstream_version']}"
 
         for platform in cfg["platforms"]:
+            if platform != "linux/amd64" and not forRelease:
+                continue
+            if platform != "linux/amd64":
+                out["chan_tests_enabled"] = False
             to_append = app.copy()
             to_append["platform"] = platform
             out["imagePlatformPermutations"].append(to_append)
