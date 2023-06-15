@@ -74,7 +74,10 @@ if __name__ == "__main__":
 
         manifest = {
             "image": app["chan_image_name"],
+            "app": name,
+            "channel": channel,
             "tags": [app["chan_tag_rolling"], app["chan_tag_version"]],
+            "version": app["chan_upstream_version"],
         }
         out["manifestsToBuild"].append(manifest)
 
