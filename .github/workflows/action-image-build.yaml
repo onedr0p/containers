@@ -179,7 +179,7 @@ jobs:
       fail-fast: false
     steps:
       - name: Download Digests
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: ${{ matrix.manifest.image }}
           path: /tmp/${{ matrix.manifest.image }}
