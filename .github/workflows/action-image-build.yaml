@@ -215,7 +215,7 @@ jobs:
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           title: ${{ steps.build-failed.outputs.message || steps.build-success.outputs.message }}
-          color: ${{ steps.build-failed.outputs.color || $steps.build-success.outputs.color }}
+          color: ${{ steps.build-failed.outputs.color || steps.build-success.outputs.color }}
           username: GitHub Actions
 
   # Summarize matrix https://github.community/t/status-check-for-a-matrix-jobs/127354/7
