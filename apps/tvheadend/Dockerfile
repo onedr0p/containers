@@ -226,8 +226,8 @@ RUN \
         bsd-compat-headers \
         bzip2 \
         curl \
-        ffmpeg4 \
-        ffmpeg4-libs \
+        ffmpeg \
+        ffmpeg-libs \
         gnu-libiconv \
         gzip \
         libcrypto1.1 \
