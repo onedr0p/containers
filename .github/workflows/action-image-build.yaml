@@ -240,5 +240,5 @@ jobs:
     if: ${{ always() }}
     steps:
       - name: Check build matrix status
-        if: ${{ (inputs.imagesToBuild != '' && inputs.imagesToBuild != '[]') && (needs.merge.result != 'success') }}
+        if: ${{ (inputs.imagesToBuild != '' && inputs.imagesToBuild != '[]') && (needs.merge.result != 'success' && needs.merge.result != "skipped") }}
         run: exit 1
