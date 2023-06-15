@@ -96,6 +96,19 @@ jobs:
         with:
           version: v0.3.21
 
+      - name: Prepare Build Outputs
+        id: prepare-build-outputs
+        run: |
+          if [[ ${{ inputs.pushImages }} == 'true' ]]; then
+              image_name="ghcr.io/${{ github.repository_owner }}/${{ matrix.image.chan_image_name }}"
+              outputs="type=image,name=${image_name},push-by-digest=true,name-canonical=true,push=true"
+          else
+              image_name="ghcr.io/${{ github.repository_owner }}/${{ matrix.image.chan_tag_testing }}"
+              outputs="type=docker,name=${image_name},push=false"
+          fi
+          echo "image_name=${image_name}" >> $GITHUB_OUTPUT
+          echo "outputs=${outputs}" >> $GITHUB_OUTPUT
+
       - name: Build Image
         uses: docker/build-push-action@v4
         id: build
@@ -106,7 +119,7 @@ jobs:
           context: .
           platforms: ${{ matrix.image.platform }}
           file: ${{ matrix.image.chan_dockerfile }}
-          outputs: type=image,name=ghcr.io/${{ github.repository_owner }}/${{ matrix.image.chan_image_name }},push-by-digest=true,name-canonical=true,push=${{ inputs.pushImages }}
+          outputs: ${{ steps.prepare-build-outputs.outputs.outputs }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -122,7 +135,7 @@ jobs:
           GOSS_FILES_STRATEGY: cp
           CONTAINER_LOG_OUTPUT: goss_container_log_output
         run: |
-          dgoss run ghcr.io/${{ github.repository_owner }}/${{ matrix.image.chan_image_name }}@${{ steps.build.outputs.digest }} ${{ matrix.image.chan_goss_args }}
+          dgoss run ${{ steps.build.outputs.imageid }} ${{ matrix.image.chan_goss_args }}
 
       - name: Export Digest
         id: export-digest
