@@ -27,14 +27,14 @@ if __name__ == "__main__":
 
     for app in changed_apps:
         name = app["app"]
-        channel = app["channel"]
+        channel = str(app["channel"])
         with open(f"./apps/{name}/metadata.json") as f:
             metadata = json.load(f)
 
         # Generate Config
         cfg = {}
         for ch in metadata["channels"]:
-            if ch["name"] == channel:
+            if str(ch["name"]) == channel:
                 cfg = ch
                 break
 
@@ -89,4 +89,3 @@ if __name__ == "__main__":
         out["manifestsToBuild"].append(manifest)
 
     print(json.dumps(out))
-
