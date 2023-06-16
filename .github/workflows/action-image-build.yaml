@@ -211,8 +211,13 @@ jobs:
         working-directory: /tmp/${{ matrix.manifest.image }}/digests
         env:
           TAGS: ${{ toJSON(matrix.manifest.tags) }}
-        run:
-          docker buildx imagetools create $(jq -cr '. | map("-t ghcr.io/${{ github.repository_owner }}/" + .) | join(" ")'  <<< "$TAGS") $(printf 'ghcr.io/${{ github.repository_owner }}/${{ matrix.manifest.image }}@sha256:%s ' *)
+        run: |
+          docker buildx imagetools create $(jq -cr '. | map("-t ghcr.io/${{ github.repository_owner }}/" + .) | join(" ")'  <<< "$TAGS") \
+              $(printf 'ghcr.io/${{ github.repository_owner }}/${{ matrix.manifest.image }}@sha256:%s ' *)
+
+      - name: Inspect image
+        run: |
+          docker buildx imagetools inspect ${{ github.repository_owner }}/${{ matrix.manifest.image }}
 
       - name: Build successful
         id: build-success
