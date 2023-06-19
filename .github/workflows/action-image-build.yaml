@@ -49,6 +49,15 @@ jobs:
           echo 'pushImages=${{ inputs.pushImages }}'
           echo 'sendNotification=${{ inputs.sendNotification }}'
 
+      - name: Setup CUE
+        uses: cue-lang/setup-cue@0be332bb74c8a2f07821389447ba3163e2da3bfb
+
+      - name: Validate Image Metadata
+        shell: bash
+        # 'xargs' rather than 'find -exec' so we can capture the status code
+        run: |
+          find ./apps/ -name metadata.json | xargs -I {} cue vet --schema '#Spec' {} ./metadata.rules.cue
+
       - name: Generate Matrices
         id: generate-matrices
         run: |
@@ -87,9 +96,6 @@ jobs:
       - name: Setup Tools
         shell: bash
         run: sudo apt-get install -y moreutils jo
-
-      - name: Setup CUE
-        uses: cue-lang/setup-cue@0be332bb74c8a2f07821389447ba3163e2da3bfb
 
       - name: Setup Goss
         if: ${{ matrix.image.chan_tests_enabled }}
