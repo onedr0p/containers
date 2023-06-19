@@ -158,7 +158,7 @@ jobs:
           touch "/tmp/${{ matrix.image.chan_image_name }}/digests/${digest#sha256:}"
 
       - name: Set Failed Bit
-        if: ${{ always() && steps.dgoss.outcome == 'failed' || steps.build.outcome != 'success' }}
+        if: ${{ always() && steps.dgoss.outcome == 'failure' || steps.build.outcome != 'success' }}
         run: |
           mkdir -p /tmp/${{ matrix.image.chan_image_name }}
           touch "/tmp/${{ matrix.image.chan_image_name }}/failed"
