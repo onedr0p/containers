@@ -189,7 +189,7 @@ jobs:
       - name: Ensure all platforms were built
         id: ensure-platforms
         run: |
-            EXPECTED_COUNT = $(cat << EOF | jq ". | length"
+            EXPECTED_COUNT=$(cat << EOF | jq ". | length"
             ${{ toJSON(matrix.manifest.platforms) }}
             EOF
             )
