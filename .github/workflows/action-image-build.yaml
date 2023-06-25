@@ -193,7 +193,7 @@ jobs:
             ${{ toJSON(matrix.manifest.platforms) }}
             EOF
             )
-            ACTUAL_COUNT = $(ls -1 /tmp/${{ matrix.manifest.image }}/digests | wc -l)
+            ACTUAL_COUNT=$(ls -1 /tmp/${{ matrix.manifest.image }}/digests | wc -l)
             if [[ $EXPECTED_COUNT != $ACTUAL_COUNT ]]; then
                 echo "Expected $EXPECTED_COUNT platforms, but only found $ACTUAL_COUNT"
                 echo "Expected: ${{ toJSON(matrix.manifest.platforms) }}"
