@@ -189,8 +189,11 @@ jobs:
       - name: Ensure all platforms were built
         id: ensure-platforms
         run: |
-            EXPECTED_COUNT=$(echo "${{ toJSON(matrix.manifest.platforms) }}" | jq ". | length")
-            ACTUAL_COUNT=$(ls -1 /tmp/${{ matrix.manifest.image }}/digests | wc -l)
+            EXPECTED_COUNT = $(cat << EOF | jq ". | length"
+            ${{ toJSON(matrix.manifest.platforms) }}
+            EOF
+            )
+            ACTUAL_COUNT = $(ls -1 /tmp/${{ matrix.manifest.image }}/digests | wc -l)
             if [[ $EXPECTED_COUNT != $ACTUAL_COUNT ]]; then
                 echo "Expected $EXPECTED_COUNT platforms, but only found $ACTUAL_COUNT"
                 echo "Expected: ${{ toJSON(matrix.manifest.platforms) }}"
