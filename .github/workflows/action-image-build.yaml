@@ -164,7 +164,7 @@ jobs:
           touch "/tmp/${{ matrix.image.chan_image_name }}/failed"
 
       - name: Upload Digest
-        if: ${{ inputs.pushImages == 'true' }}
+        if: ${{ always() inputs.pushImages == 'true' }}
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.image.chan_image_name }}
