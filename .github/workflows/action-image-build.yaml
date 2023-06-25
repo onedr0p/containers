@@ -155,16 +155,10 @@ jobs:
         run: |
           mkdir -p /tmp/${{ matrix.image.chan_image_name }}/digests
           digest="${{ steps.build.outputs.digest }}"
-          touch "/tmp/${{ matrix.image.chan_image_name }}/digests/${digest#sha256:}"
-
-      - name: Set Failed Bit
-        if: ${{ always() && steps.dgoss.outcome == 'failure' || steps.build.outcome != 'success' }}
-        run: |
-          mkdir -p /tmp/${{ matrix.image.chan_image_name }}
-          touch "/tmp/${{ matrix.image.chan_image_name }}/failed"
+          echo "${{ matrix.image.platform }}" > "/tmp/${{ matrix.image.chan_image_name }}/digests/${digest#sha256:}"
 
       - name: Upload Digest
-        if: ${{ always() && inputs.pushImages == 'true' }}
+        if: ${{ inputs.pushImages == 'true' }}
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.image.chan_image_name }}
@@ -192,10 +186,17 @@ jobs:
           name: ${{ matrix.manifest.image }}
           path: /tmp/${{ matrix.manifest.image }}
 
-      - name: Test Failed Bit
-        id: failure-test
-        run:
-          test -f "/tmp/${{ matrix.manifest.image }}/failed" && exit 1 || exit 0
+      - name: Ensure all platforms were built
+        id: ensure-platforms
+        run: |
+            EXPECTED_COUNT = $(echo "${{ toJSON(matrix.manifest.platforms) }}" | jq ". | length")
+            ACTUAL_COUNT = $(ls -1 /tmp/${{ matrix.manifest.image }}/digests | wc -l)
+            if [[ $EXPECTED_COUNT != $ACTUAL_COUNT ]]; then
+                echo "Expected $EXPECTED_COUNT platforms, but only found $ACTUAL_COUNT"
+                echo "Expected: ${{ toJSON(matrix.manifest.platforms) }}"
+                echo "Actual: $(cat /tmp/${{ matrix.manifest.image }}/digests/*)"
+                exit 1
+            fi
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
