@@ -37,6 +37,18 @@
         "enabled": true,
         "type": "web"
       }
+    },
+    {
+      "name": "plugins",
+      "platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "stable": false,
+      "tests": {
+        "enabled": true,
+        "type": "web"
+      }
     }
   ]
 }
