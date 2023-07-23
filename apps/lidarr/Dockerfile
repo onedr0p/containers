@@ -11,7 +11,7 @@ ENV \
     LIDARR__ANALYTICS_ENABLED="False"
 
 #hadolint ignore=DL3018
-RUN apk add --no-cache ca-certificates chromaprint icu-libs libintl sqlite-libs xmlstarlet
+RUN apk add --no-cache ca-certificates chromaprint ffmpeg icu-libs libintl sqlite-libs xmlstarlet
 #hadolint ignore=DL3059
 RUN \
     case "${TARGETPLATFORM}" in \
