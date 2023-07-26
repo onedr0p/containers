@@ -2,7 +2,7 @@
 # * Install python3-venv for the built-in Python3 venv module (not installed by default)
 # * Install gcc libpython3-dev to compile C Python modules
 # * In the virtualenv: Update pip setuputils and wheel to support building new packages
-FROM debian:11-slim AS build
+FROM debian:12-slim AS build
 
 # hadolint ignore=DL3008,DL3009
 RUN apt-get update && \
