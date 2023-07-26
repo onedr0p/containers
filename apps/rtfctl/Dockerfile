@@ -6,5 +6,3 @@ ARG VERSION
 RUN apk --no-cache upgrade && \
     apk --no-cache add ca-certificates curl && \
     curl -L https://anypoint.mulesoft.com/runtimefabric/api/download/rtfctl/${VERSION} -o /usr/local/bin/rtfctl
-
-RUN echo Version: ${VERSION} 
