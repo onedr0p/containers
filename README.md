@@ -44,6 +44,8 @@ For applications that need to have persistent configuration data the config volu
 
 ## Contributing
 
+**NOTE**: Github issues are disabled because people have a hard time updating the Renovate config which leads to my issues being spammed with a new issue every hour. Whomever own [consuela-bot](https://github.com/apps/consuela-bot) please do the needful so I can enable issues again.
+
 1. Install [Docker](https://docs.docker.com/get-docker/), [Taskfile](https://taskfile.dev/) & [Cuelang](https://cuelang.org/)
 2. Get familiar with the structure of the repositroy
 3. Find a similar application in the apps directory
