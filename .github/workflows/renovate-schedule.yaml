@@ -24,6 +24,8 @@ env:
   LOG_LEVEL: debug
   RENOVATE_DRY_RUN: false
   RENOVATE_CONFIG_FILE: .github/renovate.json5
+  RENOVATE_AUTODISCOVER: true
+  RENOVATE_AUTODISCOVER_FILTER: onedr0p/containers
 
 jobs:
   renovate:
