@@ -6,6 +6,7 @@ This container support setting certain custom enviroment variables with the use 
 
 | Name                            | Default |
 |---------------------------------|---------|
+| SABNZBD__PORT                   |         |
 | SABNZBD__API_KEY                |         |
 | SABNZBD__NZB_KEY                |         |
 | SABNZBD__HOST_WHITELIST_ENTRIES |         |
