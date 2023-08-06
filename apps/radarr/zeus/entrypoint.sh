@@ -19,6 +19,7 @@ if [[ -f /config/config.xml ]]; then
     current_postgres_port="$(xmlstarlet sel -t -v "//PostgresPort" -nl /config/config.xml)"
     current_postgres_user="$(xmlstarlet sel -t -v "//PostgresUser" -nl /config/config.xml)"
     current_url_base="$(xmlstarlet sel -t -v "//UrlBase" -nl /config/config.xml)"
+    current_theme="$(xmlstarlet sel -t -v "//Theme" -nl /config/config.xml)"
 fi
 
 # Update config.xml with environment variables
@@ -39,6 +40,7 @@ envsubst < /app/config.xml.tmpl > /config/config.xml
 [[ -z "${RADARR__POSTGRES_PORT}" && -n "${current_postgres_port}" ]] && xmlstarlet edit --inplace --update //PostgresPort -v "${current_postgres_port}" /config/config.xml
 [[ -z "${RADARR__POSTGRES_USER}" && -n "${current_postgres_user}" ]] && xmlstarlet edit --inplace --update //PostgresUser -v "${current_postgres_user}" /config/config.xml
 [[ -z "${RADARR__URL_BASE}" && -n "${current_url_base}" ]] && xmlstarlet edit --inplace --update //UrlBase -v "${current_url_base}" /config/config.xml
+[[ -z "${RADARR__THEME}" && -n "${current_theme}" ]] && xmlstarlet edit --inplace --update //Theme -v "${current_theme}" /config/config.xml
 
 # BindAddress, LaunchBrowser, Port, EnableSsl, SslPort, SslCertPath, SslCertPassword, UpdateMechanism
 # have been omited because their configuration is not really needed in a container environment
