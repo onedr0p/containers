@@ -9,7 +9,6 @@
   ],
   "platform": "github",
   "username": "bot-ross[bot]",
-  // "repositories": ["onedr0p/containers"],
   "onboarding": false,
   "requireConfig": "optional",
   "gitAuthor": "bot-ross <98030736+bot-ross[bot]@users.noreply.github.com>",
