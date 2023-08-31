@@ -36,7 +36,7 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
       - name: Generate Token
-        uses: tibdex/github-app-token@d6edb790cfa657f678d2f6188875e9837622c415 # v1.8.1
+        uses: tibdex/github-app-token@0d49dd721133f900ebd5e0dff2810704e8defbc6 # v1.8.2
         id: generate-token
         with:
           app_id: "${{ secrets.BOT_APP_ID }}"
