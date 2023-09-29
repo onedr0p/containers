@@ -1,5 +1,5 @@
 # Force using 3.10
-FROM ghcr.io/onedr0p/alpine:3.17.3
+FROM ghcr.io/onedr0p/alpine:3.18.4
 
 ARG TARGETPLATFORM
 ARG VERSION
