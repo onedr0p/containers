@@ -1,0 +1,51 @@
+---
+name: "Render Readme"
+
+on:
+  workflow_call:
+    secrets:
+      BOT_APP_ID:
+        description: "The ID of the GitHub App"
+        required: true
+      BOT_APP_PRIVATE_KEY:
+        description: "The private key of the GitHub App"
+        required: true
+
+jobs:
+  render-readme:
+    name: Render README
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip' # caching pip dependencies
+
+      - name: Install Python Requirements
+        run: |
+          pip install -r ./.github/scripts/requirements.txt && pip freeze
+
+      - name: Generate Token
+        uses: tibdex/github-app-token@v1
+        id: generate-token
+        with:
+          app_id: "${{ secrets.BOT_APP_ID }}"
+          private_key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
+
+      - name: Render README
+        env:
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+        run: |
+          python ./.github/scripts/render-readme.py
+
+      - name: Commit Changes
+        run: |
+          git config --global user.name "bot-ross"
+          git config --global user.email "98030736+bot-ross[bot]@users.noreply.github.com"
+          git add ./README.md
+          git commit -m "Render README.md" || echo "No changes to commit"
+          git push origin || echo "No changes to push"

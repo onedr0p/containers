@@ -1,0 +1,46 @@
+---
+name: Scheduled Release
+
+concurrency:
+  group: container-release
+  cancel-in-progress: false
+
+on:
+  workflow_dispatch:
+    inputs:
+      appsToBuild:
+        description: "Which apps to release"
+        required: false
+        type: string
+        default: "all"
+      force:
+        description: "Rebuild images regardless of whether version has changed"
+        type: boolean
+        default: false
+        required: true
+  schedule:
+    - cron: "0 * * * *"
+
+jobs:
+  simple-checks:
+    name: Simple Checks
+    uses: ./.github/workflows/simple-checks.yaml
+
+  build-images:
+    name: Build Images
+    needs: simple-checks
+    uses: ./.github/workflows/build-images.yaml
+    secrets: inherit
+    permissions:
+      packages: write
+    with:
+      appsToBuild: ${{ inputs.appsToBuild }}
+      force: ${{ inputs.force == true }}
+      pushImages: true
+      sendNotifications: true
+
+  render-readme:
+    name: Render Readme
+    needs: build-images
+    uses: ./.github/workflows/render-readme.yaml
+    secrets: inherit
