@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       app:
-        description: "App (ex: radarr)"
+        description: "Apps (ex: radarr,sonarr)"
         default: ""
         required: true
       channels:
@@ -26,43 +26,26 @@ env:
   TOKEN: ${{ secrets.TOKEN }}
 
 jobs:
-  determine-images:
-    name: Determine Images to Build
-    runs-on: ubuntu-latest
-    outputs:
-      appsToBuild: ${{ steps.determine-images.outputs.changes }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
+  simple-checks:
+    name: Simple Checks
+    uses: ./.github/workflows/simple-checks.yaml
 
-      - name: Install tools
-        run: sudo apt-get install moreutils jo
-
-      - name: Determine images to build
-        id: determine-images
-        shell: bash
-        run: |
-          if [ "${{ inputs.app }}" = "ALL" ]; then
-            ./.github/scripts/fetch.sh all
-          else
-            output="[]"
-            IFS=',' read -a channels <<< "${{ inputs.channels }}"
-            declare -a images_array=()
-            for channel in "${channels[@]}"; do
-              image="$(jo app="${{ inputs.app }}" channel="$channel")"
-              images_array+=($image)
-            done
-
-            output="$(jo -a ${images_array[*]})"
-            echo "changes=${output}" >> $GITHUB_OUTPUT
-            echo "Changes:\n ${output}"
-          fi
-
-  images-build:
+  build-images:
+    name: Build Images
+    needs: simple-checks
     uses: ./.github/workflows/build-images.yaml
-    if: needs.determine-images.outputs.appsToBuild != '[]'
-    needs: ["determine-images"]
+    secrets: inherit
+    permissions:
+      packages: write
     with:
-      appsToBuild: "${{ needs.determine-images.outputs.appsToBuild }}"
-      pushImages: ${{ fromJSON(github.event.inputs.push) }}
+      appsToBuild: ${{ inputs.appsToBuild }}
+      channelsToBuild: ${{ inputs.channelsToBuild }}
+      force: ${{ inputs.force == true }}
+      pushImages: true
+      sendNotifications: true
+
+  render-readme:
+    name: Render Readme
+    needs: build-images
+    uses: ./.github/workflows/render-readme.yaml
     secrets: inherit
