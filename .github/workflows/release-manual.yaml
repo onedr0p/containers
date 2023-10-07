@@ -18,7 +18,7 @@ on:
         required: true
       push:
         description: "Push"
-        default: "false"
+        default: "true"
         required: true
 
 env:
@@ -63,5 +63,5 @@ jobs:
     needs: ["determine-images"]
     with:
       appsToBuild: "${{ needs.determine-images.outputs.appsToBuild }}"
-      pushImages: "${{ github.event.inputs.push }}"
+      pushImages: ${{ github.event.inputs.push }}
     secrets: inherit
