@@ -60,8 +60,8 @@ def get_published_version(image_name):
     data = json.loads(r.text)
     for image in data:
         tags = image["metadata"]["container"]["tags"]
-        if "latest" in tags:
-            tags.remove("latest")
+        if "rolling" in tags:
+            tags.remove("rolling")
             # Assume the longest string is the complete version number
             return max(tags, key=len)
 
