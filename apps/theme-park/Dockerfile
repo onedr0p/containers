@@ -13,7 +13,7 @@ RUN \
     && \
     apt-get install -qqy --no-install-recommends --no-install-suggests python3 \
     && \
-    curl -fsSL "https://github.com/GilbN/theme.park/archive/${VERSION}.tar.gz" \
+    curl -fsSL "https://github.com/themepark-dev/theme.park/archive/${VERSION}.tar.gz" \
       | tar xzf - -C /tmp --strip-components 1 \
     && \
     python3 /tmp/themes.py \
@@ -35,4 +35,4 @@ USER nginx
 
 WORKDIR ${NGINX_WEB_ROOT}
 
-LABEL org.opencontainers.image.source="https://github.com/GilbN/theme.park"
+LABEL org.opencontainers.image.source="https://github.com/themepark-dev/theme.park"
