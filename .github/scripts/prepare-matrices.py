@@ -91,7 +91,7 @@ def get_image_metadata(subdir, meta, forRelease=False, force=False, channels=Non
 
         # Skip if latest version already published
         if not force:
-            published = get_published_version(meta["app"])
+            published = get_published_version(toBuild["name"])
             if published is not None and published == version:
                 continue
             toBuild["published_version"] = published
