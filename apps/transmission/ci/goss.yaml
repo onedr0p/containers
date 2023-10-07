@@ -1,7 +1,7 @@
 ---
 # https://github.com/aelsabbahy/goss/blob/master/docs/manual.md#process
 process:
-  transmission-daemon:
+  transmission-da:
     running: true
 
 # https://github.com/aelsabbahy/goss/blob/master/docs/manual.md#port
