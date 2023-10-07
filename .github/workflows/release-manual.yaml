@@ -29,7 +29,7 @@ jobs:
     name: Determine Images to Build
     runs-on: ubuntu-latest
     outputs:
-      imagesToBuild: ${{ steps.determine-images.outputs.changes }}
+      appsToBuild: ${{ steps.determine-images.outputs.changes }}
     steps:
       - name: Checkout
         uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
@@ -58,68 +58,10 @@ jobs:
           fi
 
   images-build:
-    uses: ./.github/workflows/action-image-build.yaml
-    if: needs.determine-images.outputs.imagesToBuild != '[]'
+    uses: ./.github/workflows/build-images.yaml
+    if: needs.determine-images.outputs.appsToBuild != '[]'
     needs: ["determine-images"]
     with:
-      imagesToBuild: "${{ needs.determine-images.outputs.imagesToBuild }}"
+      appsToBuild: "${{ needs.determine-images.outputs.appsToBuild }}"
       pushImages: "${{ github.event.inputs.push }}"
-    secrets: inherit
-
----
-name: Scheduled Release
-
-concurrency:
-  group: container-release
-  cancel-in-progress: false
-
-on:
-  workflow_dispatch:
-    inputs:
-      appsToBuild:
-        description: "Which apps to release"
-        required: false
-        type: string
-        default: "all"
-      channelsToBuild:
-        description: "Which channels to release"
-        required: false
-        type: string
-        default: "all"
-      force:
-        description: "Rebuild images regardless of whether version has changed"
-        type: boolean
-        default: false
-        required: true
-      push:
-        description: "Push Images"
-        type: boolean
-        default: true
-        required: true
-  schedule:
-    - cron: "0 * * * *"
-
-jobs:
-  simple-checks:
-    name: Simple Checks
-    uses: ./.github/workflows/simple-checks.yaml
-
-  build-images:
-    name: Build Images
-    needs: simple-checks
-    uses: ./.github/workflows/build-images.yaml
-    secrets: inherit
-    permissions:
-      packages: write
-    with:
-      appsToBuild: ${{ inputs.appsToBuild }}
-      channelsToBuild: ${{ inputs.channelsToBuild }}
-      force: ${{ inputs.force == true }}
-      pushImages: ${{ inputs.push == true }}
-      sendNotifications: true
-
-  render-readme:
-    name: Render Readme
-    needs: build-images
-    uses: ./.github/workflows/render-readme.yaml
     secrets: inherit
