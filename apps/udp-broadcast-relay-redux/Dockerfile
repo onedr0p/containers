@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/alpine:3.18.3 AS builder
+FROM public.ecr.aws/docker/library/alpine:3.18.4 AS builder
 ARG VERSION
 
 WORKDIR /build
@@ -17,7 +17,7 @@ RUN \
   fi \
   && gcc -g main.c -o udp-broadcast-relay-redux
 
-FROM public.ecr.aws/docker/library/alpine:3.18.3
+FROM public.ecr.aws/docker/library/alpine:3.18.4
 WORKDIR /app
 RUN \
   apk add --no-cache \
