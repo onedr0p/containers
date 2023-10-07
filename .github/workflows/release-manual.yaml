@@ -64,5 +64,5 @@ jobs:
     needs: ["determine-images"]
     with:
       appsToBuild: "${{ needs.determine-images.outputs.appsToBuild }}"
-      pushImages: "${{ github.event.inputs.push }}"
+      pushImages: ${{ github.event.inputs.push }}
     secrets: inherit
