@@ -161,6 +161,7 @@ jobs:
           build-args: |-
             VERSION=${{ matrix.image.version }}
             REVISION=${{ github.sha }}
+            CHANNEL=${{ matrix.image.channel }}
           context: . # TODO: Use ${{ matrix.image.context }}, requires updates to all dockerfiles :-(
           platforms: ${{ matrix.image.platform }}
           file: ${{ matrix.image.dockerfile }}
