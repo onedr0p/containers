@@ -21,7 +21,6 @@ on:
         type: boolean
         default: true
         required: true
-
 env:
   TOKEN: ${{ secrets.TOKEN }}
 
@@ -40,8 +39,8 @@ jobs:
     with:
       appsToBuild: ${{ inputs.appsToBuild }}
       channelsToBuild: ${{ inputs.channelsToBuild }}
-      force: ${{ inputs.force == true }}
-      pushImages: true
+      force: true
+      pushImages: ${{ fromJSON(inputs.push) }}
       sendNotifications: true
 
   render-readme:
