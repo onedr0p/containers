@@ -63,17 +63,47 @@ For applications that need to have persistent configuration data the config volu
 
 ## Available Images
 
-Each Image will be built with a `rolling` tag, along with tags specific to it's version. For Semantically Versioned containers (e.g. `v1.2.3`), `major`, `major.minor`, and `major.minor.patch` tags will be generated, for example, ![1](https://img.shields.io/badge/1-blue?style=flat-square) ![1.2](https://img.shields.io/badge/1.2-blue?style=flat-square) and ![1.2.3](https://img.shields.io/badge/1.2.3-blue?style=flat-square). Available Images Below.
+Each Image will be built with a `rolling` tag, along with tags specific to it's version. Available Images Below
 
 Container | Channel | Image | Latest Tags
 --- | --- | --- | ---
-{% for image in app_images | sort(attribute="name") -%}
-[{{ image.name }}]({{ image.html_url }}) | {{ image.channel }} | ghcr.io/onedr0p/{{ image.name }} |
-{%- set space = joiner(" ") -%}
-{%- for tag in image.tags -%}
-{{ space() }}![{{ tag }}](https://img.shields.io/badge/{{ tag.replace("-", "--") }}-{% if tag == "latest" %}green{% else %}blue{% endif %}?style=flat-square)
-{%- endfor %}
-{% endfor %}
+[bazarr](https://github.com/onedr0p/containers/pkgs/container/bazarr) | stable | ghcr.io/onedr0p/bazarr |![1.3.0](https://img.shields.io/badge/1.3.0-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[cni-plugins](https://github.com/onedr0p/containers/pkgs/container/cni-plugins) | stable | ghcr.io/onedr0p/cni-plugins |![1.3.0](https://img.shields.io/badge/1.3.0-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[emby](https://github.com/onedr0p/containers/pkgs/container/emby) | stable | ghcr.io/onedr0p/emby |![4.7.14.0](https://img.shields.io/badge/4.7.14.0-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[flood](https://github.com/onedr0p/containers/pkgs/container/flood) | stable | ghcr.io/onedr0p/flood |![4.7.0](https://img.shields.io/badge/4.7.0-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[github-actions-runner](https://github.com/onedr0p/containers/pkgs/container/github-actions-runner) | stable | ghcr.io/onedr0p/github-actions-runner |![2.309.0](https://img.shields.io/badge/2.309.0-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[home-assistant](https://github.com/onedr0p/containers/pkgs/container/home-assistant) | stable | ghcr.io/onedr0p/home-assistant |![2023.10.1](https://img.shields.io/badge/2023.10.1-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[jbops](https://github.com/onedr0p/containers/pkgs/container/jbops) | stable | ghcr.io/onedr0p/jbops |![1.0.893](https://img.shields.io/badge/1.0.893-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[jellyfin](https://github.com/onedr0p/containers/pkgs/container/jellyfin) | stable | ghcr.io/onedr0p/jellyfin |![10.8.11](https://img.shields.io/badge/10.8.11-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[kubernetes-kubectl](https://github.com/onedr0p/containers/pkgs/container/kubernetes-kubectl) | kubectl | ghcr.io/onedr0p/kubernetes-kubectl |![1.28.2](https://img.shields.io/badge/1.28.2-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[lidarr](https://github.com/onedr0p/containers/pkgs/container/lidarr) | master | ghcr.io/onedr0p/lidarr |![1.3.5.3530](https://img.shields.io/badge/1.3.5.3530-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[lidarr-develop](https://github.com/onedr0p/containers/pkgs/container/lidarr-develop) | develop | ghcr.io/onedr0p/lidarr-develop |![1.4.3.3586](https://img.shields.io/badge/1.4.3.3586-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[lidarr-nightly](https://github.com/onedr0p/containers/pkgs/container/lidarr-nightly) | nightly | ghcr.io/onedr0p/lidarr-nightly |![1.4.5.3632](https://img.shields.io/badge/1.4.5.3632-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[lidarr-plugins](https://github.com/onedr0p/containers/pkgs/container/lidarr-plugins) | plugins | ghcr.io/onedr0p/lidarr-plugins |![1.4.1.3564](https://img.shields.io/badge/1.4.1.3564-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[par2cmdline-turbo](https://github.com/onedr0p/containers/pkgs/container/par2cmdline-turbo) | stable | ghcr.io/onedr0p/par2cmdline-turbo |![1.1.0](https://img.shields.io/badge/1.1.0-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[plex](https://github.com/onedr0p/containers/pkgs/container/plex) | stable | ghcr.io/onedr0p/plex |![1.32.6.7557-1cf77d501](https://img.shields.io/badge/1.32.6.7557--1cf77d501-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[plex-beta](https://github.com/onedr0p/containers/pkgs/container/plex-beta) | beta | ghcr.io/onedr0p/plex-beta |![1.32.7.7571-13cdc68dc](https://img.shields.io/badge/1.32.7.7571--13cdc68dc-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[postgres-init](https://github.com/onedr0p/containers/pkgs/container/postgres-init) | stable | ghcr.io/onedr0p/postgres-init |![14.9](https://img.shields.io/badge/14.9-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[prowlarr](https://github.com/onedr0p/containers/pkgs/container/prowlarr) | master | ghcr.io/onedr0p/prowlarr |![1.8.6.3946](https://img.shields.io/badge/1.8.6.3946-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[prowlarr-develop](https://github.com/onedr0p/containers/pkgs/container/prowlarr-develop) | develop | ghcr.io/onedr0p/prowlarr-develop |![1.9.1.3981](https://img.shields.io/badge/1.9.1.3981-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[prowlarr-nightly](https://github.com/onedr0p/containers/pkgs/container/prowlarr-nightly) | nightly | ghcr.io/onedr0p/prowlarr-nightly |![1.9.3.4012](https://img.shields.io/badge/1.9.3.4012-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[qbittorrent](https://github.com/onedr0p/containers/pkgs/container/qbittorrent) | stable | ghcr.io/onedr0p/qbittorrent |![4.5.5](https://img.shields.io/badge/4.5.5-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[qbittorrent-beta](https://github.com/onedr0p/containers/pkgs/container/qbittorrent-beta) | beta | ghcr.io/onedr0p/qbittorrent-beta |![4.5.5](https://img.shields.io/badge/4.5.5-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[radarr](https://github.com/onedr0p/containers/pkgs/container/radarr) | master | ghcr.io/onedr0p/radarr |![4.7.5.7809](https://img.shields.io/badge/4.7.5.7809-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[radarr-develop](https://github.com/onedr0p/containers/pkgs/container/radarr-develop) | develop | ghcr.io/onedr0p/radarr-develop |![5.0.3.8107](https://img.shields.io/badge/5.0.3.8107-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[readarr-develop](https://github.com/onedr0p/containers/pkgs/container/readarr-develop) | develop | ghcr.io/onedr0p/readarr-develop |![0.3.6.2232](https://img.shields.io/badge/0.3.6.2232-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[readarr-nightly](https://github.com/onedr0p/containers/pkgs/container/readarr-nightly) | nightly | ghcr.io/onedr0p/readarr-nightly |![0.3.7.2257](https://img.shields.io/badge/0.3.7.2257-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[rtorrent](https://github.com/onedr0p/containers/pkgs/container/rtorrent) | stable | ghcr.io/onedr0p/rtorrent |![0.9.8-r16](https://img.shields.io/badge/0.9.8--r16-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[sabnzbd](https://github.com/onedr0p/containers/pkgs/container/sabnzbd) | stable | ghcr.io/onedr0p/sabnzbd |![4.1.0](https://img.shields.io/badge/4.1.0-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[sonarr](https://github.com/onedr0p/containers/pkgs/container/sonarr) | main | ghcr.io/onedr0p/sonarr |![3.0.10.1567](https://img.shields.io/badge/3.0.10.1567-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[sonarr-develop](https://github.com/onedr0p/containers/pkgs/container/sonarr-develop) | develop | ghcr.io/onedr0p/sonarr-develop |![4.0.0.688](https://img.shields.io/badge/4.0.0.688-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[tautulli](https://github.com/onedr0p/containers/pkgs/container/tautulli) | master | ghcr.io/onedr0p/tautulli |![2.13.1](https://img.shields.io/badge/2.13.1-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[theme-park](https://github.com/onedr0p/containers/pkgs/container/theme-park) | stable | ghcr.io/onedr0p/theme-park |![1.13.11](https://img.shields.io/badge/1.13.11-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[transmission]() | stable | ghcr.io/onedr0p/transmission |
+[tvheadend](https://github.com/onedr0p/containers/pkgs/container/tvheadend) | stable | ghcr.io/onedr0p/tvheadend |![4.3.10006](https://img.shields.io/badge/4.3.10006-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[udp-broadcast-relay-redux](https://github.com/onedr0p/containers/pkgs/container/udp-broadcast-relay-redux) | stable | ghcr.io/onedr0p/udp-broadcast-relay-redux |![1.0.27](https://img.shields.io/badge/1.0.27-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[unpackerr](https://github.com/onedr0p/containers/pkgs/container/unpackerr) | stable | ghcr.io/onedr0p/unpackerr |![0.12.0](https://img.shields.io/badge/0.12.0-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+
 
 ## Contributing
 
@@ -119,4 +149,3 @@ Containers here can be **deprecated** at any point, this could be for any reason
 ## Credits
 
 A lot of inspiration and ideas are thanks to the hard work of [hotio.dev](https://hotio.dev/) and [linuxserver.io](https://www.linuxserver.io/) contributors.
-
