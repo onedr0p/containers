@@ -1,5 +1,6 @@
 app: sonarr
 base: false
+semantic_versioning: true
 channels:
 - name: main
   platforms:

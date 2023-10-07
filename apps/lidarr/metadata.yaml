@@ -1,5 +1,6 @@
 app: lidarr
 base: false
+semantic_versioning: true
 channels:
 - name: master
   platforms:

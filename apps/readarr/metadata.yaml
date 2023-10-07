@@ -1,5 +1,6 @@
 app: readarr
 base: false
+semantic_versioning: true
 channels:
 - name: develop
   platforms:

@@ -1,5 +1,6 @@
 app: udp-broadcast-relay-redux
 base: false
+semantic_versioning: true
 channels:
 - name: stable
   platforms:
