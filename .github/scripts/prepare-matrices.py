@@ -118,6 +118,8 @@ def get_image_metadata(subdir, meta, forRelease=False, force=False, channels=Non
             platformToBuild["name"] = toBuild["name"]
             platformToBuild["platform"] = platform
             platformToBuild["version"] = version
+            platformToBuild["channel"] = channel["name"]
+
             if meta.get("base", False):
                 platformToBuild["label_type"] ="org.opencontainers.image.base"
             else:
