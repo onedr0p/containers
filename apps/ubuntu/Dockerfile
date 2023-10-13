@@ -63,6 +63,7 @@ RUN \
     apt-get install -y \
         bash \
         ca-certificates \
+        coreutils \
         curl \
         dnsutils \
         iputils-ping \
