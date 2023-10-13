@@ -37,6 +37,8 @@ RUN \
     apk add --no-cache \
         # 656 kB           # 1.28 MB     # 632 kB
         ca-certificates    bash          bind-tools \
+        # 1.07 MB
+        coreutils \
         # 256 kB           # 156 kB      # 40 kB
         curl               iputils       jo \
         # 564 kB           # 200 kB      # 316 kB
