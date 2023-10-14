@@ -67,7 +67,7 @@ Each Image will be built with a `rolling` tag, along with tags specific to it's 
 
 Container | Channel | Image | Latest Tags
 --- | --- | --- | ---
-[bazarr](https://github.com/onedr0p/containers/pkgs/container/bazarr) | stable | ghcr.io/onedr0p/bazarr |![1.3.0](https://img.shields.io/badge/1.3.0-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
+[bazarr](https://github.com/onedr0p/containers/pkgs/container/bazarr) | stable | ghcr.io/onedr0p/bazarr |![1](https://img.shields.io/badge/1-blue?style=flat-square) ![1.3](https://img.shields.io/badge/1.3-blue?style=flat-square) ![1.3.1](https://img.shields.io/badge/1.3.1-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
 [cni-plugins](https://github.com/onedr0p/containers/pkgs/container/cni-plugins) | stable | ghcr.io/onedr0p/cni-plugins |![1.3.0](https://img.shields.io/badge/1.3.0-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
 [emby](https://github.com/onedr0p/containers/pkgs/container/emby) | stable | ghcr.io/onedr0p/emby |![4.7.14.0](https://img.shields.io/badge/4.7.14.0-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
 [flood](https://github.com/onedr0p/containers/pkgs/container/flood) | stable | ghcr.io/onedr0p/flood |![4](https://img.shields.io/badge/4-blue?style=flat-square) ![4.7](https://img.shields.io/badge/4.7-blue?style=flat-square) ![4.7.0](https://img.shields.io/badge/4.7.0-blue?style=flat-square) ![rolling](https://img.shields.io/badge/rolling-blue?style=flat-square)
