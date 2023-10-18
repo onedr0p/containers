@@ -18,7 +18,7 @@ RUN \
   go mod tidy; \
   CGO_ENABLED=0 go build -a -installsuffix cgo -ldflags "-w -s -X main.version=${VERSION}" -o /bin/tautulli_exporter
 
-FROM alpine:3.18.2
+FROM alpine:3.18.4
 WORKDIR /app/
 # hadolint ignore=DL3018,DL3017
 RUN apk --no-cache upgrade && \
