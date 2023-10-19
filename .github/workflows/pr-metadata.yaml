@@ -51,7 +51,7 @@ jobs:
       addedOrModifiedImages: ${{ steps.collect-changes.outputs.addedOrModifiedImages }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Collect changes
         id: collect-changes
