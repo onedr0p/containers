@@ -1,4 +1,4 @@
-virtualenv==20.24.5
+virtualenv==20.24.6
 pywinrm[kerberos]
 pywinrm==0.4.3
 ansible==8.5.0
