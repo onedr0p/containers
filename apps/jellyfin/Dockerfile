@@ -36,10 +36,10 @@ RUN \
         ca-certificates \
         ${EXTRA_INSTALL_ARG} \
     && \
-    curl -fsSL "https://repo.jellyfin.org/ubuntu/jellyfin_team.gpg.key" | apt-key add - && \
-    echo "deb [arch=${ARCH}] https://repo.jellyfin.org/ubuntu jammy main" | tee /etc/apt/sources.list.d/jellyfin.list && \
-    apt-get -qq update && \
-    apt-get -qq install -y \
+    curl -fsSL "https://repo.jellyfin.org/ubuntu/jellyfin_team.gpg.key" | apt-key add - \
+    && echo "deb [arch=$( dpkg --print-architecture )] https://repo.jellyfin.org/$( awk -F'=' '/^ID=/{ print $NF }' /etc/os-release ) $( awk -F'=' '/^VERSION_CODENAME=/{ print $NF }' /etc/os-release ) main" | tee /etc/apt/sources.list.d/jellyfin.list \
+    && apt-get -qq update \
+    && apt-get -qq install -y \
         jellyfin-server="${VERSION}*" \
         jellyfin-web \
         jellyfin-ffmpeg6 \
