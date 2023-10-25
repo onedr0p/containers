@@ -1,0 +1,4 @@
+---
+file:
+  /usr/bin/sqlite3:
+    exists: true
