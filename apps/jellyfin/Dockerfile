@@ -27,7 +27,6 @@ RUN \
             && \
             export ARCH='arm64'; \
             export EXTRA_INSTALL_ARG='libomxil-bellagio0 libomxil-bellagio-bin libraspberrypi0'; \
-            unset NVIDIA_DRIVER_CAPABILITIES; \
         ;; \
     esac \
     && \
@@ -43,7 +42,7 @@ RUN \
     apt-get -qq install -y \
         jellyfin-server="${VERSION}*" \
         jellyfin-web \
-        jellyfin-ffmpeg5 \
+        jellyfin-ffmpeg6 \
     && \
     apt-get remove -y gnupg2 \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
