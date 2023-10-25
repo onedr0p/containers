@@ -7,8 +7,6 @@ ARG CHANNEL
 #hadolint ignore=DL3018
 RUN apk add --no-cache ca-certificates sqlite~"${VERSION}"
 
-USER kah
-
 CMD [ "/usr/bin/sqlite3" ]
 
 LABEL org.opencontainers.image.source="https://github.com/sqlite/sqlite"
