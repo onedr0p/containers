@@ -18,11 +18,8 @@ RUN \
   go mod tidy; \
   CGO_ENABLED=0 go build -a -installsuffix cgo -ldflags "-w -s -X main.version=${VERSION}" -o /bin/tautulli_exporter
 
-FROM alpine:3.18.2
+FROM scratch
 WORKDIR /app/
-# hadolint ignore=DL3018,DL3017
-RUN apk --no-cache upgrade && \
-    apk --no-cache add ca-certificates
 COPY --from=builder /bin/tautulli_exporter .
 EXPOSE 9487/tcp
 ENTRYPOINT ["./tautulli_exporter"]
