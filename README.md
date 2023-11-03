@@ -7,7 +7,7 @@ to edit this file, instead edit its template at: ./github/scripts/templates/READ
 
 ## Containers
 
-_A Collection of Container Images Optimized for Kubernetes_
+_An opinionated collection of container images_
 
 </div>
 
