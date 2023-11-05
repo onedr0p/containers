@@ -4,6 +4,7 @@ ARG TARGETPLATFORM
 ARG VERSION
 ARG CHANNEL
 
+
 ENV NVIDIA_DRIVER_CAPABILITIES="compute,video,utility" \
     PLEX_DOWNLOAD="https://downloads.plex.tv/plex-media-server-new" \
     PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR="/config/Library/Application Support" \
