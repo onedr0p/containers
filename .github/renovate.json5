@@ -4,18 +4,21 @@
     "docker:enableMajor",
     ":disableRateLimiting",
     ":dependencyDashboard",
-    ":semanticCommits"
+    ":semanticCommits",
+    ":automergeDigest"
   ],
+  "platform": "github",
+  "onboarding": false,
+  "requireConfig": "optional",
   "dependencyDashboardTitle": "Renovate Dashboard 🤖",
   "suppressNotifications": ["prIgnoreNotification"],
-  "commitBodyTable": true,
   "packageRules": [
     {
       "description": "Auto-merge Github Actions",
       "matchDatasources": ["github-tags"],
       "automerge": true,
       "automergeType": "branch",
-      "requiredStatusChecks": null,
+      "ignoreTests": true,
       "matchUpdateTypes": ["minor", "patch"],
       "matchPackagePatterns": ["renovatebot/github-action"]
     },
@@ -23,19 +26,6 @@
       "matchDatasources": ["docker"],
       "matchUpdateTypes": ["digest"],
       "commitMessagePrefix": "📣 "
-    }
-  ],
-  "regexManagers": [
-    {
-      "description": "Process Dependencies",
-      "fileMatch": [
-        ".*"
-      ],
-      "matchStrings": [
-        "datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\n.*?\"(?<currentValue>.*)\"\n"
-      ],
-      "datasourceTemplate": "{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}",
-      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
     }
   ]
 }

@@ -1,0 +1,25 @@
+<Config>
+  <LogLevel>${LIDARR__LOG_LEVEL:-info}</LogLevel>
+  <UrlBase>${LIDARR__URL_BASE}</UrlBase>
+  <Branch>${LIDARR__BRANCH}</Branch>
+  <ApiKey>${LIDARR__API_KEY}</ApiKey>
+  <AuthenticationMethod>${LIDARR__AUTHENTICATION_METHOD:-External}</AuthenticationMethod>
+  <AuthenticationRequired>${LIDARR__AUTHENTICATION_REQUIRED:-DisabledForLocalAddresses}</AuthenticationRequired>
+  <InstanceName>${LIDARR__INSTANCE_NAME}</InstanceName>
+  <PostgresUser>${LIDARR__POSTGRES_USER}</PostgresUser>
+  <PostgresPassword>${LIDARR__POSTGRES_PASSWORD}</PostgresPassword>
+  <PostgresPort>${LIDARR__POSTGRES_PORT:-5432}</PostgresPort>
+  <PostgresHost>${LIDARR__POSTGRES_HOST}</PostgresHost>
+  <PostgresMainDb>${LIDARR__POSTGRES_MAIN_DB}</PostgresMainDb>
+  <PostgresLogDb>${LIDARR__POSTGRES_LOG_DB}</PostgresLogDb>
+  <Port>${LIDARR__PORT}</Port>
+  <BindAddress>*</BindAddress>
+  <LaunchBrowser>False</LaunchBrowser>
+  <EnableSsl>False</EnableSsl>
+  <SslPort>6969</SslPort>
+  <SslCertPath></SslCertPath>
+  <SslCertPassword></SslCertPassword>
+  <UpdateMechanism>BuiltIn</UpdateMechanism>
+  <AnalyticsEnabled>${LIDARR__ANALYTICS_ENABLED}</AnalyticsEnabled>
+  <Theme>${LIDARR__THEME:-auto}</Theme>
+</Config>

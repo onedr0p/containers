@@ -1,11 +1,15 @@
 ---
-name: "Release: Manual"
+name: "Manual Release"
+
+concurrency:
+  group: container-release
+  cancel-in-progress: false
 
 on:
   workflow_dispatch:
     inputs:
       app:
-        description: "App (ex: radarr)"
+        description: "Apps (ex: radarr,sonarr)"
         default: ""
         required: true
       channels:
@@ -14,52 +18,33 @@ on:
         required: true
       push:
         description: "Push"
-        default: "false"
+        type: boolean
+        default: true
         required: true
-
 env:
   TOKEN: ${{ secrets.TOKEN }}
 
 jobs:
-  generate-build-matrix:
-    name: Generate matrix for building images
-    runs-on: ubuntu-22.04
-    outputs:
-      matrix: ${{ steps.determine-images.outputs.changes }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          token: ${{ env.TOKEN }}
+  simple-checks:
+    name: Simple Checks
+    uses: ./.github/workflows/simple-checks.yaml
 
-      - name: Install tools
-        run: sudo apt-get install moreutils jo
-
-      - name: Determine images to build
-        id: determine-images
-        shell: bash
-        run: |
-          if [ "${{ inputs.app }}" = "ALL" ]; then
-            ./.github/scripts/fetch.sh all
-          else
-            output="[]"
-            IFS=',' read -a channels <<< "${{ inputs.channels }}"
-            declare -a images_array=()
-            for channel in "${channels[@]}"; do
-              image="$(jo app="${{ inputs.app }}" channel="$channel")"
-              images_array+=($image)
-            done
-
-            output="$(jo -a ${images_array[*]})"
-            echo "changes=${output}" >> $GITHUB_OUTPUT
-          fi
-
-  images-build:
-    uses: tuxpeople/containers/.github/workflows/action-image-build.yaml@main
-    if: needs.generate-build-matrix.outputs.matrix != '[]'
-    needs:
-      - generate-build-matrix
+  build-images:
+    name: Build Images
+    needs: simple-checks
+    uses: ./.github/workflows/build-images.yaml
+    secrets: inherit
+    permissions:
+      packages: write
     with:
-      imagesToBuild: "${{ needs.generate-build-matrix.outputs.matrix }}"
-      pushImages: "${{ github.event.inputs.push }}"
-      updateMetadata: "${{ github.event.inputs.push }}"
+      appsToBuild: ${{ inputs.appsToBuild }}
+      channelsToBuild: ${{ inputs.channelsToBuild }}
+      force: true
+      pushImages: ${{ fromJSON(inputs.push) }}
+      sendNotifications: true
+
+  render-readme:
+    name: Render Readme
+    needs: build-images
+    uses: ./.github/workflows/render-readme.yaml
     secrets: inherit

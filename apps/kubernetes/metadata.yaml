@@ -1,0 +1,10 @@
+---
+app: kubernetes
+base: false
+channels:
+  - name: kubectl
+    platforms: ["linux/amd64", "linux/arm64"]
+    stable: false
+    tests:
+      enabled: true
+      type: cli

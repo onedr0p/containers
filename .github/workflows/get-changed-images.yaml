@@ -1,0 +1,39 @@
+---
+name: "Get Changed Images"
+
+on:
+  workflow_call:
+    outputs:
+      addedOrModified:
+        description: "Whether any files were added or modified"
+        value: ${{ jobs.get-changed-images.outputs.addedOrModified }}
+      addedOrModifiedImages:
+        description: "The images that were added or modified"
+        value: ${{ jobs.get-changed-images.outputs.addedOrModifiedImages }}
+
+jobs:
+  get-changed-images:
+    name: Get Changed Images
+    runs-on: ubuntu-latest
+    outputs:
+      addedOrModified: "${{ steps.filter.outputs.addedOrModified }}"
+      addedOrModifiedImages: "${{ steps.filter-containers.outputs.addedOrModifiedImages }}"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Collect changed files
+        uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          list-files: json
+          filters: |
+            addedOrModified:
+              - added|modified: 'apps/*/**'
+
+      - name: Determine changed images
+        if: ${{ steps.filter.outputs.addedOrModified == 'true' }}
+        id: filter-containers
+        run: |
+          PATHS='${{ steps.filter.outputs.addedOrModified_files }}'
+          OUTPUT=$(echo $PATHS | jq --raw-output -c 'map(. |= split("/")[1]) | unique | join(",")')
+          echo "addedOrModifiedImages=${OUTPUT}" >> $GITHUB_OUTPUT
