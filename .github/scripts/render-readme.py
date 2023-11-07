@@ -28,7 +28,7 @@ def load_metadata_file(file_path):
 # TODO: remove hard-coded repo owner
 def get_latest_image(name):
     r = requests.get(
-        f"https://api.github.com/users/onedr0p/packages/container/{name}/versions",
+        f"https://api.github.com/users/tuxpeople/packages/container/{name}/versions",
         headers={
             "Accept": "application/vnd.github.v3+json",
             "Authorization": "token " + os.environ["GITHUB_TOKEN"]
@@ -66,7 +66,7 @@ if __name__ == "__main__":
                 }
                 gh_data = get_latest_image(name)
                 if gh_data is not None:
-                    image["html_url"] = f"https://github.com/onedr0p/containers/pkgs/container/{name}"
+                    image["html_url"] = f"https://github.com/tuxpeople/containers/pkgs/container/{name}"
                     image["tags"] = sorted(gh_data["metadata"]["container"]["tags"])
                 if meta["base"]:
                     base_images.append(image)
