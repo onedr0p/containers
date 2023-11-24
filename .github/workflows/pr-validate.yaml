@@ -11,14 +11,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Pin to main to prevent accidental injection of malicious code
   simple-checks:
     uses: onedr0p/containers/.github/workflows/simple-checks.yaml@main
-    secrets: inherit
 
   get-changed-images:
     uses: onedr0p/containers/.github/workflows/get-changed-images.yaml@main
-    secrets: inherit
 
   build-images:
     needs: ["simple-checks", "get-changed-images"]
