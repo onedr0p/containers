@@ -3,6 +3,13 @@ name: "Simple Checks"
 
 on:
   workflow_call:
+    secrets:
+      BOT_APP_ID:
+        description: "The ID of the GitHub App"
+        required: true
+      BOT_APP_PRIVATE_KEY:
+        description: "The private key of the GitHub App"
+        required: true
 
 jobs:
   metadata-validation:
