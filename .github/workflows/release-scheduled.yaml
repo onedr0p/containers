@@ -9,12 +9,12 @@ on:
   workflow_dispatch:
     inputs:
       appsToBuild:
-        description: "Which apps to release"
+        description: App(s) to build
         required: false
         type: string
-        default: "all"
+        default: all
       force:
-        description: "Rebuild images regardless of whether version has changed"
+        description: Force rebuild
         type: boolean
         default: false
         required: true

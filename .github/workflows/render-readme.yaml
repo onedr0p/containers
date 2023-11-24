@@ -30,15 +30,15 @@ jobs:
           pip install -r ./.github/scripts/requirements.txt && pip freeze
 
       - name: Generate Token
-        uses: tibdex/github-app-token@v2
-        id: generate-token
+        uses: actions/create-github-app-token@e995b4e40ace2eb5bf13137d9abe242c98f3aab6 # v1.6.0
+        id: app-token
         with:
-          app_id: "${{ secrets.BOT_APP_ID }}"
-          private_key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
+          app-id: "${{ secrets.BOT_APP_ID }}"
+          private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
 
       - name: Render README
         env:
-          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           python ./.github/scripts/render-readme.py
 

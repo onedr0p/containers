@@ -19,10 +19,20 @@ jobs:
       addedOrModified: "${{ steps.filter.outputs.addedOrModified }}"
       addedOrModifiedImages: "${{ steps.filter-containers.outputs.addedOrModifiedImages }}"
     steps:
-      - uses: actions/checkout@v4
+      - name: Generate Token
+        uses: actions/create-github-app-token@e995b4e40ace2eb5bf13137d9abe242c98f3aab6 # v1.6.0
+        id: app-token
+        with:
+          app-id: "${{ secrets.BOT_APP_ID }}"
+          private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
+
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          token: "${{ steps.app-token.outputs.token }}"
 
       - name: Collect changed files
-        uses: dorny/paths-filter@v2
+        uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
         id: filter
         with:
           list-files: json
