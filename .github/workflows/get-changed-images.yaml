@@ -10,6 +10,13 @@ on:
       addedOrModifiedImages:
         description: "The images that were added or modified"
         value: ${{ jobs.get-changed-images.outputs.addedOrModifiedImages }}
+    secrets:
+      BOT_APP_ID:
+        description: "The ID of the GitHub App"
+        required: true
+      BOT_APP_PRIVATE_KEY:
+        description: "The private key of the GitHub App"
+        required: true
 
 jobs:
   get-changed-images:
