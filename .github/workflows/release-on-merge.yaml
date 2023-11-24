@@ -7,8 +7,7 @@ concurrency:
 
 on:
   push:
-    branches:
-      - main
+    branches: ["main"]
     paths:
       - "apps/**"
       - ".github/scripts/templates/**"

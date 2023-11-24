@@ -16,19 +16,6 @@ jobs:
     name: Render README
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-          cache: 'pip' # caching pip dependencies
-
-      - name: Install Python Requirements
-        run: |
-          pip install -r ./.github/scripts/requirements.txt && pip freeze
-
       - name: Generate Token
         uses: actions/create-github-app-token@e995b4e40ace2eb5bf13137d9abe242c98f3aab6 # v1.6.0
         id: app-token
@@ -36,13 +23,29 @@ jobs:
           app-id: "${{ secrets.BOT_APP_ID }}"
           private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
 
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          token: "${{ steps.app-token.outputs.token }}"
+
+      - name: Setup Python
+        uses: actions/setup-python@65d7f2d534ac1bc67fcd62888c5f4f3d2cb2b236 # v4.7.1
+        with:
+          python-version: 3.x
+          cache: pip
+
+      - name: Install Python Requirements
+        shell: bash
+        run: pip install -r ./.github/scripts/requirements.txt && pip freeze
+
       - name: Render README
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: |
-          python ./.github/scripts/render-readme.py
+        shell: bash
+        run: python ./.github/scripts/render-readme.py
 
       - name: Commit Changes
+        shell: bash
         run: |
           git config --global user.name "bot-ross"
           git config --global user.email "98030736+bot-ross[bot]@users.noreply.github.com"

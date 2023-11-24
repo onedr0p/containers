@@ -36,10 +36,10 @@ jobs:
         if: ${{ steps.filter.outputs.cue == 'true' }}
         uses: cue-lang/setup-cue@1713281ae501e533ff06108005dffeab9e2e5203 # v1.0.0
 
+      # Run against all files to ensure they are tested if the cue schema is changed.
       - name: Validate image metadata
         if: ${{ steps.filter.outputs.cue == 'true' }}
         shell: bash
-        # Run against all files to ensure they are tested if the cue schema is changed.
         run: |
           find ./apps/ -name metadata.json | xargs -I {} cue vet --schema '#Spec' {} ./metadata.rules.cue
           find ./apps/ -name metadata.yaml | xargs -I {} cue vet --schema '#Spec' {} ./metadata.rules.cue
