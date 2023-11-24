@@ -1,3 +1,5 @@
 {
-    "ansible.python.interpreterPath": "/usr/bin/python3"
+  "files.associations": {
+      "*.json5": "jsonc"
+  }
 }
