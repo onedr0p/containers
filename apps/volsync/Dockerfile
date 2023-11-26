@@ -18,7 +18,7 @@ RUN \
     && go install -a -ldflags "-X=main.volsyncVersion=v${VERSION}" github.com/backube/volsync@v${VERSION} \
     && upx /go/bin/volsync
 
-FROM docker.io/rclone/rclone:1.64.2 as rclone
+FROM docker.io/rclone/rclone:1.65.0 as rclone
 FROM docker.io/restic/restic:0.16.2 as restic
 
 FROM public.ecr.aws/docker/library/alpine:3.18
