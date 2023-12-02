@@ -139,7 +139,7 @@ jobs:
           echo "${{ matrix.image.name }}" | grep -E "[a-zA-Z0-9_\.\-]+" || "Image Name is invalid"
           echo "${{ matrix.image.version }}" | grep -E "[a-zA-Z0-9_\.\-]+" || "Image Version is invalid"
 
-      - name: "Generate Short Lived OAuth App Token (ghs_*)"
+      - name: Generate Token
         uses: actions/create-github-app-token@46e4a501e119d39574a54e53a06c9a705efc55c9 # v1.6.1
         id: app-token
         with:
