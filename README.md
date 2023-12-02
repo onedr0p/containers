@@ -19,7 +19,7 @@ _An opinionated collection of container images_
 
 </div>
 
-Welcome to our container images, if looking for a container start by [browsing the container packages](https://github.com/onedr0p?tab=packages&repo_name=containers).
+Welcome to our container images, if looking for a container start by [browsing the GitHub Packages page for this repo's packages](https://github.com/onedr0p?tab=packages&repo_name=containers).
 
 ## Mission statement
 
