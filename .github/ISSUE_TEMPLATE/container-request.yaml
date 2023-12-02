@@ -7,8 +7,8 @@ body:
   - type: markdown
     attributes:
       value: |
-        Doing you due diligence and filling out this form throughly 
-        will gauge how serious your request is.
+        Doing your due diligence and filling out this form thoroughly
+        will help determine if your request shall be entertained.
 
   - type: input
     id: application-name
