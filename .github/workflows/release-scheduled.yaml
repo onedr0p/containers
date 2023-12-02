@@ -24,12 +24,12 @@ on:
 jobs:
   simple-checks:
     name: Simple Checks
-    uses: ./.github/workflows/simple-checks.yaml
+    uses: onedr0p/containers/.github/workflows/simple-checks.yaml@main
 
   build-images:
     name: Build Images
     needs: simple-checks
-    uses: ./.github/workflows/build-images.yaml
+    uses: onedr0p/containers/.github/workflows/build-images.yaml@main
     secrets: inherit
     permissions:
       packages: write

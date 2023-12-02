@@ -17,16 +17,16 @@ on:
 
 jobs:
   simple-checks:
-    uses: ./.github/workflows/simple-checks.yaml
+    uses: onedr0p/containers/.github/workflows/simple-checks.yaml@main
 
   get-changed-images:
     needs: ["simple-checks"]
-    uses: ./.github/workflows/get-changed-images.yaml
+    uses: onedr0p/containers/.github/workflows/get-changed-images.yaml@main
 
   build-images:
     needs: ["simple-checks", "get-changed-images"]
     if: ${{ needs.get-changed-images.outputs.addedOrModified == 'true' }}
-    uses: ./.github/workflows/build-images.yaml
+    uses: onedr0p/containers/.github/workflows/build-images.yaml@main
     secrets: inherit
     with:
       appsToBuild: "${{ needs.get-changed-images.outputs.addedOrModifiedImages }}"
