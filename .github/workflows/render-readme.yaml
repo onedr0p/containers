@@ -55,9 +55,9 @@ jobs:
           export SHA=$(git rev-parse $DESTINATION_BRANCH:$FILE_TO_COMMIT)
           export CONTENT=$(base64 -i $FILE_TO_COMMIT)
           gh api --method PUT /repos/:owner/:repo/contents/$FILE_TO_COMMIT \
-            --field message="$MESSAGE" \
-            --field content="$CONTENT" \
-            --field encoding="base64" \
-            --field branch="$DESTINATION_BRANCH" \
-            --field sha="$SHA" \
-            || echo "No changes to push"
+              --field message="$MESSAGE" \
+              --field content="$CONTENT" \
+              --field encoding="base64" \
+              --field branch="$DESTINATION_BRANCH" \
+              --field sha="$SHA" \
+              || echo "No changes to push"
