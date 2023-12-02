@@ -5,9 +5,8 @@ import yaml
 
 from jinja2 import Environment, PackageLoader, select_autoescape
 
-# read repository name and repository owner's username from custom env vars, else read from GitHub Actions default env vars
 repo_owner = os.environ.get('REPO_OWNER', os.environ.get('GITHUB_REPOSITORY_OWNER'))
-repo_name = os.environ.get('REPO_NAME', os.environ.get('GITHUB_REPOSITORY')) # uses format "owner/repo"
+repo_name = os.environ.get('REPO_NAME', os.environ.get('GITHUB_REPOSITORY'))
 
 env = Environment(
     loader=PackageLoader("render-readme"),
