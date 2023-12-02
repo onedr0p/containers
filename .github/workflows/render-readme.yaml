@@ -16,7 +16,7 @@ jobs:
     name: Render README
     runs-on: ubuntu-latest
     steps:
-      - name: "Generate Short Lived OAuth App Token (ghs_*)"
+      - name: Generate Token
         uses: actions/create-github-app-token@46e4a501e119d39574a54e53a06c9a705efc55c9 # v1.6.1
         id: app-token
         with:
