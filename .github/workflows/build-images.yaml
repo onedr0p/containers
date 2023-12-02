@@ -27,7 +27,7 @@ on:
         description: Force rebuild
     secrets:
       BOT_APP_ID:
-        description: The App ID of the GitHub App (found in app settings)
+        description: The App ID of the GitHub App
         required: true
       BOT_APP_PRIVATE_KEY:
         description: The private key of the GitHub App, used for generating JWT tokens, generated in GitHub App settings page, uses the X.509 private key format
