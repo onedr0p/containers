@@ -52,7 +52,7 @@ jobs:
           DESTINATION_BRANCH: "main"
         run: |
           export TODAY=$( date -u '+%Y-%m-%d' )
-          export MESSAGE="chore: regenerate $FILE_TO_COMMIT for $TODAY"
+          export MESSAGE="chore: regenerate $FILE_TO_COMMIT for $TODAY [skip ci]"
           export SHA=$( git rev-parse $DESTINATION_BRANCH:$FILE_TO_COMMIT )
           export CONTENT=$( base64 -i $FILE_TO_COMMIT )
           gh api --method PUT /repos/:owner/:repo/contents/$FILE_TO_COMMIT \
