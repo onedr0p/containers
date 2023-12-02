@@ -11,6 +11,8 @@ from subprocess import check_output
 
 from os.path import isfile
 
+# read repository owner's username from custom env vars, else read from GitHub Actions default env vars
+repo_owner = os.environ.get('REPO_OWNER', os.environ.get('GITHUB_REPOSITORY_OWNER'))
 
 TESTABLE_PLATFORMS = ["linux/amd64"]
 
@@ -47,7 +49,7 @@ def get_latest_version(subdir, channel_name):
 
 def get_published_version(image_name):
     r = requests.get(
-        f"https://api.github.com/users/onedr0p/packages/container/{image_name}/versions",
+        f"https://api.github.com/users/{repo_owner}/packages/container/{image_name}/versions",
         headers={
             "Accept": "application/vnd.github.v3+json",
             "Authorization": "token " + os.environ["TOKEN"]

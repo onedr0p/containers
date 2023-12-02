@@ -17,16 +17,22 @@ on:
   push:
     branches: ["main"]
     paths:
-      - .github/renovate.json5
-      - .github/renovate/**.json5
+      - renovate.json5
+      - .renovaterc.json5
+      - .renovate/**
+      - .github/renovate**
+      - .github/workflows/renovate.yaml
 
 # Retrieve BOT_USER_ID via `curl -s "https://api.github.com/users/${BOT_USERNAME}%5Bbot%5D" | jq .id`
 env:
-  DRY_RUN: false
   LOG_LEVEL: debug
+  RENOVATE_DRY_RUN: false
+  RENOVATE_PLATFORM: "github"
+  RENOVATE_PLATFORM_COMMIT: "true"
   RENOVATE_ONBOARDING_CONFIG_FILE_NAME: .github/renovate.json5
+  # for those forking: set your own secrets in your GitHub repo settings before running
   RENOVATE_AUTODISCOVER: true
-  RENOVATE_AUTODISCOVER_FILTER: "${{ github.repository }}"
+  RENOVATE_AUTODISCOVER_FILTER: "${{ github.repository }}" # this is to prevent forks from running Renovate against upstream repo
   RENOVATE_USERNAME: "${{ secrets.BOT_USERNAME }}[bot]"
   RENOVATE_GIT_AUTHOR: "${{ secrets.BOT_USERNAME }} <${{ secrets.BOT_USER_ID }}+${{ secrets.BOT_USERNAME }}[bot]@users.noreply.github.com>"
 
@@ -38,7 +44,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
-      - name: Generate Token
+      - name: "Generate Short Lived OAuth App Token (ghs_*)"
         uses: actions/create-github-app-token@46e4a501e119d39574a54e53a06c9a705efc55c9 # v1.6.1
         id: app-token
         with:
@@ -48,7 +54,7 @@ jobs:
       - name: Override default config from dispatch variables
         shell: bash
         run: |
-          echo "RENOVATE_DRY_RUN=${{ github.event.inputs.dryRun || env.DRY_RUN }}" >> "${GITHUB_ENV}"
+          echo "RENOVATE_DRY_RUN=${{ github.event.inputs.dryRun || env.RENOVATE_DRY_RUN }}" >> "${GITHUB_ENV}"
           echo "LOG_LEVEL=${{ github.event.inputs.logLevel || env.LOG_LEVEL }}" >> "${GITHUB_ENV}"
 
       - name: Renovate

@@ -5,10 +5,10 @@ on:
   workflow_call:
     secrets:
       BOT_APP_ID:
-        description: The ID of the GitHub App
+        description: The App ID of the GitHub App (found in app settings)
         required: true
       BOT_APP_PRIVATE_KEY:
-        description: The private key of the GitHub App
+        description: The private key of the GitHub App, used for generating JWT tokens, generated in GitHub App settings page, uses the X.509 private key format
         required: true
 
 jobs:
@@ -16,7 +16,7 @@ jobs:
     name: Render README
     runs-on: ubuntu-latest
     steps:
-      - name: Generate Token
+      - name: "Generate Short Lived OAuth App Token (ghs_*)"
         uses: actions/create-github-app-token@46e4a501e119d39574a54e53a06c9a705efc55c9 # v1.6.1
         id: app-token
         with:
@@ -40,15 +40,25 @@ jobs:
 
       - name: Render README
         env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          GITHUB_TOKEN: "${{ steps.app-token.outputs.token }}"
         shell: bash
         run: python ./.github/scripts/render-readme.py
 
+      # below is yoinked from https://gist.github.com/swinton/03e84635b45c78353b1f71e41007fc7c
       - name: Commit Changes
-        shell: bash
+        env:
+          GITHUB_TOKEN: "${{ steps.app-token.outputs.token }}"
+          FILE_TO_COMMIT: "README.md"
+          DESTINATION_BRANCH: "main"
         run: |
-          git config --global user.name "bot-ross"
-          git config --global user.email "98030736+bot-ross[bot]@users.noreply.github.com"
-          git add ./README.md
-          git commit -m "Render README.md" || echo "No changes to commit"
-          git push origin || echo "No changes to push"
+          export TODAY=$( date -u '+%Y-%m-%d' )
+          export MESSAGE="chore: regenerate $FILE_TO_COMMIT for $TODAY"
+          export SHA=$( git rev-parse $DESTINATION_BRANCH:$FILE_TO_COMMIT )
+          export CONTENT=$( base64 -i $FILE_TO_COMMIT )
+          gh api --method PUT /repos/:owner/:repo/contents/$FILE_TO_COMMIT \
+            --field message="$MESSAGE" \
+            --field content="$CONTENT" \
+            --field encoding="base64" \
+            --field branch="$DESTINATION_BRANCH" \
+            --field sha="$SHA" \
+            || echo "No changes to push"
