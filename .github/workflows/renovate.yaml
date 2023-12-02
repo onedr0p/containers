@@ -51,7 +51,7 @@ jobs:
       - name: Override default config from dispatch variables
         shell: bash
         run: |
-          echo "RENOVATE_DRY_RUN=${{ github.event.inputs.dryRun || env.RENOVATE_DRY_RUN }}" >> "${GITHUB_ENV}"
+          echo "RENOVATE_DRY_RUN=${{ github.event.inputs.dryRun || env.DRY_RUN }}" >> "${GITHUB_ENV}"
           echo "LOG_LEVEL=${{ github.event.inputs.logLevel || env.LOG_LEVEL }}" >> "${GITHUB_ENV}"
 
       - name: Renovate
