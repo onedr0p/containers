@@ -29,7 +29,7 @@ env:
   RENOVATE_ONBOARDING_CONFIG_FILE_NAME: .github/renovate.json5
   # for those forking: set your own secrets in your GitHub repo settings before running
   RENOVATE_AUTODISCOVER: true
-  RENOVATE_AUTODISCOVER_FILTER: "${{ github.repository }}" # this is to prevent forks from running Renovate against upstream repo
+  RENOVATE_AUTODISCOVER_FILTER: "${{ github.repository }}"
   RENOVATE_USERNAME: "${{ secrets.BOT_USERNAME }}[bot]"
   RENOVATE_GIT_AUTHOR: "${{ secrets.BOT_USERNAME }} <${{ secrets.BOT_USER_ID }}+${{ secrets.BOT_USERNAME }}[bot]@users.noreply.github.com>"
 
