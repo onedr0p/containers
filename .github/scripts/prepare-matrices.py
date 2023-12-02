@@ -11,7 +11,6 @@ from subprocess import check_output
 
 from os.path import isfile
 
-# read repository owner's username from custom env vars, else read from GitHub Actions default env vars
 repo_owner = os.environ.get('REPO_OWNER', os.environ.get('GITHUB_REPOSITORY_OWNER'))
 
 TESTABLE_PLATFORMS = ["linux/amd64"]
