@@ -17,11 +17,8 @@ on:
   push:
     branches: ["main"]
     paths:
-      - renovate.json5
-      - .renovaterc.json5
-      - .renovate/**
-      - .github/renovate**
-      - .github/workflows/renovate.yaml
+      - .github/renovate.json5
+      - .github/renovate/**.json5
 
 # Retrieve BOT_USER_ID via `curl -s "https://api.github.com/users/${BOT_USERNAME}%5Bbot%5D" | jq .id`
 env:
