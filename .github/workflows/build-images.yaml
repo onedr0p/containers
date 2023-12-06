@@ -45,7 +45,7 @@ jobs:
         run: echo "LOWERCASE_REPO_OWNER=${GITHUB_REPOSITORY_OWNER,,}" >> "${GITHUB_ENV}"
 
       - name: Generate Token
-        uses: actions/create-github-app-token@46e4a501e119d39574a54e53a06c9a705efc55c9 # v1.6.1
+        uses: actions/create-github-app-token@2986852ad836768dfea7781f31828eb3e17990fa # v1.6.2
         id: app-token
         with:
           app-id: "${{ secrets.BOT_APP_ID }}"
@@ -138,7 +138,7 @@ jobs:
           echo "${{ matrix.image.version }}" | grep -E "[a-zA-Z0-9_\.\-]+" || "Image Version is invalid"
 
       - name: Generate Token
-        uses: actions/create-github-app-token@46e4a501e119d39574a54e53a06c9a705efc55c9 # v1.6.1
+        uses: actions/create-github-app-token@2986852ad836768dfea7781f31828eb3e17990fa # v1.6.2
         id: app-token
         with:
           app-id: "${{ secrets.BOT_APP_ID }}"
