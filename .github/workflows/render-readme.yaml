@@ -45,19 +45,10 @@ jobs:
         run: python ./.github/scripts/render-readme.py
 
       - name: Commit Changes
-        env:
-          GITHUB_TOKEN: "${{ steps.app-token.outputs.token }}"
-          FILE_TO_COMMIT: README.md
-          DESTINATION_BRANCH: main
+        shell: bash
         run: |
-          export TODAY=$(date -u '+%Y-%m-%d')
-          export MESSAGE="chore: regenerate $FILE_TO_COMMIT for $TODAY [skip ci]"
-          export SHA=$(git rev-parse $DESTINATION_BRANCH:$FILE_TO_COMMIT)
-          export CONTENT=$(base64 -i $FILE_TO_COMMIT)
-          gh api --method PUT /repos/:owner/:repo/contents/$FILE_TO_COMMIT \
-              --field message="$MESSAGE" \
-              --field content="$CONTENT" \
-              --field encoding="base64" \
-              --field branch="$DESTINATION_BRANCH" \
-              --field sha="$SHA" \
-              || echo "No changes to push"
+          git config --global user.name "bot-ross"
+          git config --global user.email "98030736+bot-ross[bot]@users.noreply.github.com"
+          git add ./README.md
+          git commit -m "chore: render README.md" || echo "No changes to commit"
+          git push origin || echo "No changes to push"
