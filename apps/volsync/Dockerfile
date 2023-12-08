@@ -21,7 +21,7 @@ RUN \
 FROM docker.io/rclone/rclone:1.65.0 as rclone
 FROM docker.io/restic/restic:0.16.2 as restic
 
-FROM public.ecr.aws/docker/library/alpine:3.19
+FROM public.ecr.aws/docker/library/alpine:3.19.0
 ARG TARGETPLATFORM
 ARG VERSION
 ARG CHANNEL
