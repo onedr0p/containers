@@ -6,7 +6,6 @@
     ":disableRateLimiting",
     ":dependencyDashboard",
     ":semanticCommits",
-    ":automergeDigest",
     ":automergeBranch",
     "helpers:pinGitHubActionDigests"
   ],
