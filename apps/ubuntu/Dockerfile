@@ -63,6 +63,7 @@ RUN \
     apt-get install -y \
         bash \
         ca-certificates \
+        catatonit \
         coreutils \
         curl \
         dnsutils \
@@ -72,7 +73,6 @@ RUN \
         locales \
         moreutils \
         pv \
-        tini \
         tzdata \
         vim-tiny \
         unrar \
@@ -84,6 +84,7 @@ RUN \
     && ln -s /usr/bin/vim.tiny /usr/local/bin/vim \
     && ln -s /usr/bin/vim.tiny /usr/local/bin/nano \
     && ln -s /usr/bin/vim.tiny /usr/local/bin/emacs \
+    && ln -s /usr/bin/catatonit /usr/bin/tini \
     && chown -R kah:kah /app \
     && \
     printf "/bin/bash /scripts/greeting.sh\n" >> /etc/bash.bashrc \
@@ -103,4 +104,4 @@ VOLUME ["/config"]
 COPY ./apps/ubuntu/scripts /scripts
 COPY --from=builder /go/bin/envsubst /usr/local/bin/envsubst
 
-ENTRYPOINT [ "/usr/bin/tini", "--" ]
+ENTRYPOINT [ "/usr/bin/catatonit", "--" ]
