@@ -3,11 +3,12 @@
   "extends": [
     "config:recommended",
     "docker:enableMajor",
-    ":disableRateLimiting",
-    ":dependencyDashboard",
-    ":semanticCommits",
+    "helpers:pinGitHubActionDigests",
     ":automergeBranch",
-    "helpers:pinGitHubActionDigests"
+    ":dependencyDashboard",
+    ":disableRateLimiting",
+    ":semanticCommits",
+    ":skipStatusChecks"
   ],
   "onboarding": false,
   "requireConfig": "optional",
@@ -19,7 +20,6 @@
       "matchDatasources": ["github-tags"],
       "automerge": true,
       "automergeType": "branch",
-      "ignoreTests": true,
       "matchUpdateTypes": ["minor", "patch"],
       "matchPackagePatterns": ["renovatebot/github-action"]
     },
