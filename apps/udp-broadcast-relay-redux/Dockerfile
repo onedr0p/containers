@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/alpine:3.19.0 AS builder
+FROM public.ecr.aws/docker/library/alpine:3.19 AS builder
 ARG VERSION
 
 WORKDIR /build
