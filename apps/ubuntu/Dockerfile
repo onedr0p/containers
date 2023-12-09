@@ -1,5 +1,5 @@
 ARG VERSION
-FROM public.ecr.aws/docker/library/alpine:3.19 as builder
+FROM docker.io/library/alpine:3.19 as builder
 ARG VERSION
 ARG TARGETOS
 ARG TARGETARCH
@@ -18,7 +18,7 @@ RUN \
     && go install -ldflags="-s -w" github.com/drone/envsubst/cmd/envsubst@latest \
     && upx /go/bin/envsubst
 
-FROM public.ecr.aws/docker/library/ubuntu:${VERSION}
+FROM docker.io/library/ubuntu:${VERSION}
 ARG VERSION
 ARG CHANNEL
 ARG TARGETPLATFORM
