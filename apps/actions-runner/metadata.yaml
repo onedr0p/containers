@@ -1,5 +1,5 @@
 ---
-app: github-actions-runner
+app: actions-runner
 base: false
 semantic_versioning: true
 channels:
