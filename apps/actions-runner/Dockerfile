@@ -19,8 +19,9 @@ ENV DEBIAN_FRONTEND=noninteractive \
 RUN \
     set -eux \
     && apt-get -qq update \
-    && apt-get install -y \
+    && apt-get -qq install -y --no-install-recommends \
         bash \
+        build-essential \
         ca-certificates \
         curl \
         git \
