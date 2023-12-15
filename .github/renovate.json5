@@ -4,29 +4,12 @@
     "config:recommended",
     "docker:enableMajor",
     "helpers:pinGitHubActionDigests",
-    ":automergeBranch",
     ":dependencyDashboard",
     ":disableRateLimiting",
-    ":semanticCommits",
-    ":skipStatusChecks"
+    ":semanticCommits"
   ],
   "onboarding": false,
   "requireConfig": "optional",
   "dependencyDashboardTitle": "Renovate Dashboard 🤖",
-  "suppressNotifications": ["prIgnoreNotification"],
-  "packageRules": [
-    {
-      "description": "Auto-merge Github Actions",
-      "matchDatasources": ["github-tags"],
-      "automerge": true,
-      "automergeType": "branch",
-      "matchUpdateTypes": ["minor", "patch"],
-      "matchPackagePatterns": ["renovatebot/github-action"]
-    },
-    {
-      "matchDatasources": ["docker"],
-      "matchUpdateTypes": ["digest"],
-      "commitMessagePrefix": "📣 "
-    }
-  ]
+  "suppressNotifications": ["prEditedNotification", "prIgnoreNotification"]
 }
