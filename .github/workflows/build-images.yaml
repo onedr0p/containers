@@ -257,7 +257,7 @@ jobs:
         run: echo "LOWERCASE_REPO_OWNER=${GITHUB_REPOSITORY_OWNER,,}" >> "${GITHUB_ENV}"
 
       - name: Download Digests
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@f44cd7b40bfd40b6aa1cc1b9b5b7bf03d3c67110 # v4
         with:
           name: ${{ matrix.image.name }}
           path: /tmp/${{ matrix.image.name }}
