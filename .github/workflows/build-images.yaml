@@ -42,7 +42,7 @@ jobs:
     steps:
       - name: Lowercase repository owner
         shell: bash
-        run: echo "LOWERCASE_REPO_OWNER=${GITHUB_REPOSITORY_OWNER,,}" >> "${GITHUB_ENV}"
+        run: echo "LOWERCASE_REPO_OWNER=${GITHUB_REPOSITORY_OWNER,,}" >> $GITHUB_ENV
 
       - name: Generate Token
         uses: actions/create-github-app-token@v1
@@ -107,6 +107,7 @@ jobs:
           cat << EOF
           ${{ toJSON(matrix.image)}}
           EOF
+
       - name: Validate Matrix Input
         shell: bash
         run: |
@@ -148,7 +149,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: "${{ steps.app-token.outputs.token }}"
-          fetch-depth: 1
 
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -254,7 +254,7 @@ jobs:
     steps:
       - name: Lowercase repository owner
         shell: bash
-        run: echo "LOWERCASE_REPO_OWNER=${GITHUB_REPOSITORY_OWNER,,}" >> "${GITHUB_ENV}"
+        run: echo "LOWERCASE_REPO_OWNER=${GITHUB_REPOSITORY_OWNER,,}" >> $GITHUB_ENV
 
       - name: Download Digests
         uses: actions/download-artifact@v3

@@ -60,8 +60,8 @@ jobs:
       - name: Override default config from dispatch variables
         shell: bash
         run: |
-          echo "RENOVATE_DRY_RUN=${{ github.event.inputs.dryRun || env.WORKFLOW_RENOVATE_DRY_RUN }}" >> "${GITHUB_ENV}"
-          echo "LOG_LEVEL=${{ github.event.inputs.logLevel || env.WORKFLOW_RENOVATE_LOG_LEVEL }}" >> "${GITHUB_ENV}"
+          echo "RENOVATE_DRY_RUN=${{ github.event.inputs.dryRun || env.WORKFLOW_RENOVATE_DRY_RUN }}" >> $GITHUB_ENV
+          echo "LOG_LEVEL=${{ github.event.inputs.logLevel || env.WORKFLOW_RENOVATE_LOG_LEVEL }}" >> $GITHUB_ENV
 
       - name: Renovate
         uses: renovatebot/github-action@v39.2.4
