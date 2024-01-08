@@ -18,9 +18,6 @@ RUN \
     && go install -a -ldflags "-X=main.volsyncVersion=v${VERSION}" github.com/backube/volsync@v${VERSION} \
     && upx /go/bin/volsync
 
-FROM docker.io/rclone/rclone:1.65.1 as rclone
-FROM docker.io/restic/restic:0.16.2 as restic
-
 FROM docker.io/library/alpine:3.19.0
 ARG TARGETPLATFORM
 ARG VERSION
@@ -44,8 +41,8 @@ RUN \
         && chmod a+rx /mover-restic/*.sh \
     && rm -rf /tmp/*
 
-COPY --from=rclone /usr/local/bin/rclone /usr/local/bin/rclone
-COPY --from=restic /usr/bin/restic /usr/local/bin/restic
+COPY --from=docker.io/rclone/rclone:1.65.1 /usr/local/bin/rclone /usr/local/bin/rclone
+COPY --from=docker.io/restic/restic:0.16.2 /usr/bin/restic       /usr/local/bin/restic
 COPY --from=builder /go/bin/volsync /manager
 
 ENTRYPOINT ["/bin/bash"]
