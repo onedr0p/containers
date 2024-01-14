@@ -42,7 +42,7 @@ RUN \
     && rm -rf /tmp/*
 
 COPY --from=docker.io/rclone/rclone:1.65.1 /usr/local/bin/rclone /usr/local/bin/rclone
-COPY --from=docker.io/restic/restic:0.16.2 /usr/bin/restic       /usr/local/bin/restic
+COPY --from=docker.io/restic/restic:0.16.3 /usr/bin/restic       /usr/local/bin/restic
 COPY --from=builder /go/bin/volsync /manager
 
 ENTRYPOINT ["/bin/bash"]
