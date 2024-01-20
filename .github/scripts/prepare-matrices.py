@@ -115,9 +115,14 @@ def get_image_metadata(subdir, meta, forRelease=False, force=False, channels=Non
 
             toBuild.setdefault("platforms", []).append(platform)
 
+            target_os = platform.split("/")[0]
+            target_arch = platform.split("/")[1]
+
             platformToBuild = {}
             platformToBuild["name"] = toBuild["name"]
             platformToBuild["platform"] = platform
+            platformToBuild["target_os"] = target_os
+            platformToBuild["target_arch"] = target_arch
             platformToBuild["version"] = version
             platformToBuild["channel"] = channel["name"]
 

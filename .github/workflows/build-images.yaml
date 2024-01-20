@@ -233,9 +233,9 @@ jobs:
 
       - name: Upload Digest
         if: ${{ inputs.pushImages}}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.image.name }}
+          name: ${{ matrix.image.name }}-${{ matrix.image.target_os }}-${{ matrix.image.target_arch }}
           path: /tmp/${{ matrix.image.name }}/*
           if-no-files-found: error
           retention-days: 1
@@ -257,9 +257,10 @@ jobs:
         run: echo "LOWERCASE_REPO_OWNER=${GITHUB_REPOSITORY_OWNER,,}" >> $GITHUB_ENV
 
       - name: Download Digests
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
-          name: ${{ matrix.image.name }}
+          pattern: ${{ matrix.image.name }}-*
+          merge-multiple: true
           path: /tmp/${{ matrix.image.name }}
 
       - name: Ensure all platforms were built
