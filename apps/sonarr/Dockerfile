@@ -21,7 +21,7 @@ RUN \
     && \
     mkdir -p /app/bin \
     && \
-    curl -fsSL "https://download.sonarr.tv/v4/${SONARR__BRANCH}/${VERSION}/Sonarr.${SONARR__BRANCH}.${VERSION}.linux-musl-${ARCH}.tar.gz" \
+    curl -fsSL "https://services.sonarr.tv/v1/update/${SONARR__BRANCH}/download?version=${VERSION}&os=linuxmusl&runtime=netcore&arch=${ARCH}" \
         | tar xzf - -C /app/bin --strip-components=1 \
     && \
     rm -rf \
