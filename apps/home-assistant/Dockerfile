@@ -17,7 +17,7 @@ ENV \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PIP_BREAK_SYSTEM_PACKAGES=1 \
     ALPINE_WHEELS="https://wheel-index.linuxserver.io/alpine-3.18/" \
-    HOMEASSISTANT_WHEELS="https://wheel-index.linuxserver.io/homeassistant-3.18/" \
+    HOMEASSISTANT_WHEELS="https://wheels.home-assistant.io/musllinux/" \
     PYTHONPATH="${PYTHONPATH}:/pip-packages" \
     HOME="/config"
 
