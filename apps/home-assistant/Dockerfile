@@ -16,7 +16,6 @@ ENV \
     PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PIP_BREAK_SYSTEM_PACKAGES=1 \
-    ALPINE_WHEELS="https://wheel-index.linuxserver.io/alpine-3.18/" \
     HOMEASSISTANT_WHEELS="https://wheels.home-assistant.io/musllinux/" \
     PYTHONPATH="${PYTHONPATH}:/pip-packages" \
     HOME="/config"
@@ -90,7 +89,7 @@ RUN \
     && \
     NUMPY_VERSION=$(grep "numpy" requirements_all.txt) \
     && \
-    pip install --find-links "${ALPINE_WHEELS}" --find-links "${HOMEASSISTANT_WHEELS}" \
+    pip install --find-links "${HOMEASSISTANT_WHEELS}" \
         "${NUMPY_VERSION}" \
     && \
     case "${TARGETPLATFORM}" in \
@@ -104,16 +103,16 @@ RUN \
     && \
     HOME_ASSISTANT_BASE=$(curl -fsSL "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/build.yaml" | grep "${ARCH}: " | cut -d ":" -f3) \
     && \
-    pip install --no-index --only-binary=:all: --find-links "${ALPINE_WHEELS}" --find-links "${HOMEASSISTANT_WHEELS}" \
+    pip install --no-index --only-binary=:all: --find-links "${HOMEASSISTANT_WHEELS}" \
         --requirement "https://raw.githubusercontent.com/home-assistant/docker/${HOME_ASSISTANT_BASE}/requirements.txt" \
     && \
-    pip install --find-links "${ALPINE_WHEELS}" --find-links "${HOMEASSISTANT_WHEELS}" \
+    pip install --find-links "${HOMEASSISTANT_WHEELS}" \
         --requirement requirements_all.txt \
     && \
-    pip install --only-binary=:all: --find-links "${ALPINE_WHEELS}" --find-links "${HOMEASSISTANT_WHEELS}" \
+    pip install --only-binary=:all: --find-links "${HOMEASSISTANT_WHEELS}" \
         homeassistant=="${VERSION}" \
     && \
-    pip install --find-links "${ALPINE_WHEELS}" --find-links "${HOMEASSISTANT_WHEELS}" \
+    pip install --find-links "${HOMEASSISTANT_WHEELS}" \
         pycups PySwitchbot \
     && \
     apk del --purge .build-deps \
