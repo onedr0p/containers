@@ -19,7 +19,7 @@ RUN \
     && make \
     && make install
 
-FROM docker.io/library/alpine:3.19.0
+FROM docker.io/library/alpine:3.19.1
 COPY --from=build /usr/local/bin/par2 /usr/local/bin/par2
 RUN /usr/local/bin/par2 --help
 CMD ["/usr/local/bin/par2"]
