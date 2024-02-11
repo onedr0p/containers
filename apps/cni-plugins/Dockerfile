@@ -9,4 +9,4 @@ RUN apk add --no-cache --virtual .build-deps curl \
         | tar xzf - -C /plugins \
     && apk del --purge .build-deps \
     && rm -rf /tmp/*
-CMD cp -n /plugins/* /host/opt/cni/bin
+CMD cp /plugins/* /host/opt/cni/bin
