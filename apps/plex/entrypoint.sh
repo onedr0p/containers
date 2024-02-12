@@ -90,6 +90,20 @@ if [[ -z "$(getPref "TranscoderTempDirectory")" ]]; then
     setPref "TranscoderTempDirectory" "/transcode"
 fi
 
+# Parse list of all exported variables that start with PLEX_PREFERENCE_
+# The format of which is PLEX_PREFERENCE_<SOMETHING>="Key=Value"
+# Where Key is the EXACT key to use in the Plex Preference file
+# And Value is the EXACT value to use in the Plex Preference file for that key.
+# Please note it looks like many of the key's are camelCase in some fashion.
+# Additionally there are likely some preferences where environment variable injection
+# doesn't really work for.
+for var in "${!PLEX_PREFERENCE_@}"; do
+  value="${!var}"
+  PreferenceValue="${value#*=}"
+  PreferenceKey="${value%=*}"
+  setPref "${PreferenceKey}" "${PreferenceValue}"
+done
+
 # Remove pid file
 rm -f "${PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}/Plex Media Server/plexmediaserver.pid"
 
