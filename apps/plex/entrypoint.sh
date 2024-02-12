@@ -98,10 +98,10 @@ fi
 # Additionally there are likely some preferences where environment variable injection
 # doesn't really work for.
 for var in "${!PLEX_PREFERENCE_@}"; do
-  value="${!var}"
-  PreferenceValue="${value#*=}"
-  PreferenceKey="${value%=*}"
-  setPref "${PreferenceKey}" "${PreferenceValue}"
+    value="${!var}"
+    PreferenceValue="${value#*=}"
+    PreferenceKey="${value%=*}"
+    setPref "${PreferenceKey}" "${PreferenceValue}"
 done
 
 # Remove pid file
