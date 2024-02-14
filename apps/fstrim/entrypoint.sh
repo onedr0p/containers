@@ -16,5 +16,8 @@ nsrun() {
         -- bash -c "$1"
 }
 
+# Get mount info and filter unwanted lines
+nsrun "cat /proc/self/mountinfo | grep -v 'kubelet\|tmpfs\|overlay' > /tmp/mountinfo"
+
 # Trim filesystems
-nsrun "grep -v 'kubelet\|tmpfs\|overlay' /proc/self/mountinfo | fstrim --verbose --quiet-unsupported --listed-in -"
+nsrun "fstrim -v --quiet-unsupported -I /tmp/mountinfo"
