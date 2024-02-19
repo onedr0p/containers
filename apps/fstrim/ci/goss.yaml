@@ -1,9 +1,0 @@
----
-# https://github.com/aelsabbahy/goss/blob/master/docs/manual.md#file
-file:
-  /sbin/fstrim:
-    exists: true
-  /usr/bin/nsenter:
-    exists: true
-  /usr/bin/pgrep:
-    exists: true
