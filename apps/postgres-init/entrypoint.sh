@@ -2,6 +2,8 @@
 
 # This is most commonly set to the user 'postgres'
 export INIT_POSTGRES_SUPER_USER=${INIT_POSTGRES_SUPER_USER:-postgres}
+# default dbPort 5432
+export INIT_POSTGRES_PORT=${INIT_POSTGRES_PORT:-5432}
 
 if [[ -z "${INIT_POSTGRES_HOST}"       ||
       -z "${INIT_POSTGRES_SUPER_PASS}" ||
@@ -22,9 +24,10 @@ fi
 export PGHOST="${INIT_POSTGRES_HOST}"
 export PGUSER="${INIT_POSTGRES_SUPER_USER}"
 export PGPASSWORD="${INIT_POSTGRES_SUPER_PASS}"
+export PGPORT="${INIT_POSTGRES_PORT}"
 
 until pg_isready; do
-    printf "\e[1;32m%-6s\e[m\n" "Waiting for Host '${PGHOST}' ..."
+    printf "\e[1;32m%-6s\e[m\n" "Waiting for Host '${PGHOST}' on port '${PGPORT}' ..."
     sleep 1
 done
 
