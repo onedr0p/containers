@@ -2,7 +2,6 @@
 
 # This is most commonly set to the user 'postgres'
 export INIT_POSTGRES_SUPER_USER=${INIT_POSTGRES_SUPER_USER:-postgres}
-# default dbPort 5432
 export INIT_POSTGRES_PORT=${INIT_POSTGRES_PORT:-5432}
 
 if [[ -z "${INIT_POSTGRES_HOST}"       ||
