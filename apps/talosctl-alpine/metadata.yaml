@@ -1,0 +1,10 @@
+---
+app: talosctl-alpine
+base: true
+channels:
+  - name: talosctl
+    platforms: ["linux/amd64", "linux/arm64"]
+    stable: false
+    tests:
+      enabled: true
+      type: cli

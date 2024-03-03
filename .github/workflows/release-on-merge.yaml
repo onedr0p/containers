@@ -10,6 +10,7 @@ on:
     branches: ["main"]
     paths:
       - "apps/**"
+      - ".github/workflows/**"
       - ".github/scripts/templates/**"
       - "!apps/**/metadata.json"
       - "!apps/**/metadata.yaml"

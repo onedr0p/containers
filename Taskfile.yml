@@ -16,14 +16,14 @@ tasks:
     cmds:
       - task: download-goss
       - >-
-        cue vet --schema '#Spec' ./apps/{{.APP}}/metadata.json metadata.rules.cue
+        cue vet --schema '#Spec' ./apps/{{.APP}}/metadata.yaml metadata.rules.cue
       - >-
         docker buildx build --progress=plain --load
         -t {{.APP}}:{{.CHANNEL}}
         --build-arg CHANNEL={{.CHANNEL}}
-        --build-arg VERSION=$(bash ./.github/scripts/upstream.sh "{{.APP}}" "{{.CHANNEL}}")
+        --build-arg VERSION=$(bash ./apps/"{{.APP}}"/ci/latest.sh "{{.CHANNEL}}")
         {{if eq .MULTIPLATFORM "true"}}
-        --platform $(jq -r '.channels[] | select(.name=="{{.CHANNEL}}").platforms | join(",")' ./apps/{{.APP}}/metadata.json)
+        --platform $(jq -r '.channels[] | select(.name=="{{.CHANNEL}}").platforms | join(",")' ./apps/{{.APP}}/metadata.yaml)
         {{else}}
         --platform "linux/$(uname -m | sed 's/x86_64/amd64/')"
         {{end}}
@@ -39,6 +39,7 @@ tasks:
       GOSS_FILES_STRATEGY: cp
     vars:
       MULTIPLATFORM: '{{ default "false" .MULTIPLATFORM }}'
+      sh: bash ./apps/"{{.APP}}"/ci/latest.sh "{{.CHANNEL}}"
 
   download-goss:
     silent: true

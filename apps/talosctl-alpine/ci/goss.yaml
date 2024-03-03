@@ -1,0 +1,6 @@
+---
+file:
+  /usr/local/bin/talosctl:
+    exists: true
+  /usr/bin/jq:
+    exists: true
