@@ -1,4 +1,0 @@
----
-file:
-  /usr/local/bin/kubectl:
-    exists: true
