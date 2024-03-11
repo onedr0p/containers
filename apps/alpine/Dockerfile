@@ -38,9 +38,7 @@ RUN \
         ca-certificates catatonit bash \
         bind-tools coreutils curl iputils jo \
         jq moreutils nano pv tzdata unzip \
-        util-linux wget \
-    && \
-    apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.14/main unrar
+        util-linux wget
 
 #hadolint ignore=DL3018
 RUN \
