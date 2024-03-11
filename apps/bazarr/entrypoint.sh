@@ -9,5 +9,5 @@ exec \
         /app/bazarr.py \
             --no-update \
             --config /config \
-            --port ${BAZARR__PORT:-6767}
+            --port ${BAZARR__PORT:-6767} \
             "$@"
