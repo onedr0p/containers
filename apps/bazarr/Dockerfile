@@ -1,5 +1,4 @@
-# Force using 3.10
-FROM ghcr.io/onedr0p/alpine:3.17.3
+FROM ghcr.io/onedr0p/alpine:rolling@sha256:0e3067295cc20dafbd4cf63789ccc71858ad555f3998200ca10b271328c7285e
 
 ARG TARGETPLATFORM
 ARG VERSION
@@ -11,6 +10,7 @@ ENV \
     PIP_ROOT_USER_ACTION=ignore \
     PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_BREAK_SYSTEM_PACKAGES=1 \
     CRYPTOGRAPHY_DONT_BUILD_RUST=1
 
 RUN \
@@ -22,9 +22,9 @@ RUN \
 
 #hadolint ignore=DL3018,DL3013
 RUN \
-    apk add --no-cache ca-certificates mediainfo ffmpeg python3 py3-lxml py3-numpy py3-gevent py3-cryptography py3-setuptools py3-pillow py3-psycopg2 \
+    apk add --no-cache ca-certificates ffmpeg python3 py3-lxml py3-numpy py3-gevent py3-cryptography py3-setuptools py3-psycopg2 py3-pillow unzip \
     && \
-    apk add --no-cache --virtual .build-deps py3-pip python3-dev gcc musl-dev \
+    apk add --no-cache --virtual .build-deps py3-pip gcc python3-dev musl-dev \
     && \
     pip install --upgrade pip \
     && \
