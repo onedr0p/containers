@@ -8,6 +8,6 @@ if [[ "${HOME_ASSISTANT__HACS_INSTALL}" == "true" ]]; then
 fi
 
 exec \
-    /usr/bin/hass \
+    /usr/local/bin/hass \
         --config /config \
         "$@"
