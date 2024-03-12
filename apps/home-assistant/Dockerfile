@@ -47,7 +47,7 @@ RUN \
         socat \
         tiff
 
-#hadolint ignore=DL3018,DL3013,DL3059
+#hadolint ignore=DL3018,DL3013,DL3059,DL4006
 RUN \
     apk add --no-cache --virtual=.build-deps \
         autoconf \
@@ -65,18 +65,14 @@ RUN \
         postgresql-dev \
         python3-dev \
         unixodbc-dev
-
-#hadolint ignore=DL3018,DL3013,DL3059
-RUN \
+    && \
     pip install --upgrade \
         cython \
         pip \
         pyparsing \
         setuptools \
         wheel
-
-#hadolint ignore=DL3018,DL3013,DL3059,DL4006
-RUN \
+    && \
     curl -fsSL "https://github.com/home-assistant/core/archive/${VERSION}.tar.gz" \
         | tar xzf - -C /tmp --strip-components=1 \
     && \
