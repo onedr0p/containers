@@ -64,14 +64,14 @@ RUN \
         libxslt-dev \
         postgresql-dev \
         python3-dev \
-        unixodbc-dev
+        unixodbc-dev \
     && \
     pip install --upgrade \
         cython \
         pip \
         pyparsing \
         setuptools \
-        wheel
+        wheel \
     && \
     curl -fsSL "https://github.com/home-assistant/core/archive/${VERSION}.tar.gz" \
         | tar xzf - -C /tmp --strip-components=1 \
