@@ -5,6 +5,7 @@ ARG VERSION
 ARG CHANNEL
 
 ENV \
+    COMPlus_EnableDiagnostics="0" \
     LIDARR__INSTANCE_NAME="Lidarr" \
     LIDARR__BRANCH="${CHANNEL}" \
     LIDARR__PORT="8686" \
