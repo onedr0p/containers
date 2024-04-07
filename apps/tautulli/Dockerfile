@@ -1,4 +1,17 @@
-FROM ghcr.io/onedr0p/alpine:rolling@sha256:3fbc581cb0fe29830376161ae026e2a765dcc11e1747477fe9ebf155720b8638
+ARG VERSION
+FROM docker.io/library/golang:1.22-alpine as envsubst
+ARG VERSION
+ARG TARGETOS
+ARG TARGETARCH
+ARG TARGETVARIANT=""
+ARG TARGETPLATFORM
+ENV CGO_ENABLED=0 \
+    GOOS=${TARGETOS} \
+    GOARCH=${TARGETARCH} \
+    GOARM=${TARGETVARIANT}
+RUN go install -ldflags="-s -w" github.com/drone/envsubst/cmd/envsubst@latest
+
+FROM docker.io/library/python:3.12-alpine
 
 ARG TARGETPLATFORM
 ARG VERSION
@@ -15,7 +28,34 @@ ENV \
 
 ENV TAUTULLI_DOCKER="True"
 
+USER root
+WORKDIR /tmp
+
+#hadolint ignore=DL3018,DL3013
 RUN \
+    apk add --no-cache \
+        bash \
+        ca-certificates \
+        catatonit \
+        curl \
+        jq \
+        nano \
+        tzdata \
+    && \
+    apk add --no-cache --virtual .build-deps \
+        build-base \
+        cargo \
+        libffi-dev \
+        musl-dev \
+        openssl-dev \
+    && \
+    pip install uv \
+    && \
+    uv pip install --system \
+        --requirement "https://raw.githubusercontent.com/Tautulli/tautulli-baseimage/python3/requirements.txt" \
+    && \
+    mkdir -p /app \
+    && \
     curl -fsSL "https://github.com/Tautulli/Tautulli/archive/v${VERSION}.tar.gz" | tar xzf - -C /app --strip-components 1 \
     && \
     echo "v${VERSION}" > /app/version.txt \
@@ -23,27 +63,17 @@ RUN \
     echo "${CHANNEL}" > /app/branch.txt \
     && chown -R root:root /app \
     && chmod -R 755 /app \
-    && rm -rf /tmp/*
-
-#hadolint ignore=DL3018,DL3013
-RUN \
-    apk add --no-cache ca-certificates python3 py3-lxml py3-openssl py3-setuptools \
-    && \
-    apk add --no-cache --virtual .build-deps py3-pip make gcc g++ python3-dev \
-    && \
-    pip install --upgrade pip \
-    && \
-    pip install --upgrade \
-        plexapi \
-        pycryptodomex \
     && apk del --purge .build-deps \
     && rm -rf \
         /root/.cache \
         /root/.cargo \
         /tmp/*
 
-USER kah
+WORKDIR /app
 COPY ./apps/tautulli/entrypoint.sh /entrypoint.sh
+COPY --from=envsubst /go/bin/envsubst /usr/local/bin/envsubst
+
+ENTRYPOINT ["/usr/bin/catatonit", "--"]
 CMD ["/entrypoint.sh"]
 
 LABEL org.opencontainers.image.source="https://github.com/Tautulli/Tautulli"

@@ -5,7 +5,7 @@ test -f "/scripts/umask.sh" && source "/scripts/umask.sh"
 
 #shellcheck disable=SC2086
 exec \
-    /usr/bin/python3 \
+    python \
         /app/Tautulli.py \
         --nolaunch \
         --config /config/config.ini \
