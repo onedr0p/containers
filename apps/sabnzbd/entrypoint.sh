@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-#shellcheck disable=SC1091
-test -f "/scripts/umask.sh" && source "/scripts/umask.sh"
-test -f "/scripts/vpn.sh" && source "/scripts/vpn.sh"
-
 if [[ ! -f "/config/sabnzbd.ini" ]]; then
     printf "Copying over default configuration ...\n"
     mkdir -p /config/sabnzbd

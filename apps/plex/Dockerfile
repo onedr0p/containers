@@ -32,26 +32,21 @@ ENV UMASK="0002" \
     TZ="Etc/UTC"
 
 USER root
+WORKDIR /tmp
 
 # hadolint ignore=DL3008,DL3015,SC2039,SC2086
 RUN \
-    apt-get -qq update \
+    apt-get update \
     && \
-    apt-get -qq install --no-install-recommends --no-install-suggests -y \
+    apt-get install -y --no-install-recommends --no-install-suggests \
         bash \
         ca-certificates \
         catatonit \
-        coreutils \
         curl \
-        dnsutils \
-        iputils-ping \
-        jo \
         jq \
-        moreutils \
+        nano \
         tzdata \
-        unzip \
         uuid-runtime \
-        vim-tiny \
         xmlstarlet \
     && \
     case "${TARGETPLATFORM}" in \
@@ -78,11 +73,9 @@ RUN \
         /var/lib/apt/lists/* \
         /var/tmp/
 
-WORKDIR "${PLEX_MEDIA_SERVER_HOME}"
-
-COPY --from=envsubst /go/bin/envsubst /usr/local/bin/envsubst
-
+WORKDIR /app
 COPY ./apps/plex/entrypoint.sh /entrypoint.sh
+COPY --from=envsubst /go/bin/envsubst /usr/local/bin/envsubst
 
 ENTRYPOINT [ "/usr/bin/catatonit", "--" ]
 CMD ["/entrypoint.sh"]

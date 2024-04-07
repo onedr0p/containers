@@ -1,4 +1,4 @@
-FROM nginxinc/nginx-unprivileged:1.25.4
+FROM docker.io/nginxinc/nginx-unprivileged:1.25.4
 
 ARG TARGETPLATFORM
 ARG VERSION
@@ -9,9 +9,9 @@ ENV NGINX_WEB_ROOT "/usr/share/nginx/html"
 
 #hadolint ignore=DL3008
 RUN \
-    apt-get update -qq \
+    apt-get update \
     && \
-    apt-get install -qqy --no-install-recommends --no-install-suggests python3 \
+    apt-get install -y --no-install-recommends --no-install-suggests python3 \
     && \
     curl -fsSL "https://github.com/themepark-dev/theme.park/archive/${VERSION}.tar.gz" \
       | tar xzf - -C /tmp --strip-components 1 \
