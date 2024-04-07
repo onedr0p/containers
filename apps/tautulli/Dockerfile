@@ -11,7 +11,7 @@ ENV CGO_ENABLED=0 \
     GOARM=${TARGETVARIANT}
 RUN go install -ldflags="-s -w" github.com/drone/envsubst/cmd/envsubst@latest
 
-FROM docker.io/library/python:3.12-alpine
+FROM docker.io/library/python:3.11-alpine
 
 ARG TARGETPLATFORM
 ARG VERSION
