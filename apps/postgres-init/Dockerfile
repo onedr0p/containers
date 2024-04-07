@@ -13,6 +13,8 @@ RUN go install -ldflags="-s -w" github.com/drone/envsubst/cmd/envsubst@latest
 
 FROM docker.io/library/alpine:3.19
 
+ARG VERSION
+
 USER root
 WORKDIR /tmp
 
