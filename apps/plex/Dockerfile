@@ -11,7 +11,7 @@ ENV CGO_ENABLED=0 \
     GOARM=${TARGETVARIANT}
 RUN go install -ldflags="-s -w" github.com/drone/envsubst/cmd/envsubst@latest
 
-FROM docker.io/library/ubuntu:22.04
+FROM docker.io/library/ubuntu:22.10
 
 ARG TARGETPLATFORM
 ARG VERSION
