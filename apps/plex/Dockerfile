@@ -22,7 +22,6 @@ ENV DEBCONF_NONINTERACTIVE_SEEN="true" \
     APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE="DontWarn"
 
 ENV NVIDIA_DRIVER_CAPABILITIES="compute,video,utility" \
-    PLEX_DOWNLOAD="https://downloads.plex.tv/plex-media-server-new" \
     PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR="/config/Library/Application Support" \
     PLEX_MEDIA_SERVER_HOME="/usr/lib/plexmediaserver" \
     PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS="6" \
@@ -38,7 +37,7 @@ USER root
 RUN \
     apt-get -qq update \
     && \
-    apt-get -qq install -y \
+    apt-get -qq install --no-install-recommends --no-install-suggests -y \
         bash \
         ca-certificates \
         catatonit \
@@ -65,7 +64,7 @@ RUN \
     esac \
     && \
     curl -fsSL -o /tmp/plex.deb \
-        "${PLEX_DOWNLOAD}/${VERSION}/debian/plexmediaserver_${VERSION}_${ARCH}.deb" \
+        "https://downloads.plex.tv/plex-media-server-new/${VERSION}/debian/plexmediaserver_${VERSION}_${ARCH}.deb" \
     && \
     dpkg -i --force-confold /tmp/plex.deb \
     && chmod -R 755 "${PLEX_MEDIA_SERVER_HOME}" \
