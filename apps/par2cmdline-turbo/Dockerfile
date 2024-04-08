@@ -1,7 +1,6 @@
-FROM docker.io/library/alpine:3.19 as build
+FROM docker.io/library/alpine:3.19 as par2
 ARG TARGETARCH
 ARG VERSION
-WORKDIR /tmp
 ENV LDFLAGS="-static"
 RUN \
     apk add --no-cache \
@@ -19,7 +18,7 @@ RUN \
     && make \
     && make install
 
-FROM scratch
-COPY --from=build /usr/local/bin/par2 /usr/local/bin/par2
+FROM docker.io/library/alpine:3.19
+COPY --from=par2 /usr/local/bin/par2 /usr/local/bin/par2
 RUN /usr/local/bin/par2 --help
 CMD ["/usr/local/bin/par2"]
