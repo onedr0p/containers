@@ -5,4 +5,6 @@ test -f "/scripts/umask.sh" && source "/scripts/umask.sh"
 
 #shellcheck disable=SC2086
 exec \
-    python3 /app/Kapowarr.py \
+    /usr/bin/python3 \
+        /app/Kapowarr.py \
+        "$@"
