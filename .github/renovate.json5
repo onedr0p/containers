@@ -12,9 +12,15 @@
   "suppressNotifications": ["prEditedNotification", "prIgnoreNotification"],
   "packageRules": [
     {
-      "matchFileNames": ["apps/**"],
       "additionalBranchPrefix": "{{parentDir}}-",
-      "labels": ["app/{{parentDir}}"]
+      "groupName": "{{parentDir}}",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "labels": ["app/{{parentDir}}"],
+      "matchDatasources": ["docker"],
+      "matchFileNames": ["apps/**/Dockerfile"],
+      "separateMinorPatch": true
     }
   ]
 }
