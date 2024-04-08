@@ -5,10 +5,9 @@
     "docker:enableMajor",
     ":dependencyDashboard",
     ":disableRateLimiting",
+    ":timezone(America/New_York)",
     ":semanticCommits"
   ],
-  "onboarding": false,
-  "requireConfig": "optional",
   "dependencyDashboardTitle": "Renovate Dashboard 🤖",
   "suppressNotifications": ["prEditedNotification", "prIgnoreNotification"],
   "packageRules": [
