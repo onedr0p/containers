@@ -17,7 +17,6 @@ RUN \
 
 WORKDIR /app
 COPY ./apps/postgres-init/entrypoint.sh /entrypoint.sh
-COPY --from=envsubst /go/bin/envsubst /usr/local/bin/envsubst
 
 ENTRYPOINT ["/usr/bin/catatonit", "--"]
 CMD ["/entrypoint.sh"]

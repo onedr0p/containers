@@ -23,7 +23,6 @@ WORKDIR /tmp
 RUN apk add --no-cache \
         bash \
         ca-certificates \
-        ca-certificates \
         catatonit \
         curl \
         jq \
@@ -40,9 +39,10 @@ RUN apk add --no-cache \
         py3-pip \
         git \
     && \
-    git clone https://github.com/blacktwin/JBOPS.git . \
+    git clone https://github.com/blacktwin/JBOPS.git /app \
     && if [ -n "${VERSION}" ]; then \
         NUMBER_COMMITS_TO_REVERT=$(( $(git rev-list --count --first-parent HEAD) - $(echo "${VERSION}" | cut -d "." -f3) )); \
+        cd /app; \
         git checkout "master~${NUMBER_COMMITS_TO_REVERT}"; \
     fi \
     && \
