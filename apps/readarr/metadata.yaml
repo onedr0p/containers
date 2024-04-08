@@ -1,7 +1,6 @@
 ---
 app: readarr
-base: false
-semantic_versioning: true
+semver: true
 channels:
   - name: develop
     platforms: ["linux/amd64", "linux/arm64"]

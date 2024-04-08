@@ -1,4 +1,4 @@
-FROM ghcr.io/onedr0p/alpine:rolling@sha256:3fbc581cb0fe29830376161ae026e2a765dcc11e1747477fe9ebf155720b8638
+FROM docker.io/library/alpine:3.19
 
 ARG TARGETPLATFORM
 ARG VERSION
@@ -16,10 +16,19 @@ ENV \
 ENV PLEXAPI_CONFIG_PATH="/config/config.ini" \
     JBOPS__SCRIPT_PATH="fun/plexapi_haiku.py"
 
+USER root
+WORKDIR /app
+
 #hadolint ignore=DL3018,DL3013
 RUN apk add --no-cache \
+        bash \
         ca-certificates \
+        catatonit \
+        curl \
+        jq \
+        nano \
         python3 \
+        tzdata \
     && \
     apk add --no-cache --virtual=.build-deps \
         build-base \
@@ -30,14 +39,13 @@ RUN apk add --no-cache \
         py3-pip \
         git \
     && \
-    pip install --upgrade pip \
-    && git clone https://github.com/blacktwin/JBOPS.git . \
+    git clone https://github.com/blacktwin/JBOPS.git . \
     && if [ -n "${VERSION}" ]; then \
         NUMBER_COMMITS_TO_REVERT=$(( $(git rev-list --count --first-parent HEAD) - $(echo "${VERSION}" | cut -d "." -f3) )); \
         git checkout "master~${NUMBER_COMMITS_TO_REVERT}"; \
     fi \
     && \
-    pip install --upgrade --requirement /app/requirements.txt \
+    pip install --upgrade --requirement requirements.txt \
     && apk del --purge .build-deps \
     && chown -R root:root /app \
     && chmod -R 755 /app \
@@ -46,8 +54,8 @@ RUN apk add --no-cache \
         /root/.cargo \
         /tmp/*
 
-USER kah
 COPY ./apps/jbops/entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/usr/bin/catatonit", "--"]
 CMD ["/entrypoint.sh"]
 
 LABEL org.opencontainers.image.source="https://github.com/blacktwin/JBOPS"

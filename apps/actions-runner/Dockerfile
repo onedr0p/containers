@@ -11,9 +11,9 @@ ENV HOMEBREW_NO_ANALYTICS=1 \
 USER root
 
 RUN \
-    apt-get update && apt-get upgrade -y \
+    apt-get update \
     && \
-    apt-get install -y --no-install-recommends \
+    apt-get install -y --no-install-recommends --no-install-suggests \
         ca-certificates \
         curl \
         gcc \
