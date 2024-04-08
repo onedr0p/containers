@@ -23,6 +23,9 @@ ENV \
     READARR__PORT="8787" \
     READARR__ANALYTICS_ENABLED="False"
 
+ENV UMASK="0002" \
+    TZ="Etc/UTC"
+
 USER root
 WORKDIR /app
 

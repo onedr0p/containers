@@ -16,6 +16,9 @@ ENV \
 ENV PLEXAPI_CONFIG_PATH="/config/config.ini" \
     JBOPS__SCRIPT_PATH="fun/plexapi_haiku.py"
 
+ENV UMASK="0002" \
+    TZ="Etc/UTC"
+
 USER root
 WORKDIR /app
 

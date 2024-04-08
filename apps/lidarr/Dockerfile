@@ -24,6 +24,9 @@ ENV \
     LIDARR__PORT="8686" \
     LIDARR__ANALYTICS_ENABLED="False"
 
+ENV UMASK="0002" \
+    TZ="Etc/UTC"
+
 USER root
 WORKDIR /app
 
