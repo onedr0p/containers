@@ -1,16 +1,3 @@
-ARG VERSION
-FROM docker.io/library/golang:1.22-alpine as envsubst
-ARG VERSION
-ARG TARGETOS
-ARG TARGETARCH
-ARG TARGETVARIANT=""
-ARG TARGETPLATFORM
-ENV CGO_ENABLED=0 \
-    GOOS=${TARGETOS} \
-    GOARCH=${TARGETARCH} \
-    GOARM=${TARGETVARIANT}
-RUN go install -ldflags="-s -w" github.com/drone/envsubst/cmd/envsubst@latest
-
 FROM docker.io/library/python:3.12-alpine
 
 ARG TARGETPLATFORM
@@ -74,7 +61,6 @@ RUN ln -s /usr/local/bin/par2 /usr/local/bin/par2create \
     && ln -s /usr/local/bin/par2 /usr/local/bin/par2repair \
     && ln -s /usr/local/bin/par2 /usr/local/bin/par2verify
 COPY --from=ghcr.io/linuxserver/unrar:7.0.7 /usr/bin/unrar-alpine /usr/bin/unrar
-COPY --from=envsubst /go/bin/envsubst /usr/local/bin/envsubst
 
 ENTRYPOINT ["/usr/bin/catatonit", "--"]
 CMD ["/entrypoint.sh"]
