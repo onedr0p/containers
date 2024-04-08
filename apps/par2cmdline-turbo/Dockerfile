@@ -2,6 +2,8 @@ FROM docker.io/library/alpine:3.19 as par2
 ARG TARGETARCH
 ARG VERSION
 ENV LDFLAGS="-static"
+USER root
+WORKDIR /tmp
 RUN \
     apk add --no-cache \
         autoconf \
