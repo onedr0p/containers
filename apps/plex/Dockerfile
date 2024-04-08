@@ -19,7 +19,7 @@ ENV UMASK="0002" \
     TZ="Etc/UTC"
 
 USER root
-WORKDIR /tmp
+WORKDIR /app
 
 # hadolint ignore=DL3008,DL3015,SC2039,SC2086
 RUN \
@@ -60,7 +60,6 @@ RUN \
         /var/lib/apt/lists/* \
         /var/tmp/
 
-WORKDIR /app
 COPY ./apps/plex/entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT [ "/usr/bin/catatonit", "--" ]

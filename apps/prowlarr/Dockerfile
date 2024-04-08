@@ -25,7 +25,7 @@ ENV \
     PROWLARR__ANALYTICS_ENABLED="False"
 
 USER root
-WORKDIR /tmp
+WORKDIR /app
 
 #hadolint ignore=DL3018,DL3059
 RUN \
@@ -59,7 +59,6 @@ RUN \
     && chmod -R 755 /app \
     && rm -rf /tmp/*
 
-WORKDIR /app
 COPY ./apps/prowlarr/config.xml.tmpl /app/config.xml.tmpl
 COPY ./apps/prowlarr/entrypoint.sh /entrypoint.sh
 COPY --from=envsubst /go/bin/envsubst /usr/local/bin/envsubst

@@ -18,7 +18,7 @@ ENV UMASK="0002" \
     TZ="Etc/UTC"
 
 USER root
-WORKDIR /tmp
+WORKDIR /app
 
 #hadolint ignore=DL3018,DL3013,DL3059,DL4006
 RUN \
@@ -98,7 +98,6 @@ RUN \
         /root/.cargo \
         /tmp/*
 
-WORKDIR /app
 COPY ./apps/home-assistant/entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT ["/usr/bin/catatonit", "--"]

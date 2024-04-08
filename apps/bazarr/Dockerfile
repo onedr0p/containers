@@ -14,7 +14,7 @@ ENV \
     CRYPTOGRAPHY_DONT_BUILD_RUST=1
 
 USER root
-WORKDIR /tmp
+WORKDIR /app
 
 #hadolint ignore=DL3018,DL3013
 RUN \
@@ -56,7 +56,6 @@ RUN \
         /root/.cargo \
         /tmp/*
 
-WORKDIR /app
 COPY ./apps/bazarr/entrypoint.sh /entrypoint.sh
 COPY --from=ghcr.io/linuxserver/unrar:7.0.7 /usr/bin/unrar-alpine /usr/bin/unrar
 ENTRYPOINT ["/usr/bin/catatonit", "--"]

@@ -25,7 +25,7 @@ ENV \
     RADARR__ANALYTICS_ENABLED="False"
 
 USER root
-WORKDIR /tmp
+WORKDIR /app
 
 #hadolint ignore=DL3018,DL3059
 RUN \
@@ -59,7 +59,6 @@ RUN \
     && chmod -R 755 /app \
     && rm -rf /tmp/*
 
-WORKDIR /app
 COPY ./apps/radarr/config.xml.tmpl /app/config.xml.tmpl
 COPY ./apps/radarr/entrypoint.sh /entrypoint.sh
 COPY --from=envsubst /go/bin/envsubst /usr/local/bin/envsubst

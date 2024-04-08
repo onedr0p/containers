@@ -16,7 +16,7 @@ ENV \
 ENV TAUTULLI_DOCKER="True"
 
 USER root
-WORKDIR /tmp
+WORKDIR /app
 
 #hadolint ignore=DL3018,DL3013
 RUN \
@@ -56,7 +56,6 @@ RUN \
         /root/.cargo \
         /tmp/*
 
-WORKDIR /app
 COPY ./apps/tautulli/entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT ["/usr/bin/catatonit", "--"]

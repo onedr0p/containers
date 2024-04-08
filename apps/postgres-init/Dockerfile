@@ -5,7 +5,7 @@ ARG VERSION
 ARG CHANNEL
 
 USER root
-WORKDIR /tmp
+WORKDIR /app
 
 #hadolint ignore=DL3018
 RUN \
@@ -15,7 +15,6 @@ RUN \
         catatonit \
         postgresql16-client~"${VERSION}"
 
-WORKDIR /app
 COPY ./apps/postgres-init/entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT ["/usr/bin/catatonit", "--"]

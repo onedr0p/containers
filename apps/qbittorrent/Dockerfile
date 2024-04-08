@@ -8,7 +8,7 @@ ENV QBITTORRENT__PORT=8080 \
     QBITTORRENT__BT_PORT=50413
 
 USER root
-WORKDIR /tmp
+WORKDIR /app
 
 #hadolint ignore=DL3018,DL3059
 RUN \
@@ -46,7 +46,6 @@ RUN \
     && chmod -R 755 /app/qbittorrent-nox \
     && rm -rf /tmp/*
 
-WORKDIR /app
 COPY ./apps/qbittorrent/scripts/config.py /scripts/config.py
 COPY ./apps/qbittorrent/entrypoint.sh /entrypoint.sh
 

@@ -16,7 +16,7 @@ ENV \
 ENV SABNZBD__PORT=8080
 
 USER root
-WORKDIR /tmp
+WORKDIR /app
 
 RUN \
     apk add --no-cache \
@@ -53,7 +53,6 @@ RUN \
         /root/.cargo \
         /tmp/*
 
-WORKDIR /app
 COPY ./apps/sabnzbd/sabnzbd.ini /app/sabnzbd.ini
 COPY ./apps/sabnzbd/entrypoint.sh /entrypoint.sh
 COPY --from=ghcr.io/onedr0p/par2cmdline-turbo:1.1.1 /usr/local/bin/par2 /usr/local/bin/par2
