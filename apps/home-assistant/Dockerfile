@@ -18,7 +18,7 @@ RUN \
     && go install -ldflags="-s -w" github.com/drone/envsubst/cmd/envsubst@latest \
     && upx /go/bin/envsubst
 
-FROM docker.io/library/python:3.12.2-alpine3.19
+FROM docker.io/library/python:3.12.3-alpine3.19
 
 ARG TARGETPLATFORM
 ARG VERSION
