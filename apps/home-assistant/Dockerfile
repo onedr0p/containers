@@ -100,7 +100,8 @@ RUN \
 
 COPY ./apps/home-assistant/entrypoint.sh /entrypoint.sh
 
-USER nobody
+USER nobody:nogroup
+VOLUME ["/config"]
 ENTRYPOINT ["/usr/bin/catatonit", "--"]
 CMD ["/entrypoint.sh"]
 

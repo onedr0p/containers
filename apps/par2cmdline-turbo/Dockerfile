@@ -25,5 +25,5 @@ FROM docker.io/library/alpine:3.19
 COPY --from=par2 /usr/local/bin/par2 /usr/local/bin/par2
 RUN /usr/local/bin/par2 --help
 
-USER nobody
+USER nobody:nogroup
 CMD ["/usr/local/bin/par2"]
