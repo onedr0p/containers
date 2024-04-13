@@ -59,7 +59,6 @@ RUN apk add --no-cache \
 
 COPY ./apps/jbops/entrypoint.sh /entrypoint.sh
 
-USER nobody
 ENTRYPOINT ["/usr/bin/catatonit", "--"]
 CMD ["/entrypoint.sh"]
 

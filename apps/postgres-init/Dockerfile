@@ -17,7 +17,6 @@ RUN \
 
 COPY ./apps/postgres-init/entrypoint.sh /entrypoint.sh
 
-USER nobody
 ENTRYPOINT ["/usr/bin/catatonit", "--"]
 CMD ["/entrypoint.sh"]
 
