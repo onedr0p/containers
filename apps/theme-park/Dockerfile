@@ -32,7 +32,6 @@ RUN \
     && rm -rf /tmp/*
 
 USER nginx
-
 WORKDIR ${NGINX_WEB_ROOT}
 
 LABEL org.opencontainers.image.source="https://github.com/themepark-dev/theme.park"

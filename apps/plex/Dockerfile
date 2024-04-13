@@ -62,5 +62,6 @@ RUN \
 
 COPY ./apps/plex/entrypoint.sh /entrypoint.sh
 
+USER nobody
 ENTRYPOINT [ "/usr/bin/catatonit", "--" ]
 CMD ["/entrypoint.sh"]
