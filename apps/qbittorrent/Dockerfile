@@ -53,7 +53,6 @@ COPY ./apps/qbittorrent/scripts/config.py /scripts/config.py
 COPY ./apps/qbittorrent/entrypoint.sh /entrypoint.sh
 
 USER nobody:nogroup
-VOLUME ["/config"]
 ENTRYPOINT ["/usr/bin/catatonit", "--"]
 CMD ["/entrypoint.sh"]
 

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+mkdir -p /config
+
 downloadsPath="/downloads"
 
 if [[ -z "$QBITTORRENT__USE_PROFILE" ]]; then

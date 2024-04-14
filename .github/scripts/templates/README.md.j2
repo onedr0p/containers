@@ -29,7 +29,7 @@ It also adheres to a [KISS principle](https://en.wikipedia.org/wiki/KISS_princip
 
 ## Rootless
 
-To run these containers as non-root make sure you update your configuration.
+To run these containers as non-root make sure you update your configuration to the user and group you want.
 
 ### Docker compose
 
@@ -61,7 +61,6 @@ spec:
     spec:
       # ...
       securityContext:
-        runAsNonRoot: true
         runAsUser: 65534
         runAsGroup: 65534
         fsGroup: 65534
