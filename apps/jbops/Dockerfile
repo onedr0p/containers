@@ -1,4 +1,4 @@
-FROM docker.io/library/alpine:3.19
+FROM docker.io/library/python:3.11-alpine
 
 ARG TARGETPLATFORM
 ARG VERSION
@@ -30,7 +30,6 @@ RUN apk add --no-cache \
         curl \
         jq \
         nano \
-        python3 \
         tzdata \
     && \
     apk add --no-cache --virtual=.build-deps \
@@ -38,8 +37,6 @@ RUN apk add --no-cache \
         libffi-dev \
         openssl-dev \
         musl-dev \
-        python3-dev \
-        py3-pip \
         git \
     && \
     git clone https://github.com/blacktwin/JBOPS.git . \

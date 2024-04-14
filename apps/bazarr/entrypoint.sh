@@ -2,7 +2,7 @@
 
 #shellcheck disable=SC2086
 exec \
-    /usr/local/bin/python \
+    /usr/bin/python3 \
         /app/bazarr.py \
             --no-update \
             --config /config \

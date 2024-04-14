@@ -12,6 +12,8 @@ http:
 file:
   /usr/local/bin/python:
     exists: true
+  /usr/bin/unrar:
+    exists: true
   /usr/local/bin/par2:
     exists: true
   /usr/local/bin/par2create:

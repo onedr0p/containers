@@ -3,12 +3,12 @@
 process:
   python:
     running: true
-file:
-  /usr/local/bin/python:
-    exists: true
 port:
   tcp:8181:
     listening: true
 http:
   http://localhost:8181:
     status: 200
+file:
+  /usr/local/bin/python:
+    exists: true
