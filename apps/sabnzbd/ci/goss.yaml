@@ -10,6 +10,8 @@ http:
   http://localhost:8080/sabnzbd:
     status: 200
 file:
+  /usr/local/bin/python:
+    exists: true
   /usr/local/bin/par2:
     exists: true
   /usr/local/bin/par2create:

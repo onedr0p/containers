@@ -3,6 +3,9 @@
 process:
   hass:
     running: true
+file:
+  /usr/local/bin/hass:
+    exists: true
 port:
   tcp6:8123:
     listening: true
