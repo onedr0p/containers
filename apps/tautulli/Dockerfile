@@ -61,7 +61,6 @@ RUN \
 
 COPY ./apps/tautulli/entrypoint.sh /entrypoint.sh
 
-USER nobody:nogroup
 ENTRYPOINT ["/usr/bin/catatonit", "--"]
 CMD ["/entrypoint.sh"]
 

@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-mkdir -p /config
-
 #shellcheck disable=SC2155
 export PLEX_MEDIA_SERVER_INFO_MODEL=$(uname -m)
 #shellcheck disable=SC2155
