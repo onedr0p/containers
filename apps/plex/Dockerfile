@@ -1,5 +1,11 @@
 FROM docker.io/library/ubuntu:24.04
 
+LABEL dev.tparker00.image.target_platform=$TARGETPLATFORM
+LABEL dev.tparker00.image.target_architecture=$TARGETARCH
+LABEL dev.tparker00.image.target_os=$TARGETOS
+
+ARG TARGETOS
+ARG TARGETARCH
 ARG TARGETPLATFORM
 ARG VERSION
 ARG CHANNEL
@@ -11,9 +17,8 @@ ENV DEBCONF_NONINTERACTIVE_SEEN="true" \
 ENV NVIDIA_DRIVER_CAPABILITIES="compute,video,utility" \
     PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR="/config/Library/Application Support" \
     PLEX_MEDIA_SERVER_HOME="/usr/lib/plexmediaserver" \
-    PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS="6" \
     PLEX_MEDIA_SERVER_INFO_VENDOR="Docker" \
-    PLEX_MEDIA_SERVER_INFO_DEVICE="Docker Container (onedr0p)"
+    PLEX_MEDIA_SERVER_INFO_DEVICE="Docker Container (tparker00)"
 
 ENV UMASK="0002" \
     TZ="Etc/UTC"
