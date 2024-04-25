@@ -1,4 +1,4 @@
-FROM ghcr.io/nginxinc/nginx-unprivileged:1.25
+FROM ghcr.io/nginxinc/nginx-unprivileged:1.26
 
 ARG TARGETPLATFORM
 ARG VERSION
