@@ -21,7 +21,7 @@ RUN \
     && chmod -R u=rwX,go=rX /vuetorrent \
     && rm -rf /tmp/*
 
-FROM scratch
+FROM docker.io/library/alpine:3.19
 
 USER root
 WORKDIR /vuetorrent
