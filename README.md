@@ -134,6 +134,7 @@ Container | Channel | Image
 [sonarr-develop](https://github.com/jfroy/containers/pkgs/container/sonarr-develop) | develop | ghcr.io/jfroy/sonarr-develop
 [theme-park](https://github.com/jfroy/containers/pkgs/container/theme-park) | stable | ghcr.io/jfroy/theme-park
 [volsync](https://github.com/jfroy/containers/pkgs/container/volsync) | stable | ghcr.io/jfroy/volsync
+[vuetorrent](https://github.com/jfroy/containers/pkgs/container/vuetorrent) | stable | ghcr.io/jfroy/vuetorrent
 
 
 ## Deprecations
