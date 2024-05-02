@@ -13,13 +13,13 @@ _An opinionated collection of container images_
 
 <div align="center">
 
-![GitHub Repo stars](https://img.shields.io/github/stars/onedr0p/containers?style=for-the-badge)
-![GitHub forks](https://img.shields.io/github/forks/onedr0p/containers?style=for-the-badge)
-![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/onedr0p/containers/release-scheduled.yaml?style=for-the-badge&label=Scheduled%20Release)
+![GitHub Repo stars](https://img.shields.io/github/stars/jfroy/containers?style=for-the-badge)
+![GitHub forks](https://img.shields.io/github/forks/jfroy/containers?style=for-the-badge)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/jfroy/containers/release-scheduled.yaml?style=for-the-badge&label=Scheduled%20Release)
 
 </div>
 
-Welcome to my container images, if looking for a container start by [browsing the GitHub Packages page for this repo's packages](https://github.com/onedr0p?tab=packages&repo_name=containers).
+Welcome to my container images, if looking for a container start by [browsing the GitHub Packages page for this repo's packages](https://github.com/jfroy?tab=packages&repo_name=containers).
 
 ## Mission statement
 
@@ -35,10 +35,10 @@ We do take a similar approach but instead of appending a `-ls69` or `-r420` pref
 
 | Container                                          | Immutable |
 |----------------------------------------------------|-----------|
-| `ghcr.io/onedr0p/sonarr:rolling`                   | ❌         |
-| `ghcr.io/onedr0p/sonarr:3.0.8.1507`                | ❌         |
-| `ghcr.io/onedr0p/sonarr:rolling@sha256:8053...`    | ✅         |
-| `ghcr.io/onedr0p/sonarr:3.0.8.1507@sha256:8053...` | ✅         |
+| `ghcr.io/jfroy/sonarr:rolling`                   | ❌         |
+| `ghcr.io/jfroy/sonarr:3.0.8.1507`                | ❌         |
+| `ghcr.io/jfroy/sonarr:rolling@sha256:8053...`    | ✅         |
+| `ghcr.io/jfroy/sonarr:3.0.8.1507@sha256:8053...` | ✅         |
 
 _If pinning an image to the sha256 digest, tools like [Renovate](https://github.com/renovatebot/renovate) support updating the container on a digest or application version change._
 
@@ -55,7 +55,7 @@ networks:
     external: true
 services:
   sonarr:
-    image: ghcr.io/onedr0p/sonarr:3.0.8.1507
+    image: ghcr.io/jfroy/sonarr:3.0.8.1507
     container_name: sonarr
     user: 65534:65534
     # ...
@@ -108,32 +108,32 @@ Each Image will be built with a `rolling` tag, along with tags specific to it's 
 
 Container | Channel | Image
 --- | --- | ---
-[actions-runner](https://github.com/onedr0p/containers/pkgs/container/actions-runner) | stable | ghcr.io/onedr0p/actions-runner
-[bazarr](https://github.com/onedr0p/containers/pkgs/container/bazarr) | stable | ghcr.io/onedr0p/bazarr
-[home-assistant](https://github.com/onedr0p/containers/pkgs/container/home-assistant) | stable | ghcr.io/onedr0p/home-assistant
-[jbops](https://github.com/onedr0p/containers/pkgs/container/jbops) | stable | ghcr.io/onedr0p/jbops
-[lidarr](https://github.com/onedr0p/containers/pkgs/container/lidarr) | master | ghcr.io/onedr0p/lidarr
-[lidarr-develop](https://github.com/onedr0p/containers/pkgs/container/lidarr-develop) | develop | ghcr.io/onedr0p/lidarr-develop
-[lidarr-nightly](https://github.com/onedr0p/containers/pkgs/container/lidarr-nightly) | nightly | ghcr.io/onedr0p/lidarr-nightly
-[par2cmdline-turbo](https://github.com/onedr0p/containers/pkgs/container/par2cmdline-turbo) | stable | ghcr.io/onedr0p/par2cmdline-turbo
-[plex](https://github.com/onedr0p/containers/pkgs/container/plex) | stable | ghcr.io/onedr0p/plex
-[plex-beta](https://github.com/onedr0p/containers/pkgs/container/plex-beta) | beta | ghcr.io/onedr0p/plex-beta
-[postgres-init](https://github.com/onedr0p/containers/pkgs/container/postgres-init) | stable | ghcr.io/onedr0p/postgres-init
-[prowlarr](https://github.com/onedr0p/containers/pkgs/container/prowlarr) | master | ghcr.io/onedr0p/prowlarr
-[prowlarr-develop](https://github.com/onedr0p/containers/pkgs/container/prowlarr-develop) | develop | ghcr.io/onedr0p/prowlarr-develop
-[prowlarr-nightly](https://github.com/onedr0p/containers/pkgs/container/prowlarr-nightly) | nightly | ghcr.io/onedr0p/prowlarr-nightly
-[qbittorrent](https://github.com/onedr0p/containers/pkgs/container/qbittorrent) | stable | ghcr.io/onedr0p/qbittorrent
-[qbittorrent-beta](https://github.com/onedr0p/containers/pkgs/container/qbittorrent-beta) | beta | ghcr.io/onedr0p/qbittorrent-beta
-[radarr](https://github.com/onedr0p/containers/pkgs/container/radarr) | master | ghcr.io/onedr0p/radarr
-[radarr-develop](https://github.com/onedr0p/containers/pkgs/container/radarr-develop) | develop | ghcr.io/onedr0p/radarr-develop
-[radarr-nightly](https://github.com/onedr0p/containers/pkgs/container/radarr-nightly) | nightly | ghcr.io/onedr0p/radarr-nightly
-[readarr-develop](https://github.com/onedr0p/containers/pkgs/container/readarr-develop) | develop | ghcr.io/onedr0p/readarr-develop
-[readarr-nightly](https://github.com/onedr0p/containers/pkgs/container/readarr-nightly) | nightly | ghcr.io/onedr0p/readarr-nightly
-[sabnzbd](https://github.com/onedr0p/containers/pkgs/container/sabnzbd) | stable | ghcr.io/onedr0p/sabnzbd
-[sonarr](https://github.com/onedr0p/containers/pkgs/container/sonarr) | main | ghcr.io/onedr0p/sonarr
-[sonarr-develop](https://github.com/onedr0p/containers/pkgs/container/sonarr-develop) | develop | ghcr.io/onedr0p/sonarr-develop
-[theme-park](https://github.com/onedr0p/containers/pkgs/container/theme-park) | stable | ghcr.io/onedr0p/theme-park
-[volsync](https://github.com/onedr0p/containers/pkgs/container/volsync) | stable | ghcr.io/onedr0p/volsync
+[actions-runner](https://github.com/jfroy/containers/pkgs/container/actions-runner) | stable | ghcr.io/jfroy/actions-runner
+[bazarr](https://github.com/jfroy/containers/pkgs/container/bazarr) | stable | ghcr.io/jfroy/bazarr
+[home-assistant](https://github.com/jfroy/containers/pkgs/container/home-assistant) | stable | ghcr.io/jfroy/home-assistant
+[jbops](https://github.com/jfroy/containers/pkgs/container/jbops) | stable | ghcr.io/jfroy/jbops
+[lidarr](https://github.com/jfroy/containers/pkgs/container/lidarr) | master | ghcr.io/jfroy/lidarr
+[lidarr-develop](https://github.com/jfroy/containers/pkgs/container/lidarr-develop) | develop | ghcr.io/jfroy/lidarr-develop
+[lidarr-nightly](https://github.com/jfroy/containers/pkgs/container/lidarr-nightly) | nightly | ghcr.io/jfroy/lidarr-nightly
+[par2cmdline-turbo](https://github.com/jfroy/containers/pkgs/container/par2cmdline-turbo) | stable | ghcr.io/jfroy/par2cmdline-turbo
+[plex](https://github.com/jfroy/containers/pkgs/container/plex) | stable | ghcr.io/jfroy/plex
+[plex-beta](https://github.com/jfroy/containers/pkgs/container/plex-beta) | beta | ghcr.io/jfroy/plex-beta
+[postgres-init](https://github.com/jfroy/containers/pkgs/container/postgres-init) | stable | ghcr.io/jfroy/postgres-init
+[prowlarr](https://github.com/jfroy/containers/pkgs/container/prowlarr) | master | ghcr.io/jfroy/prowlarr
+[prowlarr-develop](https://github.com/jfroy/containers/pkgs/container/prowlarr-develop) | develop | ghcr.io/jfroy/prowlarr-develop
+[prowlarr-nightly](https://github.com/jfroy/containers/pkgs/container/prowlarr-nightly) | nightly | ghcr.io/jfroy/prowlarr-nightly
+[qbittorrent](https://github.com/jfroy/containers/pkgs/container/qbittorrent) | stable | ghcr.io/jfroy/qbittorrent
+[qbittorrent-beta](https://github.com/jfroy/containers/pkgs/container/qbittorrent-beta) | beta | ghcr.io/jfroy/qbittorrent-beta
+[radarr](https://github.com/jfroy/containers/pkgs/container/radarr) | master | ghcr.io/jfroy/radarr
+[radarr-develop](https://github.com/jfroy/containers/pkgs/container/radarr-develop) | develop | ghcr.io/jfroy/radarr-develop
+[radarr-nightly](https://github.com/jfroy/containers/pkgs/container/radarr-nightly) | nightly | ghcr.io/jfroy/radarr-nightly
+[readarr-develop](https://github.com/jfroy/containers/pkgs/container/readarr-develop) | develop | ghcr.io/jfroy/readarr-develop
+[readarr-nightly](https://github.com/jfroy/containers/pkgs/container/readarr-nightly) | nightly | ghcr.io/jfroy/readarr-nightly
+[sabnzbd](https://github.com/jfroy/containers/pkgs/container/sabnzbd) | stable | ghcr.io/jfroy/sabnzbd
+[sonarr](https://github.com/jfroy/containers/pkgs/container/sonarr) | main | ghcr.io/jfroy/sonarr
+[sonarr-develop](https://github.com/jfroy/containers/pkgs/container/sonarr-develop) | develop | ghcr.io/jfroy/sonarr-develop
+[theme-park](https://github.com/jfroy/containers/pkgs/container/theme-park) | stable | ghcr.io/jfroy/theme-park
+[volsync](https://github.com/jfroy/containers/pkgs/container/volsync) | stable | ghcr.io/jfroy/volsync
 
 
 ## Deprecations
@@ -149,4 +149,4 @@ Containers here can be **deprecated** at any point, this could be for any reason
 
 ## Credits
 
-A lot of inspiration and ideas are thanks to the hard work of [hotio.dev](https://hotio.dev/) and [linuxserver.io](https://www.linuxserver.io/) contributors.
+A lot of inspiration and ideas are thanks to the hard work of [onedr0p](https://github.com/onedr0p/), [hotio.dev](https://hotio.dev/) and [linuxserver.io](https://www.linuxserver.io/) contributors.
