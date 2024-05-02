@@ -216,7 +216,7 @@ jobs:
           CONTAINER_LOG_OUTPUT: goss_container_log_output
         shell: bash
         run: |
-          if [[ '${{ inputs.pushImages }}' == 'true' ]]; then
+          if [[ '${{ inputs.pushImages }}' == true ]]; then
               image_name="${{ steps.prepare-build-outputs.outputs.image_name }}@${{ steps.build.outputs.digest }}"
           else
               image_name="${{ steps.prepare-build-outputs.outputs.image_name }}"
@@ -331,7 +331,7 @@ jobs:
 
       - name: Send Discord Webhook
         uses: sarisia/actions-status-discord@v1
-        if: ${{ always() && inputs.sendNotifications == 'true' }}
+        if: ${{ always() && inputs.sendNotifications == true }}
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           title: ${{ steps.build-failed.outputs.message || steps.build-success.outputs.message }}

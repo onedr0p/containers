@@ -26,7 +26,7 @@ jobs:
 
   build-images:
     needs: ["simple-checks", "get-changed-images"]
-    if: ${{ needs.get-changed-images.outputs.addedOrModified == 'true' }}
+    if: ${{ needs.get-changed-images.outputs.addedOrModified == true }}
     uses: jfroy/containers/.github/workflows/build-images.yaml@main
     secrets: inherit
     with:
