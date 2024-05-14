@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-mkdir -p /config/logs
+mkdir -p /config/{deps,logs}
 
 if [[ "${HOME_ASSISTANT__HACS_INSTALL}" == "true" ]]; then
     curl -sfSL https://hacs.xyz/install | bash -
