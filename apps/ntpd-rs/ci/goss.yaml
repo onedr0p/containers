@@ -1,0 +1,11 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/goss-org/goss/master/docs/schema.yaml
+file:
+  /usr/local/bin/ntp-daemon:
+    exists: true
+  /usr/local/bin/ntp-ctl:
+    exists: true
+  /usr/local/bin/ntp-metrics-exporter:
+    exists: true
+  /etc/ntp.toml:
+    exists: true
