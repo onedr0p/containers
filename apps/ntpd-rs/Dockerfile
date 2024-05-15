@@ -17,7 +17,7 @@ RUN \
 FROM docker.io/library/alpine:3.19
 
 #hadolint ignore=DL3018,DL3059
-RUN apk add --no-cache bash ca-certificates catatonit
+RUN apk add --no-cache bash ca-certificates catatonit tzdata
 
 COPY --from=cargo /tmp/target/release/ntp-daemon /usr/local/bin/ntp-daemon
 COPY --from=cargo /tmp/target/release/ntp-ctl /usr/local/bin/ntp-ctl
