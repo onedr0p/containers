@@ -93,6 +93,7 @@ RUN \
     && \
     mkdir -p /config \
     && chown nobody:nogroup -R /config \
+    && \
     apk del --purge .build-deps \
     && \
     rm -rf \
