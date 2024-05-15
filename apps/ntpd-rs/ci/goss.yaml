@@ -7,5 +7,5 @@ file:
     exists: true
   /usr/local/bin/ntp-metrics-exporter:
     exists: true
-  /etc/ntp.toml:
+  /etc/ntpd-rs/ntp.toml:
     exists: true
