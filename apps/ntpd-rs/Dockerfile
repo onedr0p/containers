@@ -26,7 +26,7 @@ RUN /usr/local/bin/ntp-daemon --help
 RUN /usr/local/bin/ntp-ctl --help
 RUN /usr/local/bin/ntp-metrics-exporter --help
 
-COPY ./apps/ntpd-rs/ntp.toml /etc/ntp.toml
+COPY ./apps/ntpd-rs/ntp.toml /etc/ntpd-rs/ntp.toml
 COPY ./apps/ntpd-rs/entrypoint.sh /entrypoint.sh
 
 USER nobody:nogroup

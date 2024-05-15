@@ -1,2 +1,5 @@
 [[server]]
 listen = "0.0.0.0:123"
+
+[synchronization]
+local-stratum = 8
