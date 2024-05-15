@@ -115,6 +115,7 @@ Container | Channel | Image
 [lidarr](https://github.com/onedr0p/containers/pkgs/container/lidarr) | master | ghcr.io/onedr0p/lidarr
 [lidarr-develop](https://github.com/onedr0p/containers/pkgs/container/lidarr-develop) | develop | ghcr.io/onedr0p/lidarr-develop
 [lidarr-nightly](https://github.com/onedr0p/containers/pkgs/container/lidarr-nightly) | nightly | ghcr.io/onedr0p/lidarr-nightly
+[ntpd-rs](https://github.com/onedr0p/containers/pkgs/container/ntpd-rs) | stable | ghcr.io/onedr0p/ntpd-rs
 [par2cmdline-turbo](https://github.com/onedr0p/containers/pkgs/container/par2cmdline-turbo) | stable | ghcr.io/onedr0p/par2cmdline-turbo
 [plex](https://github.com/onedr0p/containers/pkgs/container/plex) | stable | ghcr.io/onedr0p/plex
 [plex-beta](https://github.com/onedr0p/containers/pkgs/container/plex-beta) | beta | ghcr.io/onedr0p/plex-beta
