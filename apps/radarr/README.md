@@ -16,6 +16,7 @@ This container support setting certain custom enviroment variables with the use 
 | RADARR__PORT                    | `7878`              |
 | RADARR__POSTGRES_HOST           |                     |
 | RADARR__POSTGRES_MAIN_DB        |                     |
+| RADARR__POSTGRES_LOG_DB_ENABLED | `True`              |
 | RADARR__POSTGRES_LOG_DB         |                     |
 | RADARR__POSTGRES_PASSWORD       |                     |
 | RADARR__POSTGRES_PORT           | `5432`              |
