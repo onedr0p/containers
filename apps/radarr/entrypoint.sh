@@ -10,6 +10,7 @@ if [[ -f /config/config.xml ]]; then
     current_instance_name="$(xmlstarlet sel -t -v "//InstanceName" -nl /config/config.xml)"
     current_log_level="$(xmlstarlet sel -t -v "//LogLevel" -nl /config/config.xml)"
     current_postgres_host="$(xmlstarlet sel -t -v "//PostgresHost" -nl /config/config.xml)"
+    current_postgres_log_db_enabled="$(xmlstarlet sel -t -v "//LogDbEnabled" -nl /config/config.xml)"
     current_postgres_log_db="$(xmlstarlet sel -t -v "//PostgresLogDb" -nl /config/config.xml)"
     current_postgres_main_db="$(xmlstarlet sel -t -v "//PostgresMainDb" -nl /config/config.xml)"
     current_postgres_password="$(xmlstarlet sel -t -v "//PostgresPassword" -nl /config/config.xml)"
@@ -31,6 +32,7 @@ envsubst < /app/config.xml.tmpl > /config/config.xml
 [[ -z "${RADARR__INSTANCE_NAME}" && -n "${current_instance_name}" ]] && xmlstarlet edit --inplace --update //InstanceName -v "${current_instance_name}" /config/config.xml
 [[ -z "${RADARR__LOG_LEVEL}" && -n "${current_log_level}" ]] && xmlstarlet edit --inplace --update //LogLevel -v "${current_log_level}" /config/config.xml
 [[ -z "${RADARR__POSTGRES_HOST}" && -n "${current_postgres_host}" ]] && xmlstarlet edit --inplace --update //PostgresHost -v "${current_postgres_host}" /config/config.xml
+[[ -z "${RADARR__POSTGRES_LOG_DB_ENABLED}" && -n "${current_postgres_log_db_enabled}" ]] && xmlstarlet edit --inplace --update //LogDbEnabled -v "${current_postgres_log_db_enabled}" /config/config.xml
 [[ -z "${RADARR__POSTGRES_LOG_DB}" && -n "${current_postgres_log_db}" ]] && xmlstarlet edit --inplace --update //PostgresLogDb -v "${current_postgres_log_db}" /config/config.xml
 [[ -z "${RADARR__POSTGRES_MAIN_DB}" &&  -n "${current_postgres_main_db}" ]] && xmlstarlet edit --inplace --update //PostgresMainDb -v "${current_postgres_main_db}" /config/config.xml
 [[ -z "${RADARR__POSTGRES_PASSWORD}" && -n "${current_postgres_password}" ]] && xmlstarlet edit --inplace --update //PostgresPassword -v "${current_postgres_password}" /config/config.xml
