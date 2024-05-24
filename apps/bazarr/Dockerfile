@@ -32,6 +32,7 @@ RUN \
         nano \
         tzdata \
         unzip \
+        libpq \
     && \
     apk add --no-cache --virtual .build-deps \
         gcc \
