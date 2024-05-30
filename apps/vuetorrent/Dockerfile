@@ -23,7 +23,7 @@ RUN \
 
 FROM docker.io/library/alpine:3.20
 
-USER root
+USER nobody:nogroup
 WORKDIR /vuetorrent
 
 COPY --from=build /vuetorrent /vuetorrent
