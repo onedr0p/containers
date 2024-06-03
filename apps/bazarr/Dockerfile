@@ -1,4 +1,4 @@
-FROM docker.io/library/alpine:3.20
+FROM docker.io/library/python:3.12-alpine
 
 ARG TARGETPLATFORM
 ARG VERSION
@@ -40,14 +40,18 @@ RUN \
         musl-dev \
         postgresql-dev \
     && \
-    pip install --upgrade "cryptography>=42.0.7" \
-    pip install --upgrade "gevent>=24.2.1" \
-    pip install --upgrade "lxml>=4.3.0, <5.0.0" \
-    pip install --upgrade "numpy>=1.12.0" \
-    pip install --upgrade --only-binary=Pillow "Pillow>=9.0.0" \
-    pip install --upgrade "psycopg2>=2.9.9" \
-    pip install --upgrade "setuptools>=70.0.0" \
-    pip install --upgrade "webrtcvad-wheels>=2.0.10" \
+    pip install uv \
+    && \
+    uv pip install --system --upgrade \
+        "cryptography>=42.0.7" \
+        "gevent>=24.2.1" \
+        "lxml>=4.3.0, <5.0.0" \
+        "numpy>=1.12.0" \
+        "psycopg2>=2.9.9" \
+        "setuptools>=70.0.0" \
+        "webrtcvad-wheels>=2.0.10" \
+    && \
+    uv pip install --system --upgrade --only-binary=Pillow "Pillow>=9.0.0" \
     && \
     curl -fsSL -o /tmp/app.zip "https://github.com/morpheus65535/bazarr/releases/download/v${VERSION}/bazarr.zip" \
     && unzip -q /tmp/app.zip -d /app \
