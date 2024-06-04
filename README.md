@@ -135,6 +135,7 @@ Container | Channel | Image
 [theme-park](https://github.com/jfroy/containers/pkgs/container/theme-park) | stable | ghcr.io/jfroy/theme-park
 [volsync](https://github.com/jfroy/containers/pkgs/container/volsync) | stable | ghcr.io/jfroy/volsync
 [vuetorrent](https://github.com/jfroy/containers/pkgs/container/vuetorrent) | stable | ghcr.io/jfroy/vuetorrent
+[whisparr-nightly](https://github.com/jfroy/containers/pkgs/container/whisparr-nightly) | nightly | ghcr.io/jfroy/whisparr-nightly
 
 
 ## Deprecations
