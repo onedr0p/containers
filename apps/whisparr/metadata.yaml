@@ -1,0 +1,10 @@
+---
+app: whisparr
+semver: true
+channels:
+  - name: nightly
+    platforms: ["linux/amd64", "linux/arm64"]
+    stable: false
+    tests:
+      enabled: true
+      type: web
