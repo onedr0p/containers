@@ -1,16 +1,4 @@
 ARG VERSION
-FROM docker.io/library/golang:1.22-alpine as envsubst
-ARG VERSION
-ARG TARGETOS
-ARG TARGETARCH
-ARG TARGETVARIANT=""
-ARG TARGETPLATFORM
-ENV CGO_ENABLED=0 \
-    GOOS=${TARGETOS} \
-    GOARCH=${TARGETARCH} \
-    GOARM=${TARGETVARIANT}
-RUN go install -ldflags="-s -w" github.com/drone/envsubst/cmd/envsubst@latest
-
 FROM docker.io/library/alpine:3.20
 
 ARG TARGETPLATFORM
@@ -18,10 +6,8 @@ ARG VERSION
 ARG CHANNEL
 
 ENV \
-    READARR__INSTANCE_NAME="Readarr" \
-    READARR__BRANCH="${CHANNEL}" \
-    READARR__PORT="8787" \
-    READARR__ANALYTICS_ENABLED="False"
+    COMPlus_EnableDiagnostics="0" \
+    READARR__UPDATE__BRANCH="${CHANNEL}"
 
 ENV UMASK="0002" \
     TZ="Etc/UTC"
@@ -42,7 +28,6 @@ RUN \
         nano \
         sqlite-libs \
         tzdata \
-        xmlstarlet \
     && \
     case "${TARGETPLATFORM}" in \
         'linux/amd64') export ARCH='x64' ;; \
@@ -51,19 +36,17 @@ RUN \
     && \
     mkdir -p /app/bin \
     && \
-    curl -fsSL "https://readarr.servarr.com/v1/update/${READARR__BRANCH}/updatefile?version=${VERSION}&os=linuxmusl&runtime=netcore&arch=${ARCH}" \
+    curl -fsSL "https://readarr.servarr.com/v1/update/${READARR__UPDATE__BRANCH}/updatefile?version=${VERSION}&os=linuxmusl&runtime=netcore&arch=${ARCH}" \
         | tar xzf - -C /app/bin --strip-components=1 \
     && \
     rm -rf /app/bin/Readarr.Update \
     && \
-    printf "UpdateMethod=docker\nBranch=%s\nPackageVersion=%s\nPackageAuthor=[onedr0p](https://github.com/onedr0p)\n" "${READARR__BRANCH}" "${VERSION}" > /app/package_info \
+    printf "UpdateMethod=docker\nBranch=%s\nPackageVersion=%s\nPackageAuthor=[onedr0p](https://github.com/onedr0p)\n" "${READARR__UPDATE__BRANCH}" "${VERSION}" > /app/package_info \
     && chown -R root:root /app \
     && chmod -R 755 /app \
     && rm -rf /tmp/*
 
-COPY ./apps/readarr/config.xml.tmpl /app/config.xml.tmpl
 COPY ./apps/readarr/entrypoint.sh /entrypoint.sh
-COPY --from=envsubst /go/bin/envsubst /usr/local/bin/envsubst
 
 USER nobody:nogroup
 WORKDIR /config
