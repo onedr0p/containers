@@ -35,6 +35,7 @@ RUN \
         eudev-libs \
         ffmpeg \
         git \
+        iputils \
         jq \
         libcap \
         libjpeg-turbo-dev \
