@@ -30,6 +30,7 @@ RUN \
         nano \
         sqlite-libs \
         tzdata \
+        xmlstarlet \
     && \
     case "${TARGETPLATFORM}" in \
         'linux/amd64') export ARCH='x64' ;; \
