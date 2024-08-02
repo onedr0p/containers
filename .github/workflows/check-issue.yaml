@@ -41,7 +41,7 @@ jobs:
 
           echo "Closing issue #${ISSUE_NUMBER}..."
           curl -s -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/json" \
-               -X PATCH -d '{"state":"closed"}' \
+               -X PATCH -d '{"state":"closed", "state_reason": "not_planned"}' \
                $CLOSE_URL
 
           echo "Locking issue #${ISSUE_NUMBER}..."
