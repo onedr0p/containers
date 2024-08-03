@@ -1,0 +1,50 @@
+name: check issues
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  issues: write
+
+jobs:
+  check-keywords:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check issue message for keywords
+        id: check_keywords
+        run: |
+          echo "Checking for keywords..."
+          if echo "${{ github.event.issue.body }}" | grep -i -E 'truenas|truechart'; then
+            echo "Keywords found"
+            echo "::set-output name=keywords_found::true"
+          else
+            echo "No keywords found"
+            echo "::set-output name=keywords_found::false"
+          fi
+
+      - name: Comment, close, and lock issue if keywords found
+        if: steps.check_keywords.outputs.keywords_found == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ISSUE_NUMBER=${{ github.event.issue.number }}
+          REPO=${{ github.repository }}
+          COMMENT_URL="https://api.github.com/repos/${REPO}/issues/${ISSUE_NUMBER}/comments"
+          CLOSE_URL="https://api.github.com/repos/${REPO}/issues/${ISSUE_NUMBER}"
+          LOCK_URL="https://api.github.com/repos/${REPO}/issues/${ISSUE_NUMBER}/lock"
+
+          echo "Adding comment to issue #${ISSUE_NUMBER}..."
+          curl -s -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/json" \
+               -X POST -d '{"body":"This repo does not support issues related to truecharts or truenas. Please direct all queries to truecharts/truenas. They use these containers without permission or attribution. This has been automatically closed."}' \
+               $COMMENT_URL
+
+          echo "Closing issue #${ISSUE_NUMBER}..."
+          curl -s -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/json" \
+               -X PATCH -d '{"state":"closed", "state_reason": "not_planned"}' \
+               $CLOSE_URL
+
+          echo "Locking issue #${ISSUE_NUMBER}..."
+          curl -s -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/json" \
+               -X PUT -d '{"lock_reason":"too heated"}' \
+               $LOCK_URL
