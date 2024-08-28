@@ -60,7 +60,7 @@ RUN \
         /tmp/*
 
 COPY ./apps/bazarr/entrypoint.sh /entrypoint.sh
-COPY --from=ghcr.io/linuxserver/unrar:7.0.7 /usr/bin/unrar-alpine /usr/bin/unrar
+COPY --from=ghcr.io/linuxserver/unrar:7.0.9 /usr/bin/unrar-alpine /usr/bin/unrar
 
 USER nobody:nogroup
 WORKDIR /config
