@@ -28,6 +28,8 @@ RUN \
         curl \
         ffmpeg \
         jq \
+        libxml2 \
+        libxslt \
         mediainfo \
         nano \
         tzdata \
