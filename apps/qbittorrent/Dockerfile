@@ -21,6 +21,7 @@ RUN \
         catatonit \
         curl \
         geoip \
+        jo \
         jq \
         nano \
         p7zip \

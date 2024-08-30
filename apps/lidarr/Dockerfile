@@ -25,6 +25,7 @@ RUN \
         curl \
         ffmpeg \
         icu-libs \
+        jo \
         jq \
         libintl \
         nano \

@@ -27,6 +27,7 @@ RUN \
         ca-certificates \
         catatonit \
         curl \
+        jo \
         jq \
         nano \
         p7zip \

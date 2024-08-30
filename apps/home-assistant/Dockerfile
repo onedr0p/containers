@@ -36,6 +36,7 @@ RUN \
         ffmpeg \
         git \
         iputils \
+        jo \
         jq \
         libcap \
         libjpeg-turbo-dev \

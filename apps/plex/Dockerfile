@@ -30,6 +30,7 @@ RUN \
         ca-certificates \
         catatonit \
         curl \
+        jo \
         jq \
         nano \
         tzdata \

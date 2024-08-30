@@ -27,6 +27,7 @@ RUN \
         catatonit \
         curl \
         ffmpeg \
+        jo \
         jq \
         libxml2 \
         libxslt \
