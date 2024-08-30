@@ -25,6 +25,7 @@ RUN \
         bash \
         ca-certificates \
         catatonit \
+        coreutils \
         curl \
         ffmpeg \
         jo \

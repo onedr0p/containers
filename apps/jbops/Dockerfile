@@ -27,7 +27,9 @@ RUN apk add --no-cache \
         bash \
         ca-certificates \
         catatonit \
+        coreutils \
         curl \
+        jo \
         jq \
         nano \
         tzdata \

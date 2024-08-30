@@ -19,6 +19,7 @@ RUN \
         bash \
         ca-certificates \
         catatonit \
+        coreutils \
         curl \
         geoip \
         jo \

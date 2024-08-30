@@ -30,6 +30,7 @@ RUN \
         bluez-libs \
         ca-certificates \
         catatonit \
+        coreutils \
         cups-libs \
         curl \
         eudev-libs \

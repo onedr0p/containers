@@ -22,6 +22,7 @@ RUN \
         ca-certificates \
         catatonit \
         chromaprint \
+        coreutils \
         curl \
         ffmpeg \
         icu-libs \

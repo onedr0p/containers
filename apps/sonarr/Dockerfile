@@ -21,6 +21,7 @@ RUN \
         bash \
         ca-certificates \
         catatonit \
+        coreutils \
         curl \
         icu-libs \
         jo \
