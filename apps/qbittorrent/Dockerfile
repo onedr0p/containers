@@ -27,6 +27,7 @@ RUN \
         nano \
         p7zip \
         python3 \
+        trurl \
         tzdata \
     && \
     case "${TARGETPLATFORM}" in \

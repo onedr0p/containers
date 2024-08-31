@@ -34,6 +34,7 @@ RUN \
         libxslt \
         mediainfo \
         nano \
+        trurl \
         tzdata \
         unzip \
         libpq \

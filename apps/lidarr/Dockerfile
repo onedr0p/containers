@@ -31,6 +31,7 @@ RUN \
         libintl \
         nano \
         sqlite-libs \
+        trurl \
         tzdata \
     && \
     case "${TARGETPLATFORM}" in \

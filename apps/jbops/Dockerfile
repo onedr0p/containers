@@ -32,6 +32,7 @@ RUN apk add --no-cache \
         jo \
         jq \
         nano \
+        trurl \
         tzdata \
     && \
     apk add --no-cache --virtual=.build-deps \

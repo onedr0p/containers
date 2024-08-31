@@ -52,6 +52,7 @@ RUN \
         postgresql-libs \
         socat \
         tiff \
+        trurl \
         tzdata \
         unzip \
     && \
