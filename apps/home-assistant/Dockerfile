@@ -1,4 +1,4 @@
-FROM docker.io/library/python:3.12.2-alpine
+FROM docker.io/library/python:3.12.4-alpine
 
 ARG TARGETPLATFORM
 ARG VERSION
@@ -30,12 +30,14 @@ RUN \
         bluez-libs \
         ca-certificates \
         catatonit \
+        coreutils \
         cups-libs \
         curl \
         eudev-libs \
         ffmpeg \
         git \
         iputils \
+        jo \
         jq \
         libcap \
         libjpeg-turbo-dev \
@@ -50,6 +52,7 @@ RUN \
         postgresql-libs \
         socat \
         tiff \
+        trurl \
         tzdata \
         unzip \
     && \

@@ -29,7 +29,9 @@ RUN \
         bash \
         ca-certificates \
         catatonit \
+        coreutils \
         curl \
+        jo \
         jq \
         nano \
         tzdata \
