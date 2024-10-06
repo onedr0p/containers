@@ -13,10 +13,9 @@ ENV \
     PIP_BREAK_SYSTEM_PACKAGES=1 \
     CRYPTOGRAPHY_DONT_BUILD_RUST=1
 
-ENV SABNZBD__ADDRESS=0.0.0.0
-ENV SABNZBD__PORT=8080
-
-ENV UMASK="0002" \
+ENV SABNZBD__ADDRESS=0.0.0.0 \
+    SABNZBD__PORT=8080 \
+    UMASK="0002" \
     TZ="Etc/UTC"
 
 USER root
@@ -74,7 +73,6 @@ USER nobody:nogroup
 WORKDIR /config
 VOLUME ["/config"]
 
-ENTRYPOINT ["/usr/bin/catatonit", "--"]
-CMD ["/entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/catatonit", "--", "/entrypoint.sh"]
 
 LABEL org.opencontainers.image.source="https://github.com/sabnzbd/sabnzbd"
