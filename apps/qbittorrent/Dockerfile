@@ -4,11 +4,16 @@ ARG TARGETPLATFORM
 ARG VERSION
 ARG CHANNEL
 
-ENV QBITTORRENT__PORT=8080 \
-    QBITTORRENT__BT_PORT=50413
+ENV QBT_CONFIRM_LEGAL_NOTICE=1 \
+    QBT_WEBUI_PORT=8080 \
+    QBT_TORRENTING_PORT=50413
 
 ENV UMASK="0002" \
     TZ="Etc/UTC"
+
+ENV HOME="/config" \
+    XDG_CONFIG_HOME="/config" \
+    XDG_DATA_HOME="/config"
 
 USER root
 WORKDIR /app
@@ -26,13 +31,14 @@ RUN \
         jq \
         nano \
         p7zip \
-        python3 \
+        qt6-qtbase \
+        qt6-qtbase-sqlite \
         trurl \
         tzdata \
     && \
     case "${TARGETPLATFORM}" in \
-        'linux/amd64') export ARCH="x86_64" ;; \
-        'linux/arm64') export ARCH="aarch64" ;; \
+        'linux/amd64') export ARCH="x86_64"; export QBT_CLI_ARCH="x64" ;; \
+        'linux/arm64') export ARCH="aarch64"; export QBT_CLI_ARCH="arm64" ;; \
     esac \
     && \
     mkdir -p /app \
@@ -52,7 +58,7 @@ RUN \
     && chmod -R 755 /app/qbittorrent-nox \
     && rm -rf /tmp/*
 
-COPY ./apps/qbittorrent/scripts/config.py /scripts/config.py
+COPY ./apps/qbittorrent/qBittorrent.conf /app/qBittorrent.conf
 COPY ./apps/qbittorrent/entrypoint.sh /entrypoint.sh
 
 USER nobody:nogroup
