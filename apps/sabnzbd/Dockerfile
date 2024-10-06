@@ -53,6 +53,8 @@ RUN \
     && \
     chown -R root:root /app \
     && chmod -R 755 /app \
+    && \
+    pip uninstall --yes uv \
     && apk del --purge .build-deps \
     && rm -rf \
         /root/.cache \
