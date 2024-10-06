@@ -17,7 +17,8 @@ RUN \
 
 COPY ./apps/postgres-init/entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT ["/usr/bin/catatonit", "--"]
-CMD ["/entrypoint.sh"]
+USER nobody:nogroup
+
+ENTRYPOINT ["/usr/bin/catatonit", "--", "/entrypoint.sh"]
 
 LABEL org.opencontainers.image.source="https://github.com/postgres/postgres"
