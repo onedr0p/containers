@@ -8,15 +8,15 @@ ENV DEBCONF_NONINTERACTIVE_SEEN="true" \
     DEBIAN_FRONTEND="noninteractive" \
     APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE="DontWarn"
 
+ENV UMASK="0002" \
+    TZ="Etc/UTC"
+
 ENV NVIDIA_DRIVER_CAPABILITIES="compute,video,utility" \
     PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR="/config/Library/Application Support" \
     PLEX_MEDIA_SERVER_HOME="/usr/lib/plexmediaserver" \
     PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS="6" \
     PLEX_MEDIA_SERVER_INFO_VENDOR="Docker" \
     PLEX_MEDIA_SERVER_INFO_DEVICE="Docker Container (onedr0p)"
-
-ENV UMASK="0002" \
-    TZ="Etc/UTC"
 
 USER root
 WORKDIR /app
@@ -68,5 +68,4 @@ USER nobody:nogroup
 WORKDIR /config
 VOLUME ["/config"]
 
-ENTRYPOINT [ "/usr/bin/catatonit", "--" ]
-CMD ["/entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/catatonit", "--", "/entrypoint.sh"]
