@@ -37,8 +37,8 @@ RUN \
         tzdata \
     && \
     case "${TARGETPLATFORM}" in \
-        'linux/amd64') export ARCH="x86_64"; export QBT_CLI_ARCH="x64" ;; \
-        'linux/arm64') export ARCH="aarch64"; export QBT_CLI_ARCH="arm64" ;; \
+        'linux/amd64') export ARCH="x86_64" ;; \
+        'linux/arm64') export ARCH="aarch64" ;; \
     esac \
     && \
     mkdir -p /app \
