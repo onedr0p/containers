@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#shellcheck disable=SC2086
 
 if [[ ! -f "/config/sabnzbd.ini" ]]; then
     printf "Copying over default configuration ...\n"
@@ -16,11 +17,12 @@ fi
 [[ -n "${SABNZBD__NZB_KEY}" ]] && sed -i -e "s/^nzb_key *=.*$/nzb_key = ${SABNZBD__NZB_KEY}/g" /config/sabnzbd.ini
 [[ -n "${SABNZBD__HOST_WHITELIST_ENTRIES}" ]] && sed -i -e "s/^host_whitelist *=.*$/host_whitelist = ${HOSTNAME:-sabnzbd}, ${SABNZBD__HOST_WHITELIST_ENTRIES}/g" /config/sabnzbd.ini
 
-#shellcheck disable=SC2086
 exec \
     /usr/local/bin/python \
         /app/SABnzbd.py \
         --browser 0 \
-        --server ${SABNZBD__ADDRESS:-0.0.0.0}:${SABNZBD__PORT:-8080} \
+        --server ${SABNZBD__ADDRESS}:${SABNZBD__PORT} \
         --config-file /config/sabnzbd.ini \
+        --disable-file-log \
+        --console \
         "$@"
