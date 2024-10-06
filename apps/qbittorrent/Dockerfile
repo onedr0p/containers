@@ -52,8 +52,7 @@ RUN \
             && curl -fsSL -o /app/qbittorrent-nox "https://github.com/userdocs/qbittorrent-nox-static/releases/download/${RELEASE}/${ARCH}-qbittorrent-nox" \
         ;; \
     esac \
-    && \
-    chown -R root:root /app/qbittorrent-nox \
+    && chown -R root:root /app/qbittorrent-nox \
     && chmod -R 755 /app/qbittorrent-nox \
     && rm -rf /tmp/*
 

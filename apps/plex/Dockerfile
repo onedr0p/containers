@@ -55,12 +55,7 @@ RUN \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && apt-get autoremove -y \
     && apt-get clean \
-    && \
-    rm -rf \
-        /etc/default/plexmediaserver \
-        /tmp/* \
-        /var/lib/apt/lists/* \
-        /var/tmp/
+    && rm -rf /etc/default/plexmediaserver /tmp/* /var/lib/apt/lists/* /var/tmp/
 
 COPY ./apps/plex/entrypoint.sh /entrypoint.sh
 

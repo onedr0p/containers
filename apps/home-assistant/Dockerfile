@@ -97,15 +97,9 @@ RUN \
     && \
     uv pip install --system --only-binary=:all: --find-links "${HOMEASSISTANT_WHEELS}" \
         homeassistant=="${VERSION}" \
-    && \
-    pip uninstall --yes uv \
-    && \
-    apk del --purge .build-deps \
-    && \
-    rm -rf \
-        /root/.cache \
-        /root/.cargo \
-        /tmp/*
+    && mkdir -p /config && chown nobody:nogroup -R /config \
+    && pip uninstall --yes uv && apk del --purge .build-deps \
+    && rm -rf /root/.cache /root/.cargo /tmp/*
 
 COPY ./apps/home-assistant/entrypoint.sh /entrypoint.sh
 

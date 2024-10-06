@@ -16,6 +16,8 @@ ENV \
 ENV UMASK="0002" \
     TZ="Etc/UTC"
 
+ENV BAZARR__PORT=6767
+
 USER root
 WORKDIR /app
 
@@ -58,10 +60,7 @@ RUN \
         --requirement /app/bin/postgres-requirements.txt \
     && chown -R root:root /app && chmod -R 755 /app \
     && apk del --purge .build-deps \
-    && rm -rf \
-        /root/.cache \
-        /root/.cargo \
-        /tmp/*
+    && rm -rf /root/.cache /root/.cargo /tmp/*
 
 COPY ./apps/bazarr/entrypoint.sh /entrypoint.sh
 COPY --from=ghcr.io/linuxserver/unrar:latest /usr/bin/unrar-alpine /usr/bin/unrar

@@ -49,12 +49,9 @@ RUN apk add --no-cache \
     fi \
     && \
     pip install --upgrade --requirement requirements.txt \
-    && apk del --purge .build-deps \
     && chown -R root:root /app && chmod -R 755 /app \
-    && rm -rf \
-        /root/.cache \
-        /root/.cargo \
-        /tmp/*
+    && apk del --purge .build-deps \
+    && rm -rf /root/.cache /root/.cargo /tmp/*
 
 COPY ./apps/jbops/entrypoint.sh /entrypoint.sh
 

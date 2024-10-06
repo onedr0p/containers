@@ -42,24 +42,14 @@ RUN \
         libffi-dev \
         musl-dev \
         openssl-dev \
-    && \
-    mkdir -p /app \
-    && \
-    curl -fsSL "https://github.com/sabnzbd/sabnzbd/releases/download/${VERSION}/SABnzbd-${VERSION}-src.tar.gz" \
+    && mkdir -p /app \
+    && curl -fsSL "https://github.com/sabnzbd/sabnzbd/releases/download/${VERSION}/SABnzbd-${VERSION}-src.tar.gz" \
         | tar xzf - -C /app --strip-components=1 \
-    && \
-    pip install uv \
-    && \
-    uv pip install --system --requirement /app/requirements.txt \
-    && \
-    chown -R root:root /app && chmod -R 755 /app \
-    && \
-    pip uninstall --yes uv \
-    && apk del --purge .build-deps \
-    && rm -rf \
-        /root/.cache \
-        /root/.cargo \
-        /tmp/*
+    && pip install uv \
+    && uv pip install --system --requirement /app/requirements.txt \
+    && chown -R root:root /app && chmod -R 755 /app \
+    && pip uninstall --yes uv && apk del --purge .build-deps \
+    && rm -rf /root/.cache /root/.cargo /tmp/*
 
 COPY ./apps/sabnzbd/sabnzbd.ini /app/sabnzbd.ini
 COPY ./apps/sabnzbd/entrypoint.sh /entrypoint.sh
