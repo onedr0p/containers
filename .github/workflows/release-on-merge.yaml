@@ -11,8 +11,7 @@ on:
     branches: ["main"]
     paths:
       - "apps/**"
-      - ".github/scripts/templates/**"
-      - "!apps/**/metadata.json"
+      - "scripts/templates/**"
       - "!apps/**/metadata.yaml"
       - "!apps/**/README.md"
 
