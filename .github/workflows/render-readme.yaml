@@ -37,7 +37,7 @@ jobs:
 
       - name: Install Python Requirements
         shell: bash
-        run: pip install -r ./.github/scripts/requirements.txt && pip freeze
+        run: pip install --requirement requirements.txt && pip freeze
 
       - name: Render README
         env:

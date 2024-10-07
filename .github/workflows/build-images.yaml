@@ -65,7 +65,7 @@ jobs:
 
       - name: Install Python Requirements
         shell: bash
-        run: pip install -r ./.github/scripts/requirements.txt && pip freeze
+        run: pip install --requirement requirements.txt
 
       - name: Prepare Matrices
         id: prepare-matrices
