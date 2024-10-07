@@ -1,55 +1,71 @@
+#!/usr/bin/env python3
 import os
-import json
-import requests
 import yaml
-
+import logging
 from jinja2 import Environment, PackageLoader, select_autoescape
 
-repo_owner = os.environ.get('REPO_OWNER', os.environ.get('GITHUB_REPOSITORY_OWNER'))
-repo_name = os.environ.get('REPO_NAME', os.environ.get('GITHUB_REPOSITORY'))
+# Set up logging
+logging.basicConfig(level=logging.INFO)
 
+# Load repo owner and name from environment variables
+repo_owner = os.getenv('REPO_OWNER') or os.getenv('GITHUB_REPOSITORY_OWNER', 'default_owner')
+repo_name = os.getenv('REPO_NAME') or os.getenv('GITHUB_REPOSITORY', 'default_repo')
+
+# Initialize Jinja2 environment
 env = Environment(
     loader=PackageLoader("render-readme"),
     autoescape=select_autoescape()
 )
 
+# Function to load YAML metadata
 def load_metadata_file_yaml(file_path):
-    with open(file_path, "r") as f:
-        return yaml.safe_load(f)
-
-def load_metadata_file_json(file_path):
-    with open(file_path, "r") as f:
-        return json.load(f)
-
-def load_metadata_file(file_path):
-    if file_path.endswith(".json"):
-        return load_metadata_file_json(file_path)
-    elif file_path.endswith(".yaml"):
-        return load_metadata_file_yaml(file_path)
+    try:
+        with open(file_path, "r") as f:
+            return yaml.safe_load(f)
+    except yaml.YAMLError as e:
+        logging.error(f"Error loading YAML file {file_path}: {e}")
+    except FileNotFoundError:
+        logging.error(f"File {file_path} not found.")
     return None
 
-if __name__ == "__main__":
+# Function to process metadata and collect images
+def process_metadata_files(apps_dir):
     app_images = []
-    for subdir, dirs, files in os.walk("./apps"):
-        for file in files:
-            if file != "metadata.yaml" and file != "metadata.json":
-                continue
-            meta = load_metadata_file(os.path.join(subdir, file))
-            for channel in meta["channels"]:
-                name = ""
-                if channel.get("stable", False):
-                    name = meta["app"]
-                else:
-                    name = "-".join([meta["app"], channel["name"]])
-                image = {
-                    "name": name,
-                    "channel": channel["name"],
-                    "html_url": f"https://github.com/{repo_name}/pkgs/container/{name}",
-                    "owner": repo_owner
-                }
+    for subdir, _, files in os.walk(apps_dir):
+        # Look for metadata.yaml
+        if "metadata.yaml" not in files:
+            continue
 
-                app_images.append(image)
+        # Load YAML metadata
+        meta = load_metadata_file_yaml(os.path.join(subdir, "metadata.yaml"))
+        if not meta:
+            continue  # Skip if metadata couldn't be loaded
 
-    template = env.get_template("README.md.j2")
-    with open("./README.md", "w") as f:
-        f.write(template.render(app_images=app_images))
+        # Iterate through the channels and build image metadata
+        for channel in meta.get("channels", []):
+            name = meta["app"] if channel.get("stable", False) else f"{meta['app']}-{channel['name']}"
+            image = {
+                "name": name,
+                "channel": channel["name"],
+                "html_url": f"https://github.com/{repo_owner}/pkgs/container/{name}",
+                "owner": repo_owner
+            }
+            app_images.append(image)
+            logging.info(f"Added image {name} from channel {channel['name']}")
+    return app_images
+
+# Main script logic
+if __name__ == "__main__":
+    apps_dir = "./apps"
+
+    # Process metadata and gather app images
+    app_images = process_metadata_files(apps_dir)
+
+    # Render the README.md from template
+    try:
+        template = env.get_template("README.md.j2")
+        with open("./README.md", "w") as f:
+            f.write(template.render(app_images=app_images))
+        logging.info("README.md successfully generated.")
+    except Exception as e:
+        logging.error(f"Error rendering template: {e}")
