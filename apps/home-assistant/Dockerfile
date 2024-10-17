@@ -11,6 +11,7 @@ ENV \
     PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PIP_BREAK_SYSTEM_PACKAGES=1 \
+    UV_SYSTEM_PYTHON=true \
     CRYPTOGRAPHY_DONT_BUILD_RUST=1 \
     HOMEASSISTANT_WHEELS="https://wheels.home-assistant.io/musllinux/" \
     HOME="/config"
