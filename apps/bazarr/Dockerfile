@@ -54,7 +54,7 @@ RUN \
     && \
     rm -rf /app/bin/bin \
     && \
-    printf "UpdateMethod=docker\nBranch=master\nPackageVersion=%s\nPackageAuthor=[onedr0p](https://github.com/onedr0p)\n" "${VERSION}" > /app/package_info \
+    printf "UpdateMethod=docker\nBranch=master\nPackageVersion=%s\nPackageAuthor=[jaimemachadoneto](https://github.com/jaimemachadoneto)\n" "${VERSION}" > /app/package_info \
     && pip install --no-cache-dir --find-links https://wheel-index.linuxserver.io/alpine-3.20/ \
         --requirement /app/bin/requirements.txt \
         --requirement /app/bin/postgres-requirements.txt \
