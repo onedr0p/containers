@@ -18,6 +18,7 @@ RUN \
         gcc \
         jo \
         moreutils \
+        build-essential \
         wget \
     && rm -rf /var/lib/apt/lists/*
 
