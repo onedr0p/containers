@@ -20,6 +20,7 @@ RUN \
         moreutils \
         build-essential \
         wget \
+        curl \
     && rm -rf /var/lib/apt/lists/*
 
 USER runner
