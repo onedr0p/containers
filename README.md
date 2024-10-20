@@ -13,13 +13,13 @@ _An opinionated collection of container images_
 
 <div align="center">
 
-![GitHub Repo stars](https://img.shields.io/github/stars/onedr0p/containers?style=for-the-badge)
-![GitHub forks](https://img.shields.io/github/forks/onedr0p/containers?style=for-the-badge)
-![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/onedr0p/containers/release-scheduled.yaml?style=for-the-badge&label=Scheduled%20Release)
+![GitHub Repo stars](https://img.shields.io/github/stars/jaimemachadoneto/containers?style=for-the-badge)
+![GitHub forks](https://img.shields.io/github/forks/jaimemachadoneto/containers?style=for-the-badge)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/jaimemachadoneto/containers/release-scheduled.yaml?style=for-the-badge&label=Scheduled%20Release)
 
 </div>
 
-Welcome to my container images, if looking for a container start by [browsing the GitHub Packages page for this repo's packages](https://github.com/onedr0p?tab=packages&repo_name=containers).
+Welcome to my container images, if looking for a container start by [browsing the GitHub Packages page for this repo's packages](https://github.com/jaimemachadoneto?tab=packages&repo_name=containers).
 
 ## Mission statement
 
@@ -35,10 +35,10 @@ We do take a similar approach but instead of appending a `-ls69` or `-r420` pref
 
 | Container                                          | Immutable |
 |----------------------------------------------------|-----------|
-| `ghcr.io/onedr0p/sonarr:rolling`                   | ❌         |
-| `ghcr.io/onedr0p/sonarr:3.0.8.1507`                | ❌         |
-| `ghcr.io/onedr0p/sonarr:rolling@sha256:8053...`    | ✅         |
-| `ghcr.io/onedr0p/sonarr:3.0.8.1507@sha256:8053...` | ✅         |
+| `ghcr.io/jaimemachadoneto/sonarr:rolling`                   | ❌         |
+| `ghcr.io/jaimemachadoneto/sonarr:3.0.8.1507`                | ❌         |
+| `ghcr.io/jaimemachadoneto/sonarr:rolling@sha256:8053...`    | ✅         |
+| `ghcr.io/jaimemachadoneto/sonarr:3.0.8.1507@sha256:8053...` | ✅         |
 
 _If pinning an image to the sha256 digest, tools like [Renovate](https://github.com/renovatebot/renovate) support updating the container on a digest or application version change._
 
@@ -55,7 +55,7 @@ networks:
     external: true
 services:
   sonarr:
-    image: ghcr.io/onedr0p/sonarr:3.0.8.1507
+    image: ghcr.io/jaimemachadoneto/sonarr:3.0.8.1507
     container_name: sonarr
     user: 65534:65534
     # ...
@@ -107,26 +107,26 @@ Each Image will be built with a `rolling` tag, along with tags specific to it's 
 
 Container | Channel | Image
 --- | --- | ---
-[actions-runner](https://github.com/onedr0p/pkgs/container/actions-runner) | stable | ghcr.io/onedr0p/actions-runner
-[bazarr](https://github.com/onedr0p/pkgs/container/bazarr) | stable | ghcr.io/onedr0p/bazarr
-[home-assistant](https://github.com/onedr0p/pkgs/container/home-assistant) | stable | ghcr.io/onedr0p/home-assistant
-[jbops](https://github.com/onedr0p/pkgs/container/jbops) | stable | ghcr.io/onedr0p/jbops
-[plex](https://github.com/onedr0p/pkgs/container/plex) | stable | ghcr.io/onedr0p/plex
-[plex-beta](https://github.com/onedr0p/pkgs/container/plex-beta) | beta | ghcr.io/onedr0p/plex-beta
-[postgres-init](https://github.com/onedr0p/pkgs/container/postgres-init) | stable | ghcr.io/onedr0p/postgres-init
-[prowlarr](https://github.com/onedr0p/pkgs/container/prowlarr) | master | ghcr.io/onedr0p/prowlarr
-[prowlarr-develop](https://github.com/onedr0p/pkgs/container/prowlarr-develop) | develop | ghcr.io/onedr0p/prowlarr-develop
-[prowlarr-nightly](https://github.com/onedr0p/pkgs/container/prowlarr-nightly) | nightly | ghcr.io/onedr0p/prowlarr-nightly
-[qbittorrent](https://github.com/onedr0p/pkgs/container/qbittorrent) | stable | ghcr.io/onedr0p/qbittorrent
-[qbittorrent-beta](https://github.com/onedr0p/pkgs/container/qbittorrent-beta) | beta | ghcr.io/onedr0p/qbittorrent-beta
-[radarr](https://github.com/onedr0p/pkgs/container/radarr) | master | ghcr.io/onedr0p/radarr
-[radarr-develop](https://github.com/onedr0p/pkgs/container/radarr-develop) | develop | ghcr.io/onedr0p/radarr-develop
-[radarr-nightly](https://github.com/onedr0p/pkgs/container/radarr-nightly) | nightly | ghcr.io/onedr0p/radarr-nightly
-[sabnzbd](https://github.com/onedr0p/pkgs/container/sabnzbd) | stable | ghcr.io/onedr0p/sabnzbd
-[sonarr](https://github.com/onedr0p/pkgs/container/sonarr) | main | ghcr.io/onedr0p/sonarr
-[sonarr-develop](https://github.com/onedr0p/pkgs/container/sonarr-develop) | develop | ghcr.io/onedr0p/sonarr-develop
-[tautulli](https://github.com/onedr0p/pkgs/container/tautulli) | master | ghcr.io/onedr0p/tautulli
-[volsync](https://github.com/onedr0p/pkgs/container/volsync) | stable | ghcr.io/onedr0p/volsync
+[actions-runner](https://github.com/jaimemachadoneto/pkgs/container/actions-runner) | stable | ghcr.io/jaimemachadoneto/actions-runner
+[bazarr](https://github.com/jaimemachadoneto/pkgs/container/bazarr) | stable | ghcr.io/jaimemachadoneto/bazarr
+[home-assistant](https://github.com/jaimemachadoneto/pkgs/container/home-assistant) | stable | ghcr.io/jaimemachadoneto/home-assistant
+[jbops](https://github.com/jaimemachadoneto/pkgs/container/jbops) | stable | ghcr.io/jaimemachadoneto/jbops
+[plex](https://github.com/jaimemachadoneto/pkgs/container/plex) | stable | ghcr.io/jaimemachadoneto/plex
+[plex-beta](https://github.com/jaimemachadoneto/pkgs/container/plex-beta) | beta | ghcr.io/jaimemachadoneto/plex-beta
+[postgres-init](https://github.com/jaimemachadoneto/pkgs/container/postgres-init) | stable | ghcr.io/jaimemachadoneto/postgres-init
+[prowlarr](https://github.com/jaimemachadoneto/pkgs/container/prowlarr) | master | ghcr.io/jaimemachadoneto/prowlarr
+[prowlarr-develop](https://github.com/jaimemachadoneto/pkgs/container/prowlarr-develop) | develop | ghcr.io/jaimemachadoneto/prowlarr-develop
+[prowlarr-nightly](https://github.com/jaimemachadoneto/pkgs/container/prowlarr-nightly) | nightly | ghcr.io/jaimemachadoneto/prowlarr-nightly
+[qbittorrent](https://github.com/jaimemachadoneto/pkgs/container/qbittorrent) | stable | ghcr.io/jaimemachadoneto/qbittorrent
+[qbittorrent-beta](https://github.com/jaimemachadoneto/pkgs/container/qbittorrent-beta) | beta | ghcr.io/jaimemachadoneto/qbittorrent-beta
+[radarr](https://github.com/jaimemachadoneto/pkgs/container/radarr) | master | ghcr.io/jaimemachadoneto/radarr
+[radarr-develop](https://github.com/jaimemachadoneto/pkgs/container/radarr-develop) | develop | ghcr.io/jaimemachadoneto/radarr-develop
+[radarr-nightly](https://github.com/jaimemachadoneto/pkgs/container/radarr-nightly) | nightly | ghcr.io/jaimemachadoneto/radarr-nightly
+[sabnzbd](https://github.com/jaimemachadoneto/pkgs/container/sabnzbd) | stable | ghcr.io/jaimemachadoneto/sabnzbd
+[sonarr](https://github.com/jaimemachadoneto/pkgs/container/sonarr) | main | ghcr.io/jaimemachadoneto/sonarr
+[sonarr-develop](https://github.com/jaimemachadoneto/pkgs/container/sonarr-develop) | develop | ghcr.io/jaimemachadoneto/sonarr-develop
+[tautulli](https://github.com/jaimemachadoneto/pkgs/container/tautulli) | master | ghcr.io/jaimemachadoneto/tautulli
+[volsync](https://github.com/jaimemachadoneto/pkgs/container/volsync) | stable | ghcr.io/jaimemachadoneto/volsync
 
 
 ## Deprecations
