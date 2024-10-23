@@ -30,6 +30,8 @@ RUN \
         jq \
         nano \
         p7zip \
+        python3 \
+        py3-pip \
         qt6-qtbase \
         qt6-qtbase-sqlite \
         trurl \
