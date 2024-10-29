@@ -107,26 +107,26 @@ Each Image will be built with a `rolling` tag, along with tags specific to it's 
 
 Container | Channel | Image
 --- | --- | ---
-[actions-runner](https://github.com/onedr0p/pkgs/container/actions-runner) | stable | ghcr.io/onedr0p/actions-runner
-[bazarr](https://github.com/onedr0p/pkgs/container/bazarr) | stable | ghcr.io/onedr0p/bazarr
-[home-assistant](https://github.com/onedr0p/pkgs/container/home-assistant) | stable | ghcr.io/onedr0p/home-assistant
-[jbops](https://github.com/onedr0p/pkgs/container/jbops) | stable | ghcr.io/onedr0p/jbops
-[plex](https://github.com/onedr0p/pkgs/container/plex) | stable | ghcr.io/onedr0p/plex
-[plex-beta](https://github.com/onedr0p/pkgs/container/plex-beta) | beta | ghcr.io/onedr0p/plex-beta
-[postgres-init](https://github.com/onedr0p/pkgs/container/postgres-init) | stable | ghcr.io/onedr0p/postgres-init
-[prowlarr](https://github.com/onedr0p/pkgs/container/prowlarr) | master | ghcr.io/onedr0p/prowlarr
-[prowlarr-develop](https://github.com/onedr0p/pkgs/container/prowlarr-develop) | develop | ghcr.io/onedr0p/prowlarr-develop
-[prowlarr-nightly](https://github.com/onedr0p/pkgs/container/prowlarr-nightly) | nightly | ghcr.io/onedr0p/prowlarr-nightly
-[qbittorrent](https://github.com/onedr0p/pkgs/container/qbittorrent) | stable | ghcr.io/onedr0p/qbittorrent
-[qbittorrent-beta](https://github.com/onedr0p/pkgs/container/qbittorrent-beta) | beta | ghcr.io/onedr0p/qbittorrent-beta
-[radarr](https://github.com/onedr0p/pkgs/container/radarr) | master | ghcr.io/onedr0p/radarr
-[radarr-develop](https://github.com/onedr0p/pkgs/container/radarr-develop) | develop | ghcr.io/onedr0p/radarr-develop
-[radarr-nightly](https://github.com/onedr0p/pkgs/container/radarr-nightly) | nightly | ghcr.io/onedr0p/radarr-nightly
-[sabnzbd](https://github.com/onedr0p/pkgs/container/sabnzbd) | stable | ghcr.io/onedr0p/sabnzbd
-[sonarr](https://github.com/onedr0p/pkgs/container/sonarr) | main | ghcr.io/onedr0p/sonarr
-[sonarr-develop](https://github.com/onedr0p/pkgs/container/sonarr-develop) | develop | ghcr.io/onedr0p/sonarr-develop
-[tautulli](https://github.com/onedr0p/pkgs/container/tautulli) | master | ghcr.io/onedr0p/tautulli
-[volsync](https://github.com/onedr0p/pkgs/container/volsync) | stable | ghcr.io/onedr0p/volsync
+[actions-runner](https://github.com/judahrand/pkgs/container/actions-runner) | stable | ghcr.io/judahrand/actions-runner
+[bazarr](https://github.com/judahrand/pkgs/container/bazarr) | stable | ghcr.io/judahrand/bazarr
+[home-assistant](https://github.com/judahrand/pkgs/container/home-assistant) | stable | ghcr.io/judahrand/home-assistant
+[jbops](https://github.com/judahrand/pkgs/container/jbops) | stable | ghcr.io/judahrand/jbops
+[plex](https://github.com/judahrand/pkgs/container/plex) | stable | ghcr.io/judahrand/plex
+[plex-beta](https://github.com/judahrand/pkgs/container/plex-beta) | beta | ghcr.io/judahrand/plex-beta
+[postgres-init](https://github.com/judahrand/pkgs/container/postgres-init) | stable | ghcr.io/judahrand/postgres-init
+[prowlarr](https://github.com/judahrand/pkgs/container/prowlarr) | master | ghcr.io/judahrand/prowlarr
+[prowlarr-develop](https://github.com/judahrand/pkgs/container/prowlarr-develop) | develop | ghcr.io/judahrand/prowlarr-develop
+[prowlarr-nightly](https://github.com/judahrand/pkgs/container/prowlarr-nightly) | nightly | ghcr.io/judahrand/prowlarr-nightly
+[qbittorrent](https://github.com/judahrand/pkgs/container/qbittorrent) | stable | ghcr.io/judahrand/qbittorrent
+[qbittorrent-beta](https://github.com/judahrand/pkgs/container/qbittorrent-beta) | beta | ghcr.io/judahrand/qbittorrent-beta
+[radarr](https://github.com/judahrand/pkgs/container/radarr) | master | ghcr.io/judahrand/radarr
+[radarr-develop](https://github.com/judahrand/pkgs/container/radarr-develop) | develop | ghcr.io/judahrand/radarr-develop
+[radarr-nightly](https://github.com/judahrand/pkgs/container/radarr-nightly) | nightly | ghcr.io/judahrand/radarr-nightly
+[sabnzbd](https://github.com/judahrand/pkgs/container/sabnzbd) | stable | ghcr.io/judahrand/sabnzbd
+[sonarr](https://github.com/judahrand/pkgs/container/sonarr) | main | ghcr.io/judahrand/sonarr
+[sonarr-develop](https://github.com/judahrand/pkgs/container/sonarr-develop) | develop | ghcr.io/judahrand/sonarr-develop
+[tautulli](https://github.com/judahrand/pkgs/container/tautulli) | master | ghcr.io/judahrand/tautulli
+[volsync](https://github.com/judahrand/pkgs/container/volsync) | stable | ghcr.io/judahrand/volsync
 
 
 ## Deprecations
