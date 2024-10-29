@@ -1,0 +1,9 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/goss-org/goss/master/docs/schema.yaml
+process:
+  matterbridge:
+    running: true
+http:
+  http://localhost:8283:
+    status: 200
+    timeout: 5000
