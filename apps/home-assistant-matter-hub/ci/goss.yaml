@@ -1,0 +1,9 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/goss-org/goss/master/docs/schema.yaml
+process:
+  home-assistant-matter-hub:
+    running: true
+http:
+  http://localhost:8482:
+    status: 200
+    timeout: 5000
