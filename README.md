@@ -128,6 +128,7 @@ Container | Channel | Image
 [sabnzbd](https://github.com/lenaxia/containers/pkgs/container/sabnzbd) | stable | ghcr.io/lenaxia/sabnzbd
 [sonarr](https://github.com/lenaxia/containers/pkgs/container/sonarr) | main | ghcr.io/lenaxia/sonarr
 [sonarr-develop](https://github.com/lenaxia/containers/pkgs/container/sonarr-develop) | develop | ghcr.io/lenaxia/sonarr-develop
+[tabbyapi](https://github.com/lenaxia/containers/pkgs/container/tabbyapi) | main | ghcr.io/lenaxia/tabbyapi
 [theme-park](https://github.com/lenaxia/containers/pkgs/container/theme-park) | stable | ghcr.io/lenaxia/theme-park
 [volsync](https://github.com/lenaxia/containers/pkgs/container/volsync) | stable | ghcr.io/lenaxia/volsync
 
