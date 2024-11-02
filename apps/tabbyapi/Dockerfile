@@ -1,9 +1,6 @@
 # Use an official CUDA runtime with Ubuntu as a parent image
 FROM nvidia/cuda:12.1.0-runtime-ubuntu22.04
 
-# Set default timezone to UTC
-ENV TZ=Etc/UTC
-
 # Additional environment variables
 ENV \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -17,6 +14,8 @@ ENV \
 
 # Set umask and timezone
 ENV UMASK="0002"
+
+ENV TZ=Etc/UTC
 
 USER root
 WORKDIR /app
