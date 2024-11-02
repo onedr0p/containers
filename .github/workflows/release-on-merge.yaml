@@ -17,6 +17,10 @@ on:
       - "!apps/**/README.md"
   workflow_dispatch:
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   simple-checks:
     uses: lenaxia/containers/.github/workflows/simple-checks.yaml@main
