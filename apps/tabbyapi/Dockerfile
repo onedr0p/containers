@@ -12,10 +12,9 @@ ENV \
     HOME="/app" \
     DEBIAN_FRONTEND=noninteractive
 
-ENV TZ=Etc/UTC
-
 # Set umask and timezone
 ENV UMASK="0002"
+ENV TZ=Etc/UTC
 
 USER root
 WORKDIR /app
@@ -50,6 +49,6 @@ EXPOSE 5000
 ENTRYPOINT ["python3"]
 
 # Run main.py when the container launches
-CMD ["main.py"]
+CMD ["main.py", "--host", "0.0.0.0"]
 
 LABEL org.opencontainers.image.source="https://github.com/theroyallab/tabbyAPI"
