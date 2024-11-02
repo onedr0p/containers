@@ -12,10 +12,10 @@ ENV \
     HOME="/app" \
     DEBIAN_FRONTEND=noninteractive
 
+ENV TZ=Etc/UTC
+
 # Set umask and timezone
 ENV UMASK="0002"
-
-ENV TZ=Etc/UTC
 
 USER root
 WORKDIR /app
