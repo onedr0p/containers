@@ -1,0 +1,12 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/goss-org/goss/master/docs/schema.yaml
+process:
+  tabbyapi:
+    running: true
+port:
+  tcp6:5000:
+    listening: true
+http:
+  http://localhost:5000:
+    status: 200
+    timeout: 5000

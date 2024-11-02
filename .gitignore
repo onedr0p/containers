@@ -1,3 +1,5 @@
 .goss
 .private
 **/*.pyc
+.aider*
+.env
