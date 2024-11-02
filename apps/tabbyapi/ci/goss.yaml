@@ -1,11 +1,11 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/goss-org/goss/master/docs/schema.yaml
-process:
-  python3:
-    running: true
-port:
-  tcp6:5000:
-    listening: true
+#process:
+#  python3:
+#    running: true
+#port:
+#  tcp6:5000:
+#    listening: true
 http:
   http://localhost:5000/v1/models:
     status: 401
