@@ -1,12 +1,24 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/goss-org/goss/master/docs/schema.yaml
 process:
-  tabbyapi:
+  python3:
     running: true
 port:
   tcp6:5000:
     listening: true
 http:
-  http://localhost:5000:
-    status: 200
+  http://localhost:5000/v1/completions:
+    method: POST
+    status: 401
     timeout: 5000
+    headers:
+      Content-Type: application/json
+    body: |
+      {
+        "model": "meta-llama/Meta-Llama-3-8B",
+        "prompt": "Once upon a time,",
+        "max_tokens": 400,
+        "stream": false,
+        "min_p": 0.05,
+        "repetition_penalty": 1.05
+      }
