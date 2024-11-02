@@ -15,6 +15,7 @@ on:
       - "!apps/**/metadata.json"
       - "!apps/**/metadata.yaml"
       - "!apps/**/README.md"
+  workflow_dispatch:
 
 jobs:
   simple-checks:
