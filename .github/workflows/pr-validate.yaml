@@ -13,15 +13,15 @@ concurrency:
 
 jobs:
   simple-checks:
-    uses: onedr0p/containers/.github/workflows/simple-checks.yaml@main
+    uses: lenaxia/containers/.github/workflows/simple-checks.yaml@main
 
   get-changed-images:
-    uses: onedr0p/containers/.github/workflows/get-changed-images.yaml@main
+    uses: lenaxia/containers/.github/workflows/get-changed-images.yaml@main
 
   build-images:
     needs: ["simple-checks", "get-changed-images"]
     if: ${{ needs.get-changed-images.outputs.addedOrModified == 'true' }}
-    uses: onedr0p/containers/.github/workflows/build-images.yaml@main
+    uses: lenaxia/containers/.github/workflows/build-images.yaml@main
     secrets: inherit
     with:
       appsToBuild: "${{ needs.get-changed-images.outputs.addedOrModifiedImages }}"
