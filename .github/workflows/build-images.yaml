@@ -33,6 +33,7 @@ on:
       BOT_APP_PRIVATE_KEY:
         description: The private key of the GitHub App
         required: true
+  workflow_dispatch:
 
 jobs:
   prepare:
