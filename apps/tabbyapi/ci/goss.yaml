@@ -3,10 +3,10 @@
 #process:
 #  python3:
 #    running: true
-#port:
-#  tcp6:5000:
-#    listening: true
+port:
+  tcp:5000:
+    listening: true
 http:
-  http://localhost:5000/v1/models:
-    status: 401
+  http://localhost:5000/health:
+    status: 200
     timeout: 5000
