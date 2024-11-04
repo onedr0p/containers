@@ -1,11 +1,14 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/goss-org/goss/master/docs/schema.yaml
 process:
-  nginx:
+  python:
     running: true
 port:
-  tcp:8080:
+  tcp:8181:
     listening: true
 http:
-  http://localhost:8080:
+  http://localhost:8181:
     status: 200
+file:
+  /usr/local/bin/python:
+    exists: true

@@ -1,4 +1,4 @@
-FROM docker.io/library/python:3.12.4-alpine
+FROM docker.io/library/python:3.12.7-alpine
 
 ARG TARGETPLATFORM
 ARG VERSION
@@ -11,6 +11,8 @@ ENV \
     PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PIP_BREAK_SYSTEM_PACKAGES=1 \
+    UV_SYSTEM_PYTHON=true \
+    CRYPTOGRAPHY_DONT_BUILD_RUST=1 \
     HOMEASSISTANT_WHEELS="https://wheels.home-assistant.io/musllinux/" \
     HOME="/config"
 
@@ -96,16 +98,9 @@ RUN \
     && \
     uv pip install --system --only-binary=:all: --find-links "${HOMEASSISTANT_WHEELS}" \
         homeassistant=="${VERSION}" \
-    && \
-    mkdir -p /config \
-    && chown nobody:nogroup -R /config \
-    && \
-    apk del --purge .build-deps \
-    && \
-    rm -rf \
-        /root/.cache \
-        /root/.cargo \
-        /tmp/*
+    && mkdir -p /config && chown nobody:nogroup -R /config \
+    && apk del --purge .build-deps \
+    && rm -rf /root/.cache /root/.cargo /tmp/*
 
 COPY ./apps/home-assistant/entrypoint.sh /entrypoint.sh
 
@@ -113,7 +108,6 @@ USER nobody:nogroup
 WORKDIR /config
 VOLUME ["/config"]
 
-ENTRYPOINT ["/usr/bin/catatonit", "--"]
-CMD ["/entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/catatonit", "--", "/entrypoint.sh"]
 
 LABEL org.opencontainers.image.source="https://github.com/home-assistant/core"

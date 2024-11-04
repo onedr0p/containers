@@ -1,0 +1,41 @@
+---
+version: '3'
+
+vars:
+  LABELS_CONFIG_FILE: '{{.ROOT_DIR}}/.github/labels.yaml'
+  PIP_REQUIREMENTS_FILE: '{{.ROOT_DIR}}/requirements.txt'
+  PYTHON_BIN: python3
+
+env:
+  VIRTUAL_ENV: '{{.ROOT_DIR}}/.venv'
+
+tasks:
+
+  default:
+    cmd: task --list
+    silent: true
+
+  venv:
+    desc: Set up a Python virtual environment
+    cmds:
+      - '{{.PYTHON_BIN}} -m venv {{.VIRTUAL_ENV}}'
+      - '{{.VIRTUAL_ENV}}/bin/python3 -m pip install --upgrade pip setuptools wheel'
+      - '{{.VIRTUAL_ENV}}/bin/python3 -m pip install --upgrade --requirement "{{.PIP_REQUIREMENTS_FILE}}"'
+    sources:
+      - '{{.PIP_REQUIREMENTS_FILE}}'
+    generates:
+      - '{{.VIRTUAL_ENV}}/pyvenv.cfg'
+    preconditions:
+      - test -f {{.PIP_REQUIREMENTS_FILE}}
+
+  append-app-labels:
+    desc: Append app labels to the labels config file
+    cmds:
+      - for: { var: apps }
+        cmd: |
+          yq --inplace '. += [{"name": "app/{{.ITEM}}", "color": "0e8a16"}]' {{.LABELS_CONFIG_FILE}}
+    vars:
+      apps:
+        sh: ls --directory {{.ROOT_DIR}}/apps/*/ | xargs --max-args=1 basename
+    preconditions:
+      - sh: '[[ -z {{.CLI_FORCE}} ]]'

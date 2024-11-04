@@ -4,11 +4,15 @@ ARG TARGETPLATFORM
 ARG VERSION
 ARG CHANNEL
 
-ENV QBITTORRENT__PORT=8080 \
-    QBITTORRENT__BT_PORT=50413
-
 ENV UMASK="0002" \
     TZ="Etc/UTC"
+
+ENV QBT_CONFIRM_LEGAL_NOTICE=1 \
+    QBT_WEBUI_PORT=8080 \
+    QBT_TORRENTING_PORT=50413 \
+    HOME="/config" \
+    XDG_CONFIG_HOME="/config" \
+    XDG_DATA_HOME="/config"
 
 USER root
 WORKDIR /app
@@ -27,6 +31,9 @@ RUN \
         nano \
         p7zip \
         python3 \
+        py3-pip \
+        qt6-qtbase \
+        qt6-qtbase-sqlite \
         trurl \
         tzdata \
     && \
@@ -47,19 +54,17 @@ RUN \
             && curl -fsSL -o /app/qbittorrent-nox "https://github.com/userdocs/qbittorrent-nox-static/releases/download/${RELEASE}/${ARCH}-qbittorrent-nox" \
         ;; \
     esac \
-    && \
-    chown -R root:root /app/qbittorrent-nox \
+    && chown -R root:root /app/qbittorrent-nox \
     && chmod -R 755 /app/qbittorrent-nox \
     && rm -rf /tmp/*
 
-COPY ./apps/qbittorrent/scripts/config.py /scripts/config.py
+COPY ./apps/qbittorrent/qBittorrent.conf /app/qBittorrent.conf
 COPY ./apps/qbittorrent/entrypoint.sh /entrypoint.sh
 
 USER nobody:nogroup
 WORKDIR /config
 VOLUME ["/config"]
 
-ENTRYPOINT ["/usr/bin/catatonit", "--"]
-CMD ["/entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/catatonit", "--", "/entrypoint.sh"]
 
 LABEL org.opencontainers.image.source="https://github.com/qbittorrent/qBittorrent"

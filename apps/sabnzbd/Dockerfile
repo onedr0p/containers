@@ -1,4 +1,4 @@
-FROM docker.io/library/python:3.12-alpine
+FROM docker.io/library/python:3.13-alpine
 
 ARG TARGETPLATFORM
 ARG VERSION
@@ -13,10 +13,11 @@ ENV \
     PIP_BREAK_SYSTEM_PACKAGES=1 \
     CRYPTOGRAPHY_DONT_BUILD_RUST=1
 
-ENV SABNZBD__PORT=8080
-
 ENV UMASK="0002" \
     TZ="Etc/UTC"
+
+ENV SABNZBD__ADDRESS=0.0.0.0 \
+    SABNZBD__PORT=8080
 
 USER root
 WORKDIR /app
@@ -41,37 +42,29 @@ RUN \
         libffi-dev \
         musl-dev \
         openssl-dev \
-    && \
-    mkdir -p /app \
-    && \
-    curl -fsSL "https://github.com/sabnzbd/sabnzbd/releases/download/${VERSION}/SABnzbd-${VERSION}-src.tar.gz" \
+    && mkdir -p /app \
+    && curl -fsSL "https://github.com/sabnzbd/sabnzbd/releases/download/${VERSION}/SABnzbd-${VERSION}-src.tar.gz" \
         | tar xzf - -C /app --strip-components=1 \
-    && \
-    pip install uv \
-    && \
-    uv pip install --system --requirement /app/requirements.txt \
-    && \
-    chown -R root:root /app \
-    && chmod -R 755 /app \
-    && apk del --purge .build-deps \
-    && rm -rf \
-        /root/.cache \
-        /root/.cargo \
-        /tmp/*
+    && pip install uv \
+    && uv pip install --system --requirement /app/requirements.txt \
+    && chown -R root:root /app && chmod -R 755 /app \
+    && pip uninstall --yes uv && apk del --purge .build-deps \
+    && rm -rf /root/.cache /root/.cargo /tmp/*
 
 COPY ./apps/sabnzbd/sabnzbd.ini /app/sabnzbd.ini
 COPY ./apps/sabnzbd/entrypoint.sh /entrypoint.sh
-COPY --from=ghcr.io/onedr0p/par2cmdline-turbo:1.1.1 /usr/local/bin/par2 /usr/local/bin/par2
+
+COPY --from=ghcr.io/linuxserver/unrar:latest /usr/bin/unrar-alpine /usr/bin/unrar
+
+COPY --from=ghcr.io/linuxserver/sabnzbd:latest /usr/local/bin/par2 /usr/local/bin/par2
 RUN ln -s /usr/local/bin/par2 /usr/local/bin/par2create \
     && ln -s /usr/local/bin/par2 /usr/local/bin/par2repair \
     && ln -s /usr/local/bin/par2 /usr/local/bin/par2verify
-COPY --from=ghcr.io/linuxserver/unrar:7.0.9 /usr/bin/unrar-alpine /usr/bin/unrar
 
 USER nobody:nogroup
 WORKDIR /config
 VOLUME ["/config"]
 
-ENTRYPOINT ["/usr/bin/catatonit", "--"]
-CMD ["/entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/catatonit", "--", "/entrypoint.sh"]
 
 LABEL org.opencontainers.image.source="https://github.com/sabnzbd/sabnzbd"
