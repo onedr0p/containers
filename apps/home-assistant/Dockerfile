@@ -41,6 +41,8 @@ RUN \
         iputils \
         jo \
         jq \
+        ldap3 \
+        ldapsearch \
         libcap \
         libjpeg-turbo-dev \
         libpcap-dev \
