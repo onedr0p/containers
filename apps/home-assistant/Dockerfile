@@ -43,6 +43,7 @@ RUN \
         iputils \
         jo \
         jq \
+        py3-ldap3 \
         libcap \
         libjpeg-turbo-dev \
         libpcap-dev \
@@ -51,6 +52,7 @@ RUN \
         mariadb-connector-c \
         mariadb-connector-c-dev \
         nano \
+        openldap-clients \
         openssh-client \
         openssl \
         postgresql-libs \
