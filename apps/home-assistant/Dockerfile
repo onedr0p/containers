@@ -15,7 +15,8 @@ ENV \
     UV_NO_CACHE=true \
     CRYPTOGRAPHY_DONT_BUILD_RUST=1 \
     HOMEASSISTANT_WHEELS="https://wheels.home-assistant.io/musllinux/" \
-    HOME="/config"
+    HOME="/config" \
+    PYTHONPATH="/config/deps"
 
 ENV UMASK="0002" \
     TZ="Etc/UTC"
@@ -39,7 +40,6 @@ RUN \
         eudev-libs \
         ffmpeg \
         git \
-        go2rtc \
         iputils \
         jo \
         jq \
@@ -84,22 +84,26 @@ RUN \
     case "${TARGETPLATFORM}" in \
         'linux/amd64') \
             export ARCH='amd64'; \
+            export GO2RTC_SUFFIX='amd64'; \
         ;; \
         'linux/arm64') \
             export ARCH='aarch64'; \
+            export GO2RTC_SUFFIX='arm64'; \
         ;; \
     esac \
     && \
     HOME_ASSISTANT_BASE=$(curl -fsSL "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/build.yaml" | grep "${ARCH}: " | cut -d ":" -f3) \
     && \
-    uv pip install --system --only-binary=:all: --find-links "${HOMEASSISTANT_WHEELS}" \
+    uv pip install --only-binary=:all: --find-links "${HOMEASSISTANT_WHEELS}" \
         --requirement "https://raw.githubusercontent.com/home-assistant/docker/${HOME_ASSISTANT_BASE}/requirements.txt" \
     && \
-    uv pip install --system --only-binary=:all: --find-links "${HOMEASSISTANT_WHEELS}" \
+    uv pip install --only-binary=:all: --find-links "${HOMEASSISTANT_WHEELS}" \
         --requirement /tmp/requirements_all.txt \
     && \
-    uv pip install --system --only-binary=:all: --find-links "${HOMEASSISTANT_WHEELS}" \
+    uv pip install --only-binary=:all: --find-links "${HOMEASSISTANT_WHEELS}" \
         homeassistant=="${VERSION}" \
+    && curl -L https://github.com/AlexxIT/go2rtc/releases/download/v1.9.6/go2rtc_linux_${GO2RTC_SUFFIX} --output /bin/go2rtc \
+    && chmod +x /bin/go2rtc \
     && mkdir -p /config && chown nobody:nogroup -R /config \
     && apk del --purge .build-deps \
     && rm -rf /root/.cache /root/.cargo /tmp/*
