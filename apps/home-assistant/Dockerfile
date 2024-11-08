@@ -107,7 +107,7 @@ RUN \
     && curl -L https://github.com/AlexxIT/go2rtc/releases/download/v1.9.6/go2rtc_linux_${GO2RTC_SUFFIX} --output /bin/go2rtc \
     && chmod +x /bin/go2rtc \
     && mkdir -p /config && chown nobody:nogroup -R /config \
-    && apk del --purge .build-deps \
+    #&& apk del --purge .build-deps \
     && rm -rf /root/.cache /root/.cargo /tmp/*
 
 COPY ./apps/home-assistant/entrypoint.sh /entrypoint.sh
