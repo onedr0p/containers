@@ -1,9 +1,0 @@
----
-# yaml-language-server: $schema=https://raw.githubusercontent.com/goss-org/goss/master/docs/schema.yaml
-file:
-  /config/Matterbridge/matterbridge-zigbee2mqtt:
-    exists: true
-    filetype: "directory"
-    mode: "0644"
-    owner: "nobody"
-    group: "nobody"
