@@ -43,7 +43,6 @@ RUN \
         iputils \
         jo \
         jq \
-        py3-ldap3 \
         libcap \
         libjpeg-turbo-dev \
         libpcap-dev \
@@ -79,6 +78,8 @@ RUN \
         unixodbc-dev \
     && \
     pip install uv \
+    && \
+    uv pip install ldap3 \
     && \
     curl -fsSL "https://github.com/home-assistant/core/archive/${VERSION}.tar.gz" \
         | tar xzf - -C /tmp --strip-components=1 \
