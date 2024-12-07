@@ -16,4 +16,5 @@ fi
 
 version="${version#*v}"
 version="${version#*release-}"
+
 printf "%s" "${version}"
