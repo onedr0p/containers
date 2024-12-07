@@ -79,7 +79,9 @@ RUN \
     && \
     pip install uv \
     && \
-    uv pip install ldap3 rpds \
+    uv pip install ldap3 \
+    && \
+    uv pip install rpds \
     && \
     curl -fsSL "https://github.com/home-assistant/core/archive/${VERSION}.tar.gz" \
         | tar xzf - -C /tmp --strip-components=1 \
