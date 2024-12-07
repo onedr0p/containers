@@ -79,7 +79,7 @@ RUN \
     && \
     pip install uv \
     && \
-    uv pip install ldap3 \
+    uv pip install ldap3 rpds \
     && \
     curl -fsSL "https://github.com/home-assistant/core/archive/${VERSION}.tar.gz" \
         | tar xzf - -C /tmp --strip-components=1 \
@@ -105,7 +105,7 @@ RUN \
     && \
     uv pip install --only-binary=:all: --find-links "${HOMEASSISTANT_WHEELS}" \
         homeassistant=="${VERSION}" \
-    && curl -L https://github.com/AlexxIT/go2rtc/releases/download/v1.9.6/go2rtc_linux_${GO2RTC_SUFFIX} --output /bin/go2rtc \
+    && curl -L https://github.com/AlexxIT/go2rtc/releases/download/v1.9.7/go2rtc_linux_${GO2RTC_SUFFIX} --output /bin/go2rtc \
     && chmod +x /bin/go2rtc \
     && mkdir -p /config && chown nobody:nogroup -R /config \
     && apk del --purge .build-deps \
