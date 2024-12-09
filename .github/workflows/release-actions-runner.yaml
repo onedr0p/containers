@@ -1,4 +1,4 @@
-name: Manual Release
+name: Release Actions Runner
 
 on:
   workflow_dispatch:
@@ -36,6 +36,10 @@ jobs:
           VERSION=$(./apps/actions-runner/ci/latest.sh)
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
 
+      - name: Sanitize repository name
+        id: sanitize
+        run: echo "repo=${{ github.repository }}" | tr '[:upper:]' '[:lower:]' >> $GITHUB_ENV
+
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
@@ -44,5 +48,5 @@ jobs:
           build-args: |
             VERSION=${{ steps.version.outputs.version }}
           tags: |
-            ghcr.io/${{ github.repository }}/actions-runner:latest
-            ghcr.io/${{ github.repository }}/actions-runner:${{ steps.version.outputs.version }}
+            ghcr.io/${{ env.repo }}/actions-runner:latest
+            ghcr.io/${{ env.repo }}/actions-runner:${{ steps.version.outputs.version }}
