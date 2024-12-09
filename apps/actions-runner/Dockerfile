@@ -20,6 +20,12 @@ RUN \
     gcc \
     jo \
     moreutils \
+    git \
+    libpq-dev \
+    libssl-dev \
+    build-essential \
+    make \
+    pkg-config \
     wget \
     && rm -rf /var/lib/apt/lists/*
 
