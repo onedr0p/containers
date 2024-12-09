@@ -34,6 +34,7 @@ jobs:
         id: version
         run: |
           VERSION=$(./apps/actions-runner/ci/latest.sh)
+          echo "Debug: VERSION=$VERSION"
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
 
       - name: Sanitize repository name
