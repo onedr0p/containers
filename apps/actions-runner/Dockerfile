@@ -14,11 +14,13 @@ RUN \
     apt-get update \
     && \
     apt-get install -y --no-install-recommends --no-install-suggests \
-        ca-certificates \
-        gcc \
-        jo \
-        moreutils \
-        wget \
+    lld \
+    clang \
+    ca-certificates \
+    gcc \
+    jo \
+    moreutils \
+    wget \
     && rm -rf /var/lib/apt/lists/*
 
 USER runner
