@@ -10,14 +10,8 @@ jobs:
     name: Render README
     runs-on: ubuntu-latest
     steps:
-      - name: Generate Token
-        uses: actions/create-github-app-token@v1
-        id: app-token
-
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          token: "${{ steps.app-token.outputs.token }}"
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -30,8 +24,6 @@ jobs:
         run: pip install --requirement requirements.txt && pip freeze
 
       - name: Render README
-        env:
-          GITHUB_TOKEN: "${{ steps.app-token.outputs.token }}"
         shell: bash
         run: python ./scripts/render-readme.py
 

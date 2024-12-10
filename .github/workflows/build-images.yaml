@@ -38,14 +38,8 @@ jobs:
         shell: bash
         run: echo "LOWERCASE_REPO_OWNER=${GITHUB_REPOSITORY_OWNER,,}" >> $GITHUB_ENV
 
-      - name: Generate Token
-        uses: actions/create-github-app-token@v1
-        id: app-token
-
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          token: "${{ steps.app-token.outputs.token }}"
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -59,8 +53,6 @@ jobs:
 
       - name: Prepare Matrices
         id: prepare-matrices
-        env:
-          TOKEN: ${{ steps.app-token.outputs.token }}
         shell: bash
         run: |
           if [[ -z "${{ inputs.appsToBuild }}" ]]; then
@@ -130,14 +122,8 @@ jobs:
           echo "${{ matrix.image.name }}" | grep -E "[a-zA-Z0-9_\.\-]+" || "Image Name is invalid"
           echo "${{ matrix.image.version }}" | grep -E "[a-zA-Z0-9_\.\-]+" || "Image Version is invalid"
 
-      - name: Generate Token
-        uses: actions/create-github-app-token@v1
-        id: app-token
-
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          token: "${{ steps.app-token.outputs.token }}"
 
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
