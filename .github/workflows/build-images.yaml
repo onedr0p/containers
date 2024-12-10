@@ -26,13 +26,6 @@ on:
         default: true
         type: boolean
         description: Force rebuild
-    secrets:
-      BOT_APP_ID:
-        description: The App ID of the GitHub App
-        required: true
-      BOT_APP_PRIVATE_KEY:
-        description: The private key of the GitHub App
-        required: true
 
 jobs:
   prepare:
@@ -48,9 +41,6 @@ jobs:
       - name: Generate Token
         uses: actions/create-github-app-token@v1
         id: app-token
-        with:
-          app-id: "${{ secrets.BOT_APP_ID }}"
-          private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -143,9 +133,6 @@ jobs:
       - name: Generate Token
         uses: actions/create-github-app-token@v1
         id: app-token
-        with:
-          app-id: "${{ secrets.BOT_APP_ID }}"
-          private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
 
       - name: Checkout
         uses: actions/checkout@v4
