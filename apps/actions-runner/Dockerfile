@@ -26,6 +26,7 @@ RUN \
     build-essential \
     make \
     pkg-config \
+    sshpass \
     wget \
     && rm -rf /var/lib/apt/lists/*
 
