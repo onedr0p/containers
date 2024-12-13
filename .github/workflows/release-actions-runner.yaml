@@ -1,6 +1,12 @@
 name: Release Actions Runner
 
 on:
+  push:
+    branches: ["main"]
+    paths:
+      - "apps/actions-runner/**"
+      - "!apps/actions-runner/metadata.yaml"
+      - "!apps/actions-runner/README.md"
   workflow_dispatch:
     inputs:
       force:
