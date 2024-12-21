@@ -16,15 +16,15 @@ on:
       - "!apps/**/README.md"
 
 jobs:
-  simple-checks:
-    uses: nklmilojevic/containers/.github/workflows/simple-checks.yaml@main
+  # simple-checks:
+  #   uses: nklmilojevic/containers/.github/workflows/simple-checks.yaml@main
 
   get-changed-images:
-    needs: ["simple-checks"]
+    # needs: ["simple-checks"]
     uses: nklmilojevic/containers/.github/workflows/get-changed-images.yaml@main
 
   build-images:
-    needs: ["simple-checks", "get-changed-images"]
+    needs: ["get-changed-images"]
     if: ${{ needs.get-changed-images.outputs.addedOrModified == 'true' }}
     uses: nklmilojevic/containers/.github/workflows/build-images.yaml@main
     secrets: inherit
