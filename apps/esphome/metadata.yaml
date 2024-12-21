@@ -1,0 +1,11 @@
+---
+app: esphome
+source_repo: https://github.com/esphome/esphome
+# renovate: depName=esphome/esphome
+version: 2024.12.2
+platforms:
+  - linux/amd64
+  - linux/arm64
+type: web
+tests:
+  enabled: true
