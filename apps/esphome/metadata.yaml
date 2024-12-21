@@ -1,5 +1,5 @@
 ---
-app: home-assistant
+app: esphome
 semver: false
 channels:
   - name: stable
