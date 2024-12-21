@@ -33,8 +33,8 @@ RUN \
   /tmp/* \
   /wheels
 
-COPY ./entrypoint.sh /entrypoint.sh
-
+# COPY ./entrypoint.sh /entrypoint.sh
+COPY ./apps/esphome/entrypoint.sh /entrypoint.sh
 USER nobody:nogroup
 WORKDIR /config
 VOLUME ["/config", "/cache"]
