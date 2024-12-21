@@ -1,4 +1,4 @@
-FROM docker.io/library/python:3.13.1-alpine
+FROM docker.io/library/python:3.13.0-alpine
 
 ARG VERSION
 
@@ -21,17 +21,17 @@ WORKDIR /app
 
 RUN \
   apk add --no-cache \
-    build-base \
-    catatonit \
-    gcompat \
-    git \
+  build-base \
+  catatonit \
+  gcompat \
+  git \
   && pip install uv \
   && uv pip install --find-links "https://wheels.home-assistant.io/musllinux/" "setuptools" "esphome[displays]==${VERSION}" \
   && mkdir /cache \
   && chown nobody:nogroup /cache \
   && rm -rf \
-    /tmp/* \
-    /wheels
+  /tmp/* \
+  /wheels
 
 COPY ./entrypoint.sh /entrypoint.sh
 
