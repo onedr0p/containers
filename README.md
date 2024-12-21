@@ -109,7 +109,7 @@ Container | Channel | Image
 --- | --- | ---
 [actions-runner](https://github.com/nklmilojevic/containers/pkgs/container/actions-runner) | stable | ghcr.io/nklmilojevic/actions-runner
 [bazarr](https://github.com/nklmilojevic/containers/pkgs/container/bazarr) | stable | ghcr.io/nklmilojevic/bazarr
-[home-assistant](https://github.com/nklmilojevic/containers/pkgs/container/home-assistant) | stable | ghcr.io/nklmilojevic/home-assistant
+[esphome](https://github.com/nklmilojevic/containers/pkgs/container/esphome) | stable | ghcr.io/nklmilojevic/esphome
 [home-assistant](https://github.com/nklmilojevic/containers/pkgs/container/home-assistant) | stable | ghcr.io/nklmilojevic/home-assistant
 [jbops](https://github.com/nklmilojevic/containers/pkgs/container/jbops) | stable | ghcr.io/nklmilojevic/jbops
 [plex](https://github.com/nklmilojevic/containers/pkgs/container/plex) | stable | ghcr.io/nklmilojevic/plex
