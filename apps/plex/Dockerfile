@@ -28,6 +28,7 @@ RUN \
         jo \
         jq \
         nano \
+        trurl \
         tzdata \
         xmlstarlet \
     && \
