@@ -42,7 +42,8 @@ RUN \
     && curl -fsSL -o /tmp/plex.deb \
         "https://downloads.plex.tv/plex-media-server-new/${VERSION}/debian/plexmediaserver_${VERSION}_${ARCH}.deb" \
     && \
-    dpkg-deb -R /tmp/plex.deb / \
+    dpkg-deb -R /tmp/plex.deb /tmp \
+    && cp -R /tmp/usr/* /usr \
     && chown -R root:root "${PLEX_MEDIA_SERVER_HOME}" \
     && chmod -R 755 "${PLEX_MEDIA_SERVER_HOME}" \
     && apk del --purge .build-deps \
