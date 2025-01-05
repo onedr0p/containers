@@ -27,6 +27,7 @@ RUN \
         dpkg \
         jo \
         jq \
+        nano \
         tzdata \
         xmlstarlet \
     && \
