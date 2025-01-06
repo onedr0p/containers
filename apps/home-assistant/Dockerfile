@@ -16,7 +16,7 @@ ENV \
     CRYPTOGRAPHY_DONT_BUILD_RUST=1 \
     HOMEASSISTANT_WHEELS="https://wheels.home-assistant.io/musllinux/" \
     HOME="/config" \
-    PYTHONPATH="/config/deps"
+    VENV_FOLDER="/config/.venv"
 
 ENV UMASK="0002" \
     TZ="Etc/UTC"
