@@ -6,7 +6,7 @@ unset UV_SYSTEM_PYTHON
 mkdir -p "${VENV_FOLDER}"
 
 # Create venv if required.
-uv venv --system-site-packages --allow-existing "${VENV_FOLDER}"
+uv venv --system-site-packages --link-mode=copy --allow-existing "${VENV_FOLDER}"
 # Activate the venv
 source "${VENV_FOLDER}/bin/activate"
 # Install uv into the venv if required. This is needed for home-assistant to properly invoke uv to install additional deps.
