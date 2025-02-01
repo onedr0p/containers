@@ -128,6 +128,7 @@ Container | Channel | Image
 [sonarr-develop](https://github.com/lenaxia/pkgs/container/sonarr-develop) | develop | ghcr.io/lenaxia/sonarr-develop
 [tabbyapi](https://github.com/lenaxia/pkgs/container/tabbyapi) | main | ghcr.io/lenaxia/tabbyapi
 [tautulli](https://github.com/lenaxia/pkgs/container/tautulli) | master | ghcr.io/lenaxia/tautulli
+[transmission](https://github.com/lenaxia/pkgs/container/transmission) | stable | ghcr.io/lenaxia/transmission
 [volsync](https://github.com/lenaxia/pkgs/container/volsync) | stable | ghcr.io/lenaxia/volsync
 
 
