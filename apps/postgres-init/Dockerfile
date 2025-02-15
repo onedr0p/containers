@@ -15,7 +15,7 @@ RUN \
         catatonit \
         postgresql16-client~"${VERSION}"
 
-COPY ./apps/postgres-init/entrypoint.sh /entrypoint.sh
+COPY ./entrypoint.sh /entrypoint.sh
 
 USER nobody:nogroup
 
