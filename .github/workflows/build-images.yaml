@@ -74,12 +74,12 @@ jobs:
         shell: bash
         run: |
           if [[ -z "${{ inputs.appsToBuild }}" ]]; then
-              matrices=$(python ./scripts/prepare-matrices.py "all" "${{ inputs.pushImages }}" "${{ inputs.force }}")
+              matrices=$(python ./scripts/prepare-matrices.py "all" "${{ inputs.force }}")
           else
               if [[ -z "${{ inputs.channelsToBuild }}" ]]; then
-                  matrices=$(python ./scripts/prepare-matrices.py "${{ inputs.appsToBuild }}" "${{ inputs.pushImages }}" "${{ inputs.force }}")
+                  matrices=$(python ./scripts/prepare-matrices.py "${{ inputs.appsToBuild }}" "${{ inputs.force }}")
               else
-                  matrices=$(python ./scripts/prepare-matrices.py "${{ inputs.appsToBuild }}" "${{ inputs.pushImages }}" "${{ inputs.force }}" "${{ inputs.channelsToBuild }}")
+                  matrices=$(python ./scripts/prepare-matrices.py "${{ inputs.appsToBuild }}" "${{ inputs.force }}" "${{ inputs.channelsToBuild }}")
               fi
           fi
           echo "matrices=${matrices}" >> $GITHUB_OUTPUT
@@ -88,7 +88,7 @@ jobs:
   build-platform-images:
     name: Build/Test ${{ matrix.image.name }} (${{ matrix.image.platform }})
     needs: prepare
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.image.platform == 'linux/arm64' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
     if: ${{ toJSON(fromJSON(needs.prepare.outputs.matrices).imagePlatforms) != '[]' && toJSON(fromJSON(needs.prepare.outputs.matrices).imagePlatforms) != '' }}
     strategy:
       fail-fast: false
@@ -164,7 +164,7 @@ jobs:
 
       - name: Setup Goss
         if: ${{ matrix.image.tests_enabled }}
-        uses: e1himself/goss-installation-action@v1
+        uses: mlipscombe/goss-installation-action@v1.2.2
         with:
           version: latest
 
@@ -247,7 +247,7 @@ jobs:
     needs: ["prepare", "build-platform-images"]
     # Always run merge, as the prior matrix is all or nothing. We test for prior step failure
     # in the "Test Failed Bit" step. This ensures if one app fails, others can still complete.
-    if: ${{ always() && inputs.pushImages && toJSON(fromJSON(needs.prepare.outputs.matrices).images) != '[]' && toJSON(fromJSON(needs.prepare.outputs.matrices).images) != '' }}
+    if: ${{ !canceled() && inputs.pushImages && toJSON(fromJSON(needs.prepare.outputs.matrices).images) != '[]' && toJSON(fromJSON(needs.prepare.outputs.matrices).images) != '' }}
     strategy:
       matrix:
         image: ["${{ fromJSON(needs.prepare.outputs.matrices).images }}"]

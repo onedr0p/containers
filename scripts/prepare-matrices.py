@@ -13,7 +13,7 @@ from os.path import isfile
 
 repo_owner = os.environ.get('REPO_OWNER', os.environ.get('GITHUB_REPOSITORY_OWNER'))
 
-TESTABLE_PLATFORMS = ["linux/amd64"]
+TESTABLE_PLATFORMS = ["linux/amd64", "linux/arm64"]
 
 def load_metadata_file_yaml(file_path):
     with open(file_path, "r") as f:
@@ -66,7 +66,7 @@ def get_published_version(image_name):
             # Assume the longest string is the complete version number
             return max(tags, key=len)
 
-def get_image_metadata(subdir, meta, forRelease=False, force=False, channels=None):
+def get_image_metadata(subdir, meta, force=False, channels=None):
     imagesToBuild = {
         "images": [],
         "imagePlatforms": []
@@ -110,7 +110,7 @@ def get_image_metadata(subdir, meta, forRelease=False, force=False, channels=Non
         # Platform Metadata
         for platform in channel["platforms"]:
 
-            if platform not in TESTABLE_PLATFORMS and not forRelease:
+            if platform not in TESTABLE_PLATFORMS:
                 continue
 
             toBuild.setdefault("platforms", []).append(platform)
@@ -146,8 +146,7 @@ def get_image_metadata(subdir, meta, forRelease=False, force=False, channels=Non
 
 if __name__ == "__main__":
     apps = sys.argv[1]
-    forRelease = sys.argv[2] == "true"
-    force = sys.argv[3] == "true"
+    force = sys.argv[2] == "true"
     imagesToBuild = {
         "images": [],
         "imagePlatforms": []
@@ -170,7 +169,7 @@ if __name__ == "__main__":
             elif os.path.isfile(os.path.join("./apps", app, "metadata.json")):
                 meta = load_metadata_file_json(os.path.join("./apps", app, "metadata.json"))
 
-            imageToBuild = get_image_metadata(os.path.join("./apps", app), meta, forRelease, force=force, channels=channels)
+            imageToBuild = get_image_metadata(os.path.join("./apps", app), meta, force=force, channels=channels)
             if imageToBuild is not None:
                 imagesToBuild["images"].extend(imageToBuild["images"])
                 imagesToBuild["imagePlatforms"].extend(imageToBuild["imagePlatforms"])
@@ -185,7 +184,7 @@ if __name__ == "__main__":
                 else:
                     continue
                 if meta is not None:
-                    imageToBuild = get_image_metadata(subdir, meta, forRelease, force=force)
+                    imageToBuild = get_image_metadata(subdir, meta, force=force)
                     if imageToBuild is not None:
                         imagesToBuild["images"].extend(imageToBuild["images"])
                         imagesToBuild["imagePlatforms"].extend(imageToBuild["imagePlatforms"])
