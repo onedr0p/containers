@@ -13,7 +13,7 @@ from os.path import isfile
 
 repo_owner = os.environ.get('REPO_OWNER', os.environ.get('GITHUB_REPOSITORY_OWNER'))
 
-TESTABLE_PLATFORMS = ["linux/amd64"]
+TESTABLE_PLATFORMS = ["linux/amd64", "linux/arm64"]
 
 def load_metadata_file_yaml(file_path):
     with open(file_path, "r") as f:
