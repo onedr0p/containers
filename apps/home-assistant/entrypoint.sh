@@ -21,4 +21,4 @@ exec \
         --config /config \
         "$@"
 
-# TODO: ECHO FOR TESTING
+# TODO: ECHO
