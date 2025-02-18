@@ -109,8 +109,6 @@ jobs:
           cat << EOF
           ${{ toJSON(matrix.image)}}
           EOF
-          echo "Platform: ${{ matrix.image.platform == 'linux/arm64' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}"
-          exit 1
 
       - name: Validate Matrix Input
         shell: bash
