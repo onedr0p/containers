@@ -21,7 +21,7 @@ jobs:
   build-images:
     needs: ["simple-checks", "get-changed-images"]
     if: ${{ needs.get-changed-images.outputs.addedOrModified == 'true' }}
-    uses: onedr0p/containers/.github/workflows/build-images.yaml@true-multi-arch # TODO: Replace this back to main
+    uses: onedr0p/containers/.github/workflows/build-images.yaml@main
     secrets: inherit
     with:
       appsToBuild: "${{ needs.get-changed-images.outputs.addedOrModifiedImages }}"
