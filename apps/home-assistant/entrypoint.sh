@@ -20,3 +20,5 @@ exec \
     python3 -m homeassistant \
         --config /config \
         "$@"
+
+# TODO: ECHO FOR TESTING
