@@ -74,12 +74,12 @@ jobs:
         shell: bash
         run: |
           if [[ -z "${{ inputs.appsToBuild }}" ]]; then
-              matrices=$(python ./scripts/prepare-matrices.py "all" "${{ inputs.force }}")
+              matrices=$(python ./scripts/prepare-matrices.py "all" "${{ inputs.pushImages }}" "${{ inputs.force }}")
           else
               if [[ -z "${{ inputs.channelsToBuild }}" ]]; then
-                  matrices=$(python ./scripts/prepare-matrices.py "${{ inputs.appsToBuild }}" "${{ inputs.force }}")
+                  matrices=$(python ./scripts/prepare-matrices.py "${{ inputs.appsToBuild }}" "${{ inputs.pushImages }}" "${{ inputs.force }}")
               else
-                  matrices=$(python ./scripts/prepare-matrices.py "${{ inputs.appsToBuild }}" "${{ inputs.force }}" "${{ inputs.channelsToBuild }}")
+                  matrices=$(python ./scripts/prepare-matrices.py "${{ inputs.appsToBuild }}" "${{ inputs.pushImages }}" "${{ inputs.force }}" "${{ inputs.channelsToBuild }}")
               fi
           fi
           echo "matrices=${matrices}" >> $GITHUB_OUTPUT
@@ -315,7 +315,7 @@ jobs:
 
       - name: Build successful
         id: build-success
-        if: ${{ always() && steps.merge.outcome == 'success' && steps.inspect.outcome == 'success' }}
+        if: ${{ !canceled() && steps.merge.outcome == 'success' && steps.inspect.outcome == 'success' }}
         shell: bash
         run: |
           echo "message=🎉 ${{ matrix.image.name }} (${{ matrix.image.tags[0] }})" >> $GITHUB_OUTPUT
@@ -323,7 +323,7 @@ jobs:
 
       - name: Build failed
         id: build-failed
-        if: ${{ always() && (steps.merge.outcome == 'failure' || steps.inspect.outcome == 'failure') }}
+        if: ${{ !canceled() && (steps.merge.outcome == 'failure' || steps.inspect.outcome == 'failure') }}
         shell: bash
         run: |
           echo "message=💥 ${{ matrix.image.name }} (${{ matrix.image.tags[0] }})" >> $GITHUB_OUTPUT
@@ -331,7 +331,7 @@ jobs:
 
       - name: Send Discord Webhook
         uses: sarisia/actions-status-discord@v1
-        if: ${{ always() && inputs.sendNotifications == 'true' }}
+        if: ${{ !canceled() && inputs.sendNotifications == 'true' }}
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           title: ${{ steps.build-failed.outputs.message || steps.build-success.outputs.message }}
@@ -343,7 +343,7 @@ jobs:
     name: Build matrix success
     runs-on: ubuntu-latest
     needs: ["prepare", "merge"]
-    if: ${{ always() }}
+    if: ${{ !canceled() }}
     steps:
       - name: Check build matrix status
         if: ${{ (inputs.appsToBuild != '' && inputs.appsToBuild != '[]') && (needs.merge.result != 'success' && needs.merge.result != 'skipped' && needs.prepare.result != 'success') }}
