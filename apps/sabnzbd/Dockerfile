@@ -35,6 +35,7 @@ RUN \
         p7zip \
         trurl \
         tzdata \
+        htop \
     && \
     apk add --no-cache --virtual=.build-deps \
         build-base \
