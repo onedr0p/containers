@@ -9,7 +9,7 @@ ENV CGO_ENABLED=0 \
     GOOS=${TARGETOS} \
     GOARCH=${TARGETARCH} \
     GOARM=${TARGETVARIANT}
-RUN go install -a -ldflags "-X=main.volsyncVersion=v${VERSION}" github.com/backube/volsync@v${VERSION}
+RUN go install -a -ldflags "-X=main.volsyncVersion=${VERSION}" github.com/backube/volsync@v${VERSION}
 
 FROM docker.io/library/alpine:3.21
 ARG TARGETPLATFORM
@@ -25,7 +25,7 @@ RUN \
         coreutils \
         tzdata \
     && \
-    curl -fsSL "https://github.com/backube/volsync/archive/refs/tags/v${VERSION}.tar.gz" \
+    curl -fsSL "https://github.com/backube/volsync/archive/refs/tags/${VERSION}.tar.gz" \
         | tar xzf - -C /tmp --strip-components=1 \
     && mkdir -p /mover-rclone \
         && cp /tmp/mover-rclone/active.sh /mover-rclone/ \
