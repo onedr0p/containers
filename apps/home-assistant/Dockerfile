@@ -1,8 +1,11 @@
 FROM docker.io/library/python:3.13.2-alpine
 
+ARG TARGETARCH
 ARG TARGETPLATFORM
 ARG VERSION
-ARG CHANNEL
+
+ENV UMASK="0002" \
+    TZ="Etc/UTC"
 
 ENV \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -17,9 +20,6 @@ ENV \
     HOMEASSISTANT_WHEELS="https://wheels.home-assistant.io/musllinux/" \
     HOME="/config" \
     VENV_FOLDER="/config/.venv"
-
-ENV UMASK="0002" \
-    TZ="Etc/UTC"
 
 USER root
 WORKDIR /app
@@ -84,11 +84,9 @@ RUN \
     case "${TARGETPLATFORM}" in \
         'linux/amd64') \
             export ARCH='amd64'; \
-            export GO2RTC_SUFFIX='amd64'; \
         ;; \
         'linux/arm64') \
             export ARCH='aarch64'; \
-            export GO2RTC_SUFFIX='arm64'; \
         ;; \
     esac \
     && \
@@ -102,18 +100,16 @@ RUN \
     && \
     uv pip install --only-binary=:all: --find-links "${HOMEASSISTANT_WHEELS}" \
         homeassistant=="${VERSION}" \
-    && curl -L https://github.com/AlexxIT/go2rtc/releases/latest/download/go2rtc_linux_${GO2RTC_SUFFIX} --output /bin/go2rtc \
+    && curl -L https://github.com/AlexxIT/go2rtc/releases/latest/download/go2rtc_linux_${TARGETARCH} --output /bin/go2rtc \
     && chmod +x /bin/go2rtc \
     && mkdir -p /config && chown nobody:nogroup -R /config \
     && apk del --purge .build-deps \
     && rm -rf /root/.cache /root/.cargo /tmp/*
 
-COPY ./apps/home-assistant/entrypoint.sh /entrypoint.sh
-
 USER nobody:nogroup
 WORKDIR /config
 VOLUME ["/config"]
 
-ENTRYPOINT ["/usr/bin/catatonit", "--", "/entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/catatonit", "--", "/usr/local/bin/hass", "--config", "/config"]
 
 LABEL org.opencontainers.image.source="https://github.com/home-assistant/core"

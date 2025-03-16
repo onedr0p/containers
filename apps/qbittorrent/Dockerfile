@@ -2,7 +2,6 @@ FROM docker.io/library/alpine:3.21
 
 ARG TARGETPLATFORM
 ARG VERSION
-ARG CHANNEL
 
 ENV UMASK="0002" \
     TZ="Etc/UTC"
@@ -43,14 +42,14 @@ RUN \
     esac \
     && \
     mkdir -p /app \
-    && export RELEASE=$(curl -sL "https://github.com/userdocs/qbittorrent-nox-static/releases/latest/download/dependency-version.json" | jq -r '. | "release-\(.qbittorrent)_v\(.libtorrent_2_0)"') \
-    && curl -fsSL -o /app/qbittorrent-nox "https://github.com/userdocs/qbittorrent-nox-static/releases/download/${RELEASE}/${ARCH}-qbittorrent-nox" \
+    && LIBTORRENT=$(curl -sL "https://github.com/userdocs/qbittorrent-nox-static/releases/latest/download/dependency-version.json" | jq -r '.libtorrent_2_0') \
+    && curl -fsSL -o /app/qbittorrent-nox "https://github.com/userdocs/qbittorrent-nox-static/releases/download/release-${VERSION}_v${LIBTORRENT}/${ARCH}-qbittorrent-nox" \
     && chown -R root:root /app/qbittorrent-nox \
     && chmod -R 755 /app/qbittorrent-nox \
     && rm -rf /tmp/*
 
-COPY ./apps/qbittorrent/qBittorrent.conf /app/qBittorrent.conf
-COPY ./apps/qbittorrent/entrypoint.sh /entrypoint.sh
+COPY ./qBittorrent.conf /app/qBittorrent.conf
+COPY ./entrypoint.sh /entrypoint.sh
 
 USER nobody:nogroup
 WORKDIR /config
