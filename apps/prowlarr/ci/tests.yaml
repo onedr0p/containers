@@ -1,0 +1,13 @@
+schemaVersion: "2.0.0"
+commandTests:
+  - name: test
+    command: timeout
+    args:
+      - --preserve-status
+      - 30s
+      - /app/bin/Prowlarr
+      - --nobrowser
+      - --data=/config
+    expectedOutput:
+      - .*Now listening on.*9696.*
+      - .*Application started.*
