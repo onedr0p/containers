@@ -6,5 +6,5 @@ commandTests:
       - --preserve-status
       - 30s
       - /entrypoint.sh
-    expectedOutput:
-      - .*BAZARR is started.*6767
+    expectedError:
+      - .*BAZARR is started.*6767.*
