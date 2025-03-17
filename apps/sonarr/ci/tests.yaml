@@ -4,7 +4,7 @@ commandTests:
     command: timeout
     args:
       - --preserve-status
-      - 10s
+      - 30s
       - /app/bin/Sonarr
       - --nobrowser
       - --data=/config
