@@ -79,12 +79,8 @@ jobs:
           chmod +x $HOME/bin/container-structure-test
           echo "$HOME/bin" >> $GITHUB_PATH
 
-      - name: Verify installation
-        run: container-structure-test version
-
       - name: Run Tests
-        run: |
-          container-structure-test test --image ${{ steps.build.outputs.imageid }} --config ./apps/${{ inputs.app }}/ci/tests.yaml
+        run: container-structure-test test --image ${{ steps.build.outputs.imageid }} --config ./apps/${{ inputs.app }}/ci/tests.yaml
 
       - if: ${{ inputs.test }}
         name: Setup Goss
