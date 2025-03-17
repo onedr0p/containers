@@ -74,7 +74,7 @@ jobs:
       - name: Run tests
         uses: docker://ghcr.io/googlecontainertools/container-structure-test:1.19.3
         with:
-          args: test --image ${{ steps.build.outputs.imageid }} --config /github/workspace/${{ inputs.app }}/ci/tests.yaml
+          args: test --image ${{ steps.build.outputs.imageid }} --config /github/workspace/apps/${{ inputs.app }}/ci/tests.yaml
 
       - if: ${{ inputs.release }}
         name: Export Digest
