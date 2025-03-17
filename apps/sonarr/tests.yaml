@@ -5,9 +5,7 @@ commandTests:
     args:
       - --preserve-status
       - 30s
-      - /app/bin/Sonarr
-      - --nobrowser
-      - --data=/config
+      - /entrypoint.sh
     expectedOutput:
       - .*Now listening on.*8989.*
       - .*Application started.*

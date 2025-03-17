@@ -5,9 +5,7 @@ commandTests:
     args:
       - --preserve-status
       - 30s
-      - /app/bin/Prowlarr
-      - --nobrowser
-      - --data=/config
+      - /entrypoint.sh
     expectedOutput:
       - .*Now listening on.*9696.*
       - .*Application started.*

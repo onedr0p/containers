@@ -5,9 +5,7 @@ commandTests:
     args:
       - --preserve-status
       - 30s
-      - /app/bin/Radarr
-      - --nobrowser
-      - --data=/config
+      - /entrypoint.sh
     expectedOutput:
       - .*Now listening on.*7878.*
       - .*Application started.*

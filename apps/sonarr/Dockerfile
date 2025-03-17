@@ -42,6 +42,8 @@ RUN \
     && chown -R root:root /app && chmod -R 755 /app \
     && rm -rf /tmp/* /app/bin/Sonarr.Update
 
+COPY ./entrypoint.sh /entrypoint.sh
+
 USER nobody:nogroup
 WORKDIR /config
 VOLUME ["/config"]
