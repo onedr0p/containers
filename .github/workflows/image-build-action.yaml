@@ -71,6 +71,21 @@ jobs:
           platforms: linux/${{ matrix.platform }}
           provenance: false
 
+      - name: Install container-structure-test
+        run: |
+          mkdir -p $HOME/bin
+          curl -fsSL -o $HOME/bin/container-structure-test \
+            https://github.com/GoogleContainerTools/container-structure-test/releases/latest/download/container-structure-test-linux-${{ matrix.platform }}
+          chmod +x $HOME/bin/container-structure-test
+          echo "$HOME/bin" >> $GITHUB_PATH
+
+      - name: Verify installation
+        run: container-structure-test version
+
+      - name: Run Tests
+        run: |
+          container-structure-test test --image ${{ steps.build.outputs.imageid }} --config ./apps/${{ inputs.app }}/ci/tests.yaml
+
       - if: ${{ inputs.test }}
         name: Setup Goss
         uses: mlipscombe/goss-installation-action@a440e50e0ca070a5b84fc4b99a4e2bc7f9390201 # v1.2.2

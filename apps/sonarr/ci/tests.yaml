@@ -1,0 +1,13 @@
+schemaVersion: "2.0.0"
+commandTests:
+  - name: test
+    command: timeout
+    args:
+      - --preserve-status
+      - 10s
+      - /app/bin/Sonarr
+      - --nobrowser
+      - --data=/config
+    expectedOutput:
+      - .*Now listening on.*8989.*
+      - .*Application started.*
