@@ -1,0 +1,10 @@
+schemaVersion: "2.0.0"
+commandTests:
+  - name: test
+    command: timeout
+    args:
+      - --preserve-status
+      - 30s
+      - /entrypoint.sh
+    expectedOutput:
+      - .*Unable to find configuration.*
