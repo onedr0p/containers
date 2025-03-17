@@ -71,16 +71,10 @@ jobs:
           platforms: linux/${{ matrix.platform }}
           provenance: false
 
-      - name: Install container-structure-test
-        run: |
-          mkdir -p $HOME/bin
-          curl -fsSL -o $HOME/bin/container-structure-test \
-            https://github.com/GoogleContainerTools/container-structure-test/releases/latest/download/container-structure-test-linux-${{ matrix.platform }}
-          chmod +x $HOME/bin/container-structure-test
-          echo "$HOME/bin" >> $GITHUB_PATH
-
-      - name: Run Tests
-        run: container-structure-test test --image ${{ steps.build.outputs.imageid }} --config ./apps/${{ inputs.app }}/ci/tests.yaml
+      - name: Run tests
+        uses: docker://ghcr.io/googlecontainertools/container-structure-test:1.19.3
+        with:
+          args: test --image ${{ steps.build.outputs.imageid }} --config /github/workspace/${{ inputs.app }}/ci/tests.yaml
 
       - if: ${{ inputs.release }}
         name: Export Digest
