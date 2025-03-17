@@ -46,6 +46,6 @@ USER nobody:nogroup
 WORKDIR /config
 VOLUME ["/config"]
 
-ENTRYPOINT ["/usr/bin/catatonit", "--", "/app/bin/Prowlarr", "--nobrowser", "--data=/config"]
+ENTRYPOINT ["/usr/bin/catatonit", "--", "/entrypoint.sh"]
 
 LABEL org.opencontainers.image.source="https://github.com/Prowlarr/Prowlarr"
