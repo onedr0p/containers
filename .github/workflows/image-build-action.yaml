@@ -71,16 +71,22 @@ jobs:
           platforms: linux/${{ matrix.platform }}
           provenance: false
 
-      - name: Install container-structure-test
-        run: |
-          mkdir -p $HOME/bin
-          curl -fsSL -o $HOME/bin/container-structure-test \
-            https://github.com/GoogleContainerTools/container-structure-test/releases/latest/download/container-structure-test-linux-${{ matrix.platform }}
-          chmod +x $HOME/bin/container-structure-test
-          echo "$HOME/bin" >> $GITHUB_PATH
+      - name: Run tests
+        uses: brpaz/structure-tests-action@dac5ee013c28d64b5da3ec7cf0b0cb8b22027cf6 # v1.4.0
+        with:
+          image: ${{ steps.build.outputs.imageid }}
+          configFile: apps/${{ inputs.app }}/ci/tests.yaml
 
-      - name: Run Tests
-        run: container-structure-test test --image ${{ steps.build.outputs.imageid }} --config ./apps/${{ inputs.app }}/ci/tests.yaml
+      # - name: Install container-structure-test
+      #   run: |
+      #     mkdir -p $HOME/bin
+      #     curl -fsSL -o $HOME/bin/container-structure-test \
+      #       https://github.com/GoogleContainerTools/container-structure-test/releases/latest/download/container-structure-test-linux-${{ matrix.platform }}
+      #     chmod +x $HOME/bin/container-structure-test
+      #     echo "$HOME/bin" >> $GITHUB_PATH
+
+      # - name: Run Tests
+      #   run: container-structure-test test --image ${{ steps.build.outputs.imageid }} --config ./apps/${{ inputs.app }}/ci/tests.yaml
 
       - if: ${{ inputs.release }}
         name: Export Digest
