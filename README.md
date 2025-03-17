@@ -1,3 +1,6 @@
+> [!WARNING]
+> This repository has moved [here](https://github.com/home-operations/containers) and will be deleted on or after March 17, 2026.
+
 <div align="center">
 
 ## Containers
