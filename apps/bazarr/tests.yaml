@@ -7,5 +7,5 @@ commandTests:
       - 30s
       - /entrypoint.sh
       - --debug
-    expectedOutput:
+    expectedError:
       - .*starting child process.*
