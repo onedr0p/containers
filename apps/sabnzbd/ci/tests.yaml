@@ -1,0 +1,21 @@
+schemaVersion: "2.0.0"
+commandTests:
+  - name: test
+    command: timeout
+    args:
+      - --preserve-status
+      - 30s
+      - /entrypoint.sh
+    expectedOutput:
+      - .*Starting web-interface.*8080.*
+      - .*Starting SABnzbd.py.*
+fileExistenceTests:
+  - name: unrar
+    path: /usr/bin/unrar
+    shouldExist: true
+  - name: par2
+    path: /usr/local/bin/par2
+    shouldExist: true
+  - name: par2create
+    path: /usr/local/bin/par2create
+    shouldExist: true
