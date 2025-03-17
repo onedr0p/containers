@@ -8,4 +8,4 @@ commandTests:
       - /entrypoint.sh
       - --debug
     expectedOutput:
-      - .*BAZARR is started.*
+      - .*starting child process.*

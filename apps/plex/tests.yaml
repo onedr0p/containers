@@ -6,5 +6,6 @@ commandTests:
       - --preserve-status
       - 30s
       - /entrypoint.sh
+      - --debug
     expectedOutput:
       - .*Setting TranscoderTempDirectory.*
