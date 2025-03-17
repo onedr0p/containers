@@ -7,4 +7,4 @@ commandTests:
       - 30s
       - /entrypoint.sh
     expectedOutput:
-      - .*BAZARR is started.*6767.*
+      - .*BAZARR is started.*6767
