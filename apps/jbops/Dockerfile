@@ -41,7 +41,7 @@ RUN apk add --no-cache \
         musl-dev \
         git \
     && \
-    git clone https://github.com/blacktwin/JBOPS.git . \
+    git clone -b "${VERSION}" https://github.com/blacktwin/JBOPS.git . \
     && \
     pip install --upgrade --requirement requirements.txt \
     && chown -R root:root /app && chmod -R 755 /app \
