@@ -1,11 +1,16 @@
-schemaVersion: "2.0.0"
-commandTests:
-  - name: test
-    command: timeout
-    args:
-      - --preserve-status
-      - 30s
-      - /entrypoint.sh
-      - --debug
-    expectedError:
-      - .*starting child process.*
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/goss-org/goss/master/docs/schema.yaml
+process:
+  python:
+    running: true
+port:
+  tcp:6767:
+    listening: true
+http:
+  http://localhost:6767:
+    status: 200
+file:
+  /usr/local/bin/python:
+    exists: true
+  /usr/bin/unrar:
+    exists: true
