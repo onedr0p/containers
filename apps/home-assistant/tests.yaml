@@ -1,10 +1,14 @@
-schemaVersion: "2.0.0"
-commandTests:
-  - name: test
-    command: timeout
-    args:
-      - --preserve-status
-      - 30s
-      - /entrypoint.sh
-    expectedOutput:
-      - .*Unable to find configuration.*
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/goss-org/goss/master/docs/schema.yaml
+process:
+  python3:
+    running: true
+file:
+  /usr/local/bin/hass:
+    exists: true
+port:
+  tcp6:8123:
+    listening: true
+http:
+  http://localhost:8123:
+    status: 200

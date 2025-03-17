@@ -1,11 +1,11 @@
-schemaVersion: "2.0.0"
-commandTests:
-  - name: test
-    command: timeout
-    args:
-      - --preserve-status
-      - 30s
-      - /entrypoint.sh
-    expectedOutput:
-      - .*Now listening on.*8989.*
-      - .*Application started.*
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/goss-org/goss/master/docs/schema.yaml
+process:
+  Sonarr:
+    running: true
+port:
+  tcp6:8989:
+    listening: true
+http:
+  http://localhost:8989:
+    status: 200
