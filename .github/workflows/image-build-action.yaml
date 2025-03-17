@@ -82,17 +82,17 @@ jobs:
         with:
           args: test --image ${{ steps.build.outputs.imageid }} --config /github/workspace/apps/${{ inputs.app }}/tests.yaml
 
-      - name: Setup Goss
+      - name: Setup goss
         if: ${{ steps.test.outputs.tool == 'goss' }}
         uses: mlipscombe/goss-installation-action@a440e50e0ca070a5b84fc4b99a4e2bc7f9390201 # v1.2.2
         with:
           version: latest
 
-      - name: Run Goss Tests
+      - name: Run goss
         if: ${{ steps.test.outputs.tool == 'goss' }}
         env:
           CONTAINER_RUNTIME: docker
-          GOSS_FILE: ./apps/${{ inputs.app }}/ci/goss.yaml
+          GOSS_FILE: ./apps/${{ inputs.app }}/tests.yaml
           GOSS_OPTS: --retry-timeout 60s --sleep 2s --color --format documentation
           GOSS_SLEEP: 2
           GOSS_FILES_STRATEGY: cp
